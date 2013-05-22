@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BikeZenAppDelegate : UIResponder <UIApplicationDelegate>
+@class Station, BikeZenSecondViewController;
+
+@interface BikeZenAppDelegate : UIResponder <UIApplicationDelegate, NSXMLParserDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) IBOutlet BikeZenSecondViewController *secondViewController;
 
 @end

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
+		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
 		CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBA1730B77F005420D6 /* UIKit.framework */; };
 		CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBC1730B77F005420D6 /* Foundation.framework */; };
 		CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBE1730B77F005420D6 /* CoreGraphics.framework */; };
@@ -28,6 +30,10 @@
 		CD529EEC1730B77F005420D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBC1730B77F005420D6 /* Foundation.framework */; };
 		CD529EF41730B77F005420D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD529EF21730B77F005420D6 /* InfoPlist.strings */; };
 		CD529EF71730B77F005420D6 /* BikeZenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EF61730B77F005420D6 /* BikeZenTests.m */; };
+		CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529F001730BFF0005420D6 /* MapKit.framework */; };
+		CD548C09174C69F10062F61A /* arrest.png in Resources */ = {isa = PBXBuildFile; fileRef = CD548C08174C69F10062F61A /* arrest.png */; };
+		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
+		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +47,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLocation.h; sourceTree = "<group>"; };
+		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLocation.m; sourceTree = "<group>"; };
+		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		CD529EB71730B77F005420D6 /* BikeZen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikeZen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD529EBA1730B77F005420D6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CD529EBC1730B77F005420D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -69,6 +78,13 @@
 		CD529EF31730B77F005420D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD529EF51730B77F005420D6 /* BikeZenTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BikeZenTests.h; sourceTree = "<group>"; };
 		CD529EF61730B77F005420D6 /* BikeZenTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BikeZenTests.m; sourceTree = "<group>"; };
+		CD529F001730BFF0005420D6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		CD529F041730C209005420D6 /* BikeZenDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BikeZenDefine.h; sourceTree = "<group>"; };
+		CD548C08174C69F10062F61A /* arrest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrest.png; sourceTree = "<group>"; };
+		CDC453FB1736D5DA008E2966 /* ParseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseOperation.h; sourceTree = "<group>"; };
+		CDC453FC1736D5DA008E2966 /* ParseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ParseOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
+		CDC453FF1736D7BF008E2966 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Station.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +92,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */,
+				CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */,
 				CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */,
 				CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */,
 				CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */,
@@ -98,6 +116,8 @@
 		CD529EAE1730B77F005420D6 = {
 			isa = PBXGroup;
 			children = (
+				CD0344341730DC9D00682A78 /* CoreLocation.framework */,
+				CD529F001730BFF0005420D6 /* MapKit.framework */,
 				CD529EC01730B77F005420D6 /* BikeZen */,
 				CD529EEF1730B77F005420D6 /* BikeZenTests */,
 				CD529EB91730B77F005420D6 /* Frameworks */,
@@ -140,6 +160,13 @@
 				CD529EDF1730B77F005420D6 /* second.png */,
 				CD529EE11730B77F005420D6 /* second@2x.png */,
 				CD529EC11730B77F005420D6 /* Supporting Files */,
+				CD529F041730C209005420D6 /* BikeZenDefine.h */,
+				CD0344311730D01400682A78 /* MyLocation.h */,
+				CD0344321730D01400682A78 /* MyLocation.m */,
+				CDC453FB1736D5DA008E2966 /* ParseOperation.h */,
+				CDC453FC1736D5DA008E2966 /* ParseOperation.m */,
+				CDC453FE1736D7BF008E2966 /* Station.h */,
+				CDC453FF1736D7BF008E2966 /* Station.m */,
 			);
 			path = BikeZen;
 			sourceTree = "<group>";
@@ -147,6 +174,7 @@
 		CD529EC11730B77F005420D6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CD548C08174C69F10062F61A /* arrest.png */,
 				CD529EC21730B77F005420D6 /* BikeZen-Info.plist */,
 				CD529EC31730B77F005420D6 /* InfoPlist.strings */,
 				CD529EC61730B77F005420D6 /* main.m */,
@@ -258,6 +286,7 @@
 				CD529EDB1730B77F005420D6 /* first@2x.png in Resources */,
 				CD529EE01730B77F005420D6 /* second.png in Resources */,
 				CD529EE21730B77F005420D6 /* second@2x.png in Resources */,
+				CD548C09174C69F10062F61A /* arrest.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +325,9 @@
 				CD529ECB1730B77F005420D6 /* BikeZenAppDelegate.m in Sources */,
 				CD529ED71730B77F005420D6 /* BikeZenFirstViewController.m in Sources */,
 				CD529EDE1730B77F005420D6 /* BikeZenSecondViewController.m in Sources */,
+				CD0344331730D01400682A78 /* MyLocation.m in Sources */,
+				CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */,
+				CDC454001736D7BF008E2966 /* Station.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +439,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
 				INFOPLIST_FILE = "BikeZen/BikeZen-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -418,6 +451,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
 				INFOPLIST_FILE = "BikeZen/BikeZen-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -434,6 +468,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
 				INFOPLIST_FILE = "BikeZenTests/BikeZenTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -451,6 +486,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
 				INFOPLIST_FILE = "BikeZenTests/BikeZenTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -476,6 +512,7 @@
 				CD529EFC1730B77F005420D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CD529EFD1730B77F005420D6 /* Build configuration list for PBXNativeTarget "BikeZenTests" */ = {
 			isa = XCConfigurationList;
@@ -484,6 +521,7 @@
 				CD529EFF1730B77F005420D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
