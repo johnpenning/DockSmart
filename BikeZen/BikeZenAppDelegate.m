@@ -91,6 +91,24 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+// Handle errors in the download by showing an alert to the user. This is a very
+// simple way of handling the error, partly because this application does not have any offline
+// functionality for the user. Most real applications should handle the error in a less obtrusive
+// way and provide offline functionality to the user.
+//
+- (void)handleError:(NSError *)error {
+    NSString *errorMessage = [error localizedDescription];
+    UIAlertView *alertView =
+    [[UIAlertView alloc] initWithTitle:
+     NSLocalizedString(@"Error Title",
+                       @"Title for alert displayed when download or parse error occurs.")
+                               message:errorMessage
+                              delegate:nil
+                     cancelButtonTitle:@"OK"
+                     otherButtonTitles:nil];
+    [alertView show];
+}
+
 // Our NSNotification callback from the running NSOperation to add the earthquakes
 //
 - (void)addStations:(NSNotification *)notif {

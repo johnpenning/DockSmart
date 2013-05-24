@@ -37,6 +37,24 @@
     _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
 }
 
+- (NSString *)title
+{
+//    return [[NSString alloc] initWithFormat:@"Test name"];
+    return _name;
+}
+
+- (NSString *)subtitle
+{
+    NSString* bikeSummary = [[NSString alloc] initWithFormat:@"Bikes: %i - Docks: %i", _nbBikes, _nbEmptyDocks];
+//    CLLocationDistance *distance = MKMetersBetweenMapPoints(MKMapPointForCoordinate(_coordinate), )
+    return bikeSummary;
+}
+
+//- (CLLocationCoordinate2D)coordinate
+//{
+//    return _coordinate;
+//}
+
 //- (MKMapItem*)mapItem
 //{
 //    NSDictionary *addressDict = @{(NSString*)kABPersonAddressStreetKey : _address};

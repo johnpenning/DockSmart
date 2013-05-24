@@ -99,7 +99,11 @@
     }
     
     for (Station* station in stationList)
+    {
+        //TODO: if we should show this... (i.e., if it's public: write a method to determine this. gray it out if it's locked?)
+        //add to the map
         [self.mapView addAnnotation:station];
+    }
 
 //    NSDictionary *root = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
 //    NSArray *data = [root objectForKey:@"data"];
@@ -119,35 +123,36 @@
     
 }
 
-//- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
-//{
-//    static NSString *identifier = @"Station";
-//    
-//    if ([annotation isKindOfClass:[Station class]]) {
-//        MKAnnotationView *annotationView = (MKAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-//        if (annotationView == nil) {
-//            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-//            annotationView.enabled = YES;
-//            annotationView.canShowCallout = NO;//YES;
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    static NSString *identifier = @"Station";
+    
+    if ([annotation isKindOfClass:[Station class]]) {
+        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+        if (annotationView == nil) {
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+            annotationView.enabled = YES;
+            annotationView.canShowCallout = YES;
 //            annotationView.image = [UIImage imageNamed:@"arrest.png"];
-//            annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-//        }
-//        else {
-//            annotationView.annotation = annotation;
-//        }
-//        
-//        return annotationView;
-//    }
-//    
-//    return nil;
-//}
+            annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            annotationView.animatesDrop = YES;
+        }
+        else {
+            annotationView.annotation = annotation;
+        }
+        
+        return annotationView;
+    }
+    
+    return nil;
+}
 
 //- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 //{
 //    Station *station = (Station*)view.annotation;
 //    
 //    NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-//    [location.mapItem openInMapsWithLaunchOptions:launchOptions];
+//    [station.mapItem openInMapsWithLaunchOptions:launchOptions];
 //}
 
 #pragma mark -

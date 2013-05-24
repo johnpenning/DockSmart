@@ -169,6 +169,7 @@ static NSUInteger const kSizeOfStationBatch = 10;
 // Reduce potential parsing errors by using string constants declared in a single place.
 static NSString * const kStationElementName = @"station";
 static NSString * const kIDElementName = @"id";
+static NSString * const kNameElementName = @"name";
 static NSString * const kLatElementName = @"lat";
 static NSString * const kLongElementName = @"long";
 static NSString * const kInstalledElementName = @"installed";
@@ -209,6 +210,7 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
 //            self.currentStationObject.USGSWebLink = [NSURL URLWithString:USGSWebLink];
 //        }
     } else if ([elementName isEqualToString:kIDElementName] ||
+               [elementName isEqualToString:kNameElementName] ||
                [elementName isEqualToString:kLatElementName] ||
                [elementName isEqualToString:kLongElementName] ||
                [elementName isEqualToString:kInstalledElementName] ||
@@ -247,6 +249,13 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
         if ([scanner scanInteger:&stationID]) {
             self.currentStationObject.stationID = stationID;
         }
+    }
+    else if ([elementName isEqualToString:kNameElementName])
+    {
+        NSScanner *scanner = [NSScanner scannerWithString:self.currentParsedCharacterData];
+        NSString *name;
+        if ([scanner scanUpToCharactersFromSet:[NSCharacterSet illegalCharacterSet] intoString:&name])
+            self.currentStationObject.name = name;
     }
     else if ([elementName isEqualToString:kLatElementName])
     {
