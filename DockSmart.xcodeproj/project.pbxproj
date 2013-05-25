@@ -14,22 +14,22 @@
 		CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBE1730B77F005420D6 /* CoreGraphics.framework */; };
 		CD529EC51730B77F005420D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD529EC31730B77F005420D6 /* InfoPlist.strings */; };
 		CD529EC71730B77F005420D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EC61730B77F005420D6 /* main.m */; };
-		CD529ECB1730B77F005420D6 /* BikeZenAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529ECA1730B77F005420D6 /* BikeZenAppDelegate.m */; };
+		CD529ECB1730B77F005420D6 /* DockSmartAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529ECA1730B77F005420D6 /* DockSmartAppDelegate.m */; };
 		CD529ECD1730B77F005420D6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ECC1730B77F005420D6 /* Default.png */; };
 		CD529ECF1730B77F005420D6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ECE1730B77F005420D6 /* Default@2x.png */; };
 		CD529ED11730B77F005420D6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED01730B77F005420D6 /* Default-568h@2x.png */; };
 		CD529ED41730B77F005420D6 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED21730B77F005420D6 /* MainStoryboard.storyboard */; };
-		CD529ED71730B77F005420D6 /* BikeZenFirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529ED61730B77F005420D6 /* BikeZenFirstViewController.m */; };
+		CD529ED71730B77F005420D6 /* DockSmartFavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529ED61730B77F005420D6 /* DockSmartFavoritesViewController.m */; };
 		CD529ED91730B77F005420D6 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED81730B77F005420D6 /* first.png */; };
 		CD529EDB1730B77F005420D6 /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529EDA1730B77F005420D6 /* first@2x.png */; };
-		CD529EDE1730B77F005420D6 /* BikeZenSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EDD1730B77F005420D6 /* BikeZenSecondViewController.m */; };
+		CD529EDE1730B77F005420D6 /* DockSmartMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EDD1730B77F005420D6 /* DockSmartMapViewController.m */; };
 		CD529EE01730B77F005420D6 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529EDF1730B77F005420D6 /* second.png */; };
 		CD529EE21730B77F005420D6 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529EE11730B77F005420D6 /* second@2x.png */; };
 		CD529EEA1730B77F005420D6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EE91730B77F005420D6 /* SenTestingKit.framework */; };
 		CD529EEB1730B77F005420D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBA1730B77F005420D6 /* UIKit.framework */; };
 		CD529EEC1730B77F005420D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBC1730B77F005420D6 /* Foundation.framework */; };
 		CD529EF41730B77F005420D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD529EF21730B77F005420D6 /* InfoPlist.strings */; };
-		CD529EF71730B77F005420D6 /* BikeZenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EF61730B77F005420D6 /* BikeZenTests.m */; };
+		CD529EF71730B77F005420D6 /* DockSmartTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EF61730B77F005420D6 /* DockSmartTests.m */; };
 		CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529F001730BFF0005420D6 /* MapKit.framework */; };
 		CD548C09174C69F10062F61A /* arrest.png in Resources */ = {isa = PBXBuildFile; fileRef = CD548C08174C69F10062F61A /* arrest.png */; };
 		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
@@ -47,44 +47,44 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLocation.h; sourceTree = "<group>"; };
-		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLocation.m; sourceTree = "<group>"; };
+		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLocation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		CD529EB71730B77F005420D6 /* BikeZen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikeZen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD529EB71730B77F005420D6 /* DockSmart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockSmart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD529EBA1730B77F005420D6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CD529EBC1730B77F005420D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CD529EBE1730B77F005420D6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		CD529EC21730B77F005420D6 /* BikeZen-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BikeZen-Info.plist"; sourceTree = "<group>"; };
+		CD529EC21730B77F005420D6 /* DockSmart-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DockSmart-Info.plist"; sourceTree = "<group>"; };
 		CD529EC41730B77F005420D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		CD529EC61730B77F005420D6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		CD529EC81730B77F005420D6 /* BikeZen-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BikeZen-Prefix.pch"; sourceTree = "<group>"; };
-		CD529EC91730B77F005420D6 /* BikeZenAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BikeZenAppDelegate.h; sourceTree = "<group>"; };
-		CD529ECA1730B77F005420D6 /* BikeZenAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BikeZenAppDelegate.m; sourceTree = "<group>"; };
+		CD529EC61730B77F005420D6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CD529EC81730B77F005420D6 /* DockSmart-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "DockSmart-Prefix.pch"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CD529EC91730B77F005420D6 /* DockSmartAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CD529ECA1730B77F005420D6 /* DockSmartAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD529ECC1730B77F005420D6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		CD529ECE1730B77F005420D6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		CD529ED01730B77F005420D6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		CD529ED31730B77F005420D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		CD529ED51730B77F005420D6 /* BikeZenFirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BikeZenFirstViewController.h; sourceTree = "<group>"; };
-		CD529ED61730B77F005420D6 /* BikeZenFirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BikeZenFirstViewController.m; sourceTree = "<group>"; };
+		CD529ED51730B77F005420D6 /* DockSmartFavoritesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartFavoritesViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CD529ED61730B77F005420D6 /* DockSmartFavoritesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartFavoritesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD529ED81730B77F005420D6 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
 		CD529EDA1730B77F005420D6 /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
-		CD529EDC1730B77F005420D6 /* BikeZenSecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BikeZenSecondViewController.h; sourceTree = "<group>"; };
-		CD529EDD1730B77F005420D6 /* BikeZenSecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BikeZenSecondViewController.m; sourceTree = "<group>"; };
+		CD529EDC1730B77F005420D6 /* DockSmartMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartMapViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CD529EDD1730B77F005420D6 /* DockSmartMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DockSmartMapViewController.m; sourceTree = "<group>"; };
 		CD529EDF1730B77F005420D6 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		CD529EE11730B77F005420D6 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
-		CD529EE81730B77F005420D6 /* BikeZenTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BikeZenTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD529EE81730B77F005420D6 /* DockSmartTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockSmartTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD529EE91730B77F005420D6 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		CD529EF11730B77F005420D6 /* BikeZenTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BikeZenTests-Info.plist"; sourceTree = "<group>"; };
+		CD529EF11730B77F005420D6 /* DockSmartTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DockSmartTests-Info.plist"; sourceTree = "<group>"; };
 		CD529EF31730B77F005420D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		CD529EF51730B77F005420D6 /* BikeZenTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BikeZenTests.h; sourceTree = "<group>"; };
-		CD529EF61730B77F005420D6 /* BikeZenTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BikeZenTests.m; sourceTree = "<group>"; };
+		CD529EF51730B77F005420D6 /* DockSmartTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CD529EF61730B77F005420D6 /* DockSmartTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD529F001730BFF0005420D6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		CD529F041730C209005420D6 /* BikeZenDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BikeZenDefine.h; sourceTree = "<group>"; };
+		CD529F041730C209005420D6 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		CD548C08174C69F10062F61A /* arrest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrest.png; sourceTree = "<group>"; };
-		CDC453FB1736D5DA008E2966 /* ParseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseOperation.h; sourceTree = "<group>"; };
+		CDC453FB1736D5DA008E2966 /* ParseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ParseOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CDC453FC1736D5DA008E2966 /* ParseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ParseOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Station.h; sourceTree = "<group>"; };
-		CDC453FF1736D7BF008E2966 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Station.m; sourceTree = "<group>"; };
+		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Station.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		CDC453FF1736D7BF008E2966 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Station.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,8 +118,8 @@
 			children = (
 				CD0344341730DC9D00682A78 /* CoreLocation.framework */,
 				CD529F001730BFF0005420D6 /* MapKit.framework */,
-				CD529EC01730B77F005420D6 /* BikeZen */,
-				CD529EEF1730B77F005420D6 /* BikeZenTests */,
+				CD529EC01730B77F005420D6 /* DockSmart */,
+				CD529EEF1730B77F005420D6 /* DockSmartTests */,
 				CD529EB91730B77F005420D6 /* Frameworks */,
 				CD529EB81730B77F005420D6 /* Products */,
 			);
@@ -128,8 +128,8 @@
 		CD529EB81730B77F005420D6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CD529EB71730B77F005420D6 /* BikeZen.app */,
-				CD529EE81730B77F005420D6 /* BikeZenTests.octest */,
+				CD529EB71730B77F005420D6 /* DockSmart.app */,
+				CD529EE81730B77F005420D6 /* DockSmartTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -145,22 +145,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CD529EC01730B77F005420D6 /* BikeZen */ = {
+		CD529EC01730B77F005420D6 /* DockSmart */ = {
 			isa = PBXGroup;
 			children = (
-				CD529EC91730B77F005420D6 /* BikeZenAppDelegate.h */,
-				CD529ECA1730B77F005420D6 /* BikeZenAppDelegate.m */,
+				CD529EC91730B77F005420D6 /* DockSmartAppDelegate.h */,
+				CD529ECA1730B77F005420D6 /* DockSmartAppDelegate.m */,
 				CD529ED21730B77F005420D6 /* MainStoryboard.storyboard */,
-				CD529ED51730B77F005420D6 /* BikeZenFirstViewController.h */,
-				CD529ED61730B77F005420D6 /* BikeZenFirstViewController.m */,
+				CD529ED51730B77F005420D6 /* DockSmartFavoritesViewController.h */,
+				CD529ED61730B77F005420D6 /* DockSmartFavoritesViewController.m */,
 				CD529ED81730B77F005420D6 /* first.png */,
 				CD529EDA1730B77F005420D6 /* first@2x.png */,
-				CD529EDC1730B77F005420D6 /* BikeZenSecondViewController.h */,
-				CD529EDD1730B77F005420D6 /* BikeZenSecondViewController.m */,
+				CD529EDC1730B77F005420D6 /* DockSmartMapViewController.h */,
+				CD529EDD1730B77F005420D6 /* DockSmartMapViewController.m */,
 				CD529EDF1730B77F005420D6 /* second.png */,
 				CD529EE11730B77F005420D6 /* second@2x.png */,
 				CD529EC11730B77F005420D6 /* Supporting Files */,
-				CD529F041730C209005420D6 /* BikeZenDefine.h */,
+				CD529F041730C209005420D6 /* define.h */,
 				CD0344311730D01400682A78 /* MyLocation.h */,
 				CD0344321730D01400682A78 /* MyLocation.m */,
 				CDC453FB1736D5DA008E2966 /* ParseOperation.h */,
@@ -168,6 +168,7 @@
 				CDC453FE1736D7BF008E2966 /* Station.h */,
 				CDC453FF1736D7BF008E2966 /* Station.m */,
 			);
+			name = DockSmart;
 			path = BikeZen;
 			sourceTree = "<group>";
 		};
@@ -175,10 +176,10 @@
 			isa = PBXGroup;
 			children = (
 				CD548C08174C69F10062F61A /* arrest.png */,
-				CD529EC21730B77F005420D6 /* BikeZen-Info.plist */,
+				CD529EC21730B77F005420D6 /* DockSmart-Info.plist */,
 				CD529EC31730B77F005420D6 /* InfoPlist.strings */,
 				CD529EC61730B77F005420D6 /* main.m */,
-				CD529EC81730B77F005420D6 /* BikeZen-Prefix.pch */,
+				CD529EC81730B77F005420D6 /* DockSmart-Prefix.pch */,
 				CD529ECC1730B77F005420D6 /* Default.png */,
 				CD529ECE1730B77F005420D6 /* Default@2x.png */,
 				CD529ED01730B77F005420D6 /* Default-568h@2x.png */,
@@ -186,20 +187,21 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		CD529EEF1730B77F005420D6 /* BikeZenTests */ = {
+		CD529EEF1730B77F005420D6 /* DockSmartTests */ = {
 			isa = PBXGroup;
 			children = (
-				CD529EF51730B77F005420D6 /* BikeZenTests.h */,
-				CD529EF61730B77F005420D6 /* BikeZenTests.m */,
+				CD529EF51730B77F005420D6 /* DockSmartTests.h */,
+				CD529EF61730B77F005420D6 /* DockSmartTests.m */,
 				CD529EF01730B77F005420D6 /* Supporting Files */,
 			);
+			name = DockSmartTests;
 			path = BikeZenTests;
 			sourceTree = "<group>";
 		};
 		CD529EF01730B77F005420D6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				CD529EF11730B77F005420D6 /* BikeZenTests-Info.plist */,
+				CD529EF11730B77F005420D6 /* DockSmartTests-Info.plist */,
 				CD529EF21730B77F005420D6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -208,9 +210,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CD529EB61730B77F005420D6 /* BikeZen */ = {
+		CD529EB61730B77F005420D6 /* DockSmart */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CD529EFA1730B77F005420D6 /* Build configuration list for PBXNativeTarget "BikeZen" */;
+			buildConfigurationList = CD529EFA1730B77F005420D6 /* Build configuration list for PBXNativeTarget "DockSmart" */;
 			buildPhases = (
 				CD529EB31730B77F005420D6 /* Sources */,
 				CD529EB41730B77F005420D6 /* Frameworks */,
@@ -220,14 +222,14 @@
 			);
 			dependencies = (
 			);
-			name = BikeZen;
+			name = DockSmart;
 			productName = BikeZen;
-			productReference = CD529EB71730B77F005420D6 /* BikeZen.app */;
+			productReference = CD529EB71730B77F005420D6 /* DockSmart.app */;
 			productType = "com.apple.product-type.application";
 		};
-		CD529EE71730B77F005420D6 /* BikeZenTests */ = {
+		CD529EE71730B77F005420D6 /* DockSmartTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CD529EFD1730B77F005420D6 /* Build configuration list for PBXNativeTarget "BikeZenTests" */;
+			buildConfigurationList = CD529EFD1730B77F005420D6 /* Build configuration list for PBXNativeTarget "DockSmartTests" */;
 			buildPhases = (
 				CD529EE31730B77F005420D6 /* Sources */,
 				CD529EE41730B77F005420D6 /* Frameworks */,
@@ -239,9 +241,9 @@
 			dependencies = (
 				CD529EEE1730B77F005420D6 /* PBXTargetDependency */,
 			);
-			name = BikeZenTests;
+			name = DockSmartTests;
 			productName = BikeZenTests;
-			productReference = CD529EE81730B77F005420D6 /* BikeZenTests.octest */;
+			productReference = CD529EE81730B77F005420D6 /* DockSmartTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -250,11 +252,11 @@
 		CD529EAF1730B77F005420D6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = BikeZen;
+				CLASSPREFIX = DockSmart;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "John Penning";
 			};
-			buildConfigurationList = CD529EB21730B77F005420D6 /* Build configuration list for PBXProject "BikeZen" */;
+			buildConfigurationList = CD529EB21730B77F005420D6 /* Build configuration list for PBXProject "DockSmart" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -266,8 +268,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CD529EB61730B77F005420D6 /* BikeZen */,
-				CD529EE71730B77F005420D6 /* BikeZenTests */,
+				CD529EB61730B77F005420D6 /* DockSmart */,
+				CD529EE71730B77F005420D6 /* DockSmartTests */,
 			);
 		};
 /* End PBXProject section */
@@ -322,9 +324,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD529EC71730B77F005420D6 /* main.m in Sources */,
-				CD529ECB1730B77F005420D6 /* BikeZenAppDelegate.m in Sources */,
-				CD529ED71730B77F005420D6 /* BikeZenFirstViewController.m in Sources */,
-				CD529EDE1730B77F005420D6 /* BikeZenSecondViewController.m in Sources */,
+				CD529ECB1730B77F005420D6 /* DockSmartAppDelegate.m in Sources */,
+				CD529ED71730B77F005420D6 /* DockSmartFavoritesViewController.m in Sources */,
+				CD529EDE1730B77F005420D6 /* DockSmartMapViewController.m in Sources */,
 				CD0344331730D01400682A78 /* MyLocation.m in Sources */,
 				CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */,
 				CDC454001736D7BF008E2966 /* Station.m in Sources */,
@@ -335,7 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD529EF71730B77F005420D6 /* BikeZenTests.m in Sources */,
+				CD529EF71730B77F005420D6 /* DockSmartTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +346,7 @@
 /* Begin PBXTargetDependency section */
 		CD529EEE1730B77F005420D6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = CD529EB61730B77F005420D6 /* BikeZen */;
+			target = CD529EB61730B77F005420D6 /* DockSmart */;
 			targetProxy = CD529EED1730B77F005420D6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -437,10 +439,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
-				INFOPLIST_FILE = "BikeZen/BikeZen-Info.plist";
+				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
+				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = DockSmart;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -449,10 +451,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
-				INFOPLIST_FILE = "BikeZen/BikeZen-Info.plist";
+				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
+				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = DockSmart;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -467,9 +469,9 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
-				INFOPLIST_FILE = "BikeZenTests/BikeZenTests-Info.plist";
+				INFOPLIST_FILE = "BikeZenTests/DockSmartTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = DockSmartTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -485,9 +487,9 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
-				INFOPLIST_FILE = "BikeZenTests/BikeZenTests-Info.plist";
+				INFOPLIST_FILE = "BikeZenTests/DockSmartTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = DockSmartTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -496,7 +498,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CD529EB21730B77F005420D6 /* Build configuration list for PBXProject "BikeZen" */ = {
+		CD529EB21730B77F005420D6 /* Build configuration list for PBXProject "DockSmart" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD529EF81730B77F005420D6 /* Debug */,
@@ -505,7 +507,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CD529EFA1730B77F005420D6 /* Build configuration list for PBXNativeTarget "BikeZen" */ = {
+		CD529EFA1730B77F005420D6 /* Build configuration list for PBXNativeTarget "DockSmart" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD529EFB1730B77F005420D6 /* Debug */,
@@ -514,7 +516,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CD529EFD1730B77F005420D6 /* Build configuration list for PBXNativeTarget "BikeZenTests" */ = {
+		CD529EFD1730B77F005420D6 /* Build configuration list for PBXNativeTarget "DockSmartTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD529EFE1730B77F005420D6 /* Debug */,

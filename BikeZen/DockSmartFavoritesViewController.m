@@ -1,18 +1,18 @@
 //
-//  BikeZenFirstViewController.m
-//  BikeZen
+//  DockSmartFavoritesViewController.m
+//  DockSmart
 //
 //  Created by John Penning on 4/30/13.
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
 
-#import "BikeZenFirstViewController.h"
+#import "DockSmartFavoritesViewController.h"
 
-@interface BikeZenFirstViewController ()
+@interface DockSmartFavoritesViewController ()
 
 @end
 
-@implementation BikeZenFirstViewController
+@implementation DockSmartFavoritesViewController
 
 - (void)viewDidLoad
 {

@@ -1,20 +1,20 @@
 //
-//  BikeZenAppDelegate.m
-//  BikeZen
+//  DockSmartAppDelegate.m
+//  DockSmart
 //
 //  Created by John Penning on 4/30/13.
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
 
-#import "BikeZenAppDelegate.h"
+#import "DockSmartAppDelegate.h"
 #import "Station.h"
 #import "ParseOperation.h"
-#import "BikeZenSecondViewController.h"
+#import "DockSmartMapViewController.h"
 
-#pragma mark BikeZenAppDelegate ()
+#pragma mark DockSmartAppDelegate ()
 
 // forward declarations
-@interface BikeZenAppDelegate ()
+@interface DockSmartAppDelegate ()
 
 //@property (strong, nonatomic) NSURLConnection *earthquakeFeedConnection;
 @property (strong, nonatomic) NSMutableData *stationXMLData;    // the data returned from the NSURLConnection (or from initDataWithURL)
@@ -26,9 +26,9 @@
 
 
 #pragma mark -
-#pragma mark BikeZenAppDelegate
+#pragma mark DockSmartAppDelegate
 
-@implementation BikeZenAppDelegate
+@implementation DockSmartAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -131,7 +131,7 @@
 //
 - (void)addStationsToList:(NSArray *)stations {
     
-    // insert the earthquakes into our secondViewController's data source (for KVO purposes)
+    // insert the earthquakes into our mapViewController's data source (for KVO purposes)
 //    [self.rootViewController insertEarthquakes:earthquakes];
     
     //This will in turn add the stations to the map.
