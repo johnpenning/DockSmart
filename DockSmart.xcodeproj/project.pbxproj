@@ -32,6 +32,7 @@
 		CD529EF71730B77F005420D6 /* DockSmartTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EF61730B77F005420D6 /* DockSmartTests.m */; };
 		CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529F001730BFF0005420D6 /* MapKit.framework */; };
 		CD548C09174C69F10062F61A /* arrest.png in Resources */ = {isa = PBXBuildFile; fileRef = CD548C08174C69F10062F61A /* arrest.png */; };
+		CD76273117516B7000E22617 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */; };
 		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
 /* End PBXBuildFile section */
@@ -81,6 +82,8 @@
 		CD529F001730BFF0005420D6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		CD529F041730C209005420D6 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		CD548C08174C69F10062F61A /* arrest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrest.png; sourceTree = "<group>"; };
+		CD76272F17516B6F00E22617 /* DockSmartSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartSettingsViewController.h; sourceTree = "<group>"; };
+		CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartSettingsViewController.m; sourceTree = "<group>"; };
 		CDC453FB1736D5DA008E2966 /* ParseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ParseOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CDC453FC1736D5DA008E2966 /* ParseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ParseOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Station.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -167,6 +170,8 @@
 				CDC453FC1736D5DA008E2966 /* ParseOperation.m */,
 				CDC453FE1736D7BF008E2966 /* Station.h */,
 				CDC453FF1736D7BF008E2966 /* Station.m */,
+				CD76272F17516B6F00E22617 /* DockSmartSettingsViewController.h */,
+				CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */,
 			);
 			name = DockSmart;
 			path = BikeZen;
@@ -330,6 +335,7 @@
 				CD0344331730D01400682A78 /* MyLocation.m in Sources */,
 				CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */,
 				CDC454001736D7BF008E2966 /* Station.m in Sources */,
+				CD76273117516B7000E22617 /* DockSmartSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
