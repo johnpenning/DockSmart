@@ -9,6 +9,7 @@
 //#import <UIKit/UIKit.h>
 //#import <MapKit/MapKit.h>
 #import "DockSmartMapViewController.h"
+#import "DockSmartAppDelegate.h"
 #import "define.h"
 #import "Station.h"
 
@@ -16,7 +17,14 @@
 //#define DUPONT_LAT      38.909600
 //#define DUPONT_LONG     -77.043400
 
+// NSNotification name for reporting that refresh was tapped
+NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
+// NSNotification userInfo key for obtaining command to refresh the station list
+//NSString *kRefreshStationsKey = @"RefreshStationsKey";
+
 @interface DockSmartMapViewController ()
+
+- (IBAction)refeshTapped:(id)sender;
 
 @end
 
@@ -85,12 +93,22 @@
 
 - (void)viewDidUnload {
 //    [self setBikeDockViewSwitch:nil];
+//    [self setRefreshButtonTapped:nil];
     [super viewDidUnload];
     
     self.stationList = nil;
     
     [self removeObserver:self forKeyPath:@"stationList"];
 
+}
+
+- (void)refreshWasTapped
+{
+    assert([NSThread isMainThread]);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
+                                                        object:self
+                                                      userInfo:nil];
 }
 
 - (void)plotStationPosition:(NSArray *)stationList {
@@ -147,6 +165,13 @@
     return nil;
 }
 
+//- (IBAction)refreshTapped:(id)sender
+//{
+//    [self performSelectorOnMainThread:@selector(refreshWasTapped:)
+//                           withObject:nil
+//                        waitUntilDone:NO];
+//}
+
 //- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 //{
 //    Station *station = (Station*)view.annotation;
@@ -161,7 +186,7 @@
 - (void)insertStations:(NSArray *)stations
 {
     // this will allow us as an observer to notified (see observeValueForKeyPath)
-    // so we can update our UITableView
+    // so we can update our MapView
     //
     [self willChangeValueForKey:@"stationList"];
     [self.stationList addObjectsFromArray:stations];
@@ -181,4 +206,9 @@
     [self plotStationPosition:self.stationList];
 }
 
+- (IBAction)refeshTapped:(id)sender {
+    [self performSelectorOnMainThread:@selector(refreshWasTapped)
+                           withObject:nil
+                        waitUntilDone:NO];
+}
 @end

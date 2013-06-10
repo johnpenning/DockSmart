@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DockSmartFavoritesViewController : UIViewController
+@interface DockSmartFavoritesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

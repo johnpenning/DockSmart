@@ -202,14 +202,8 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
     {
         Station *tempStation = [[Station alloc] init];
         self.currentStationObject = tempStation;
-//        [station release];
-//    } else if ([elementName isEqualToString:kLinkElementName]) {
-//        NSString *relAttribute = [attributeDict valueForKey:@"rel"];
-//        if ([relAttribute isEqualToString:@"alternate"]) {
-//            NSString *USGSWebLink = [attributeDict valueForKey:@"href"];
-//            self.currentStationObject.USGSWebLink = [NSURL URLWithString:USGSWebLink];
-//        }
-    } else if ([elementName isEqualToString:kIDElementName] ||
+    }
+    else if ([elementName isEqualToString:kIDElementName] ||
                [elementName isEqualToString:kNameElementName] ||
                [elementName isEqualToString:kLatElementName] ||
                [elementName isEqualToString:kLongElementName] ||
@@ -218,7 +212,8 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
                [elementName isEqualToString:kPublicElementName] ||
                [elementName isEqualToString:kNbBikesElementName] ||
                [elementName isEqualToString:kNbEmptyDocksElementName] ||
-               [elementName isEqualToString:kLastStationUpdateElementName] ) {
+               [elementName isEqualToString:kLastStationUpdateElementName] )
+    {
         // For the other data elements within each station that we are interested in, begin accumulating parsed character data.
         // The contents are collected in parser:foundCharacters:.
         self.accumulatingParsedCharacterData = YES;

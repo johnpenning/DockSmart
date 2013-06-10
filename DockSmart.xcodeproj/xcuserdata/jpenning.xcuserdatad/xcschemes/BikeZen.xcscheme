@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CD529EB61730B77F005420D6"
-               BuildableName = "BikeZen.app"
+               BuildableName = "DockSmart.app"
                BlueprintName = "DockSmart"
                ReferencedContainer = "container:DockSmart.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CD529EE71730B77F005420D6"
-               BuildableName = "BikeZenTests.octest"
+               BuildableName = "DockSmartTests.octest"
                BlueprintName = "DockSmartTests"
                ReferencedContainer = "container:DockSmart.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CD529EB61730B77F005420D6"
-            BuildableName = "BikeZen.app"
+            BuildableName = "DockSmart.app"
             BlueprintName = "DockSmart"
             ReferencedContainer = "container:DockSmart.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CD529EB61730B77F005420D6"
-            BuildableName = "BikeZen.app"
+            BuildableName = "DockSmart.app"
             BlueprintName = "DockSmart"
             ReferencedContainer = "container:DockSmart.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CD529EB61730B77F005420D6"
-            BuildableName = "BikeZen.app"
+            BuildableName = "DockSmart.app"
             BlueprintName = "DockSmart"
             ReferencedContainer = "container:DockSmart.xcodeproj">
          </BuildableReference>

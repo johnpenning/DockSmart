@@ -202,26 +202,26 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "BikeZen/Station.m"
-         timestampString = "391064294.788181"
+         filePath = "BikeZen/DockSmartAppDelegate.m"
+         timestampString = "392499797.495634"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "48"
-         endingLineNumber = "48"
-         landmarkName = "-subtitle"
+         startingLineNumber = "156"
+         endingLineNumber = "156"
+         landmarkName = "-loadXMLData"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "No"
+         shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "BikeZen/Station.m"
-         timestampString = "391064294.788181"
+         filePath = "BikeZen/ParseOperation.m"
+         timestampString = "392499846.237456"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "42"
-         endingLineNumber = "42"
-         landmarkName = "-title"
+         startingLineNumber = "101"
+         endingLineNumber = "101"
+         landmarkName = "-addStationsToList:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

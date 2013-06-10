@@ -22,6 +22,8 @@
 
 - (void)addStationsToList:(NSArray *)stations;
 - (void)handleError:(NSError *)error;
+- (void)loadXMLData;
+- (void)refreshStationData;
 @end
 
 
@@ -34,7 +36,7 @@
 {
     // Override point for customization after application launch.
     
-    self.parseQueue = [NSOperationQueue new];
+//    self.parseQueue = [NSOperationQueue new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(addStations:)
@@ -44,20 +46,24 @@
                                              selector:@selector(stationError:)
                                                  name:kStationErrorNotif
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshStationData:)
+                                                 name:kRefreshTappedNotif
+                                               object:nil];
     
     // Spawn an NSOperation to parse the earthquake data so that the UI is not blocked while the
     // application parses the XML data.
     //
     // IMPORTANT! - Don't access or affect UIKit objects on secondary threads.
     //
-    ParseOperation *parseOperation = [[ParseOperation alloc] init];
-    [self.parseQueue addOperation:parseOperation];
-//    [parseOperation release];   // once added to the NSOperationQueue it's retained, we don't need it anymore
+//    ParseOperation *parseOperation = [[ParseOperation alloc] init];
+//    [self.parseQueue addOperation:parseOperation];
+//    
+//    // stationXMLData will be retained by the NSOperation until it has finished executing,
+//    // so we no longer need a reference to it in the main thread.
+//    self.stationXMLData = nil;
     
-    // earthquakeData will be retained by the NSOperation until it has finished executing,
-    // so we no longer need a reference to it in the main thread.
-    self.stationXMLData = nil;
-
+    [self loadXMLData];
     
     return YES;
 }
@@ -140,6 +146,26 @@
     //TODO: the following line is super dangerous and dumb as implemented.  Please change!
     [controller.childViewControllers[0] insertStations:stations];
     
+}
+
+- (void)loadXMLData
+{
+    self.parseQueue = [NSOperationQueue new];
+    
+    ParseOperation *parseOperation = [[ParseOperation alloc] init];
+    [self.parseQueue addOperation:parseOperation];
+    
+    // stationXMLData will be retained by the NSOperation until it has finished executing,
+    // so we no longer need a reference to it in the main thread.
+    self.stationXMLData = nil;
+
+}
+
+- (void)refreshStationData:(NSNotification *)notif
+{
+    assert([NSThread isMainThread]);
+    
+    [self loadXMLData];
 }
 
 @end

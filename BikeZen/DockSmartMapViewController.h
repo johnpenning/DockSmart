@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
+extern NSString *kRefreshTappedNotif;
+
 @interface DockSmartMapViewController : UIViewController <MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
@@ -16,8 +18,9 @@
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *bikeDockViewSwitch;
 @property (nonatomic) NSMutableArray *stationList;
 //@property (nonatomic, retain, readonly) NSDateFormatter *dateFormatter;
+//- (IBAction)refreshTapped:(id)sender;
 
-- (void)insertStations:(NSArray *)stations;   // addition method of earthquakes (for KVO purposes)
+- (void)insertStations:(NSArray *)stations;   // addition method of stations (for KVO purposes)
 //- (void)insertStationList:(NSArray *)array atIndexes:(NSIndexSet *)indexes
 - (void)plotStationPosition:(NSArray *)stationList;
 
