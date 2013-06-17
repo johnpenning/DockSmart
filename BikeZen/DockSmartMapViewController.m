@@ -9,9 +9,10 @@
 //#import <UIKit/UIKit.h>
 //#import <MapKit/MapKit.h>
 #import "DockSmartMapViewController.h"
-#import "DockSmartAppDelegate.h"
+#import "DockSmartDestinationsMasterViewController.h"
 #import "define.h"
 #import "Station.h"
+#import "StationDataController.h"
 
 //#define METERS_PER_MILE 1609.344
 //#define DUPONT_LAT      38.909600
@@ -23,9 +24,7 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
 //NSString *kRefreshStationsKey = @"RefreshStationsKey";
 
 @interface DockSmartMapViewController ()
-
 - (IBAction)refeshTapped:(id)sender;
-
 @end
 
 @implementation DockSmartMapViewController
@@ -35,7 +34,8 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.stationList = [NSMutableArray array];
+//    self.stationList = [NSMutableArray array];
+    self.dataController = [[StationDataController alloc] init];
     
     // KVO: listen for changes to our station data source for map view updates
     [self addObserver:self forKeyPath:@"stationList" options:0 context:NULL];
@@ -96,7 +96,8 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
 //    [self setRefreshButtonTapped:nil];
     [super viewDidUnload];
     
-    self.stationList = nil;
+//    self.stationList = nil;
+    self.dataController.stationList = nil;
     
     [self removeObserver:self forKeyPath:@"stationList"];
 
@@ -189,7 +190,8 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
     // so we can update our MapView
     //
     [self willChangeValueForKey:@"stationList"];
-    [self.stationList addObjectsFromArray:stations];
+//    [self.stationList addObjectsFromArray:stations];
+    [self.dataController addStationListObjectsFromArray:stations];
     [self didChangeValueForKey:@"stationList"];
 }
 
@@ -201,9 +203,7 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
 {
 //    [self.tableView reloadData];
     //TODO: reload map view
-//    NSEnumerator *enumerator = [self.stationList enumerateObjectsUsingBlock:<#^(id obj, NSUInteger idx, BOOL *stop)block#>]
-//    [self.stationList makeObjectsPerformSelector:<#(SEL)#>]
-    [self plotStationPosition:self.stationList];
+    [self plotStationPosition:self.dataController.stationList];
 }
 
 - (IBAction)refeshTapped:(id)sender {
@@ -211,4 +211,18 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
                            withObject:nil
                         waitUntilDone:NO];
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"Segue identifier: %@", [segue identifier]);
+    NSLog(@"Segue destination: %@", [[segue destinationViewController] title]);
+    
+    if ([[segue identifier] isEqualToString:@"Test"])
+    {
+        DockSmartDestinationsMasterViewController *vc = [segue destinationViewController];
+        //pass current station list to Destinations view controller
+//        [vc setDataController:self.dataController];
+    };
+}
+
 @end

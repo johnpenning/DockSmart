@@ -11,17 +11,23 @@
 
 extern NSString *kRefreshTappedNotif;
 
+@class StationDataController;
+
 @interface DockSmartMapViewController : UIViewController <MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 //@property NSDate *lastDataUpdate;
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *bikeDockViewSwitch;
-@property (nonatomic) NSMutableArray *stationList;
+
+//@property (nonatomic) NSMutableArray *stationList;
+
 //@property (nonatomic, retain, readonly) NSDateFormatter *dateFormatter;
 //- (IBAction)refreshTapped:(id)sender;
 
 - (void)insertStations:(NSArray *)stations;   // addition method of stations (for KVO purposes)
 //- (void)insertStationList:(NSArray *)array atIndexes:(NSIndexSet *)indexes
-- (void)plotStationPosition:(NSArray *)stationList;
+//- (void)plotStationPosition:(NSArray *)stationList;
+
+@property (strong, nonatomic) StationDataController *dataController;
 
 @end

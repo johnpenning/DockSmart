@@ -10,6 +10,7 @@
 #import "Station.h"
 #import "ParseOperation.h"
 #import "DockSmartMapViewController.h"
+#import "StationDataController.h"
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -140,11 +141,26 @@
     // insert the earthquakes into our mapViewController's data source (for KVO purposes)
 //    [self.rootViewController insertEarthquakes:earthquakes];
     
+    //Insert stations in .plist file for displaying in the Destinations view later.
+//    NSString* plistPath = nil;
+//    NSFileManager* manager = [NSFileManager defaultManager];
+//    if ((plistPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Supporting Files/stationData.plist"]))
+//    {
+//        if ([manager isWritableFileAtPath:plistPath])
+//        {
+//            NSMutableDictionary* infoDict = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
+//            [infoDict setObject:@"foo object" forKey:@"fookey"];
+//            [infoDict writeToFile:plistPath atomically:NO];
+//            [manager setAttributes:[NSDictionary dictionaryWithObject:[NSDate date] forKey:NSFileModificationDate] ofItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
+//        }
+//    }
+    
     //This will in turn add the stations to the map.
     UIViewController *controller = (UIViewController*)self.window.rootViewController;
-//    if (controller.is)
-    //TODO: the following line is super dangerous and dumb as implemented.  Please change!
+    //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
     [controller.childViewControllers[0] insertStations:stations];
+//    DockSmartMapViewController *mapViewController = (DockSmartMapViewController *)self.window.rootViewController.childViewControllers[0];
+//    [mapViewController.dataController addStationListObjectsFromArray:stations];
     
 }
 
