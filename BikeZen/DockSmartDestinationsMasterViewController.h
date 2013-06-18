@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DockSmartDestinationsMasterViewController : UITableViewController
+@interface DockSmartDestinationsMasterViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate>
 
 @end

@@ -212,17 +212,17 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
                         waitUntilDone:NO];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSLog(@"Segue identifier: %@", [segue identifier]);
-    NSLog(@"Segue destination: %@", [[segue destinationViewController] title]);
-    
-    if ([[segue identifier] isEqualToString:@"Test"])
-    {
-        DockSmartDestinationsMasterViewController *vc = [segue destinationViewController];
-        //pass current station list to Destinations view controller
-//        [vc setDataController:self.dataController];
-    };
-}
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//{
+//    NSLog(@"Segue identifier: %@", [segue identifier]);
+//    NSLog(@"Segue destination: %@", [[segue destinationViewController] title]);
+//    
+//    if ([[segue identifier] isEqualToString:@"Test"])
+//    {
+//        DockSmartDestinationsMasterViewController *vc = [segue destinationViewController];
+//        //pass current station list to Destinations view controller
+////        [vc setDataController:self.dataController];
+//    };
+//}
 
 @end

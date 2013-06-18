@@ -60,6 +60,7 @@
 @property NSInteger nbBikes;
 @property NSInteger nbEmptyDocks;
 @property (nonatomic, copy) NSDate *lastStationUpdate;
+//TODO: add distance from current user location property?
 
 - (id)initWithStationID:(NSInteger)stationID name:(NSString*)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude installed:(bool)installed locked:(bool)locked publiclyViewable:(bool)publiclyViewable nbBikes:(NSInteger)nbBikes nbEmptyDocks:(NSInteger)nbEmptyDocks lastStationUpdate:(NSDate *)lastStationUpdate;
 

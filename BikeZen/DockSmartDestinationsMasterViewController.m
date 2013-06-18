@@ -15,6 +15,11 @@
 
 @interface DockSmartDestinationsMasterViewController ()
 
+/*
+ The searchResults array contains the content filtered as a result of a search.
+ */
+@property (nonatomic) NSMutableArray *searchResults;
+
 @end
 
 @implementation DockSmartDestinationsMasterViewController
@@ -53,7 +58,14 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
+    StationDataController *dataController = [self.tabBarController.childViewControllers[0] dataController];
+    [dataController setSortedStationList:[dataController sortStationList:[dataController stationList] byMethod:StationDataSortByName]];
+
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    //deselect the last row selected
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -145,9 +157,9 @@
     // Configure the cell...
     
     static NSString *CellIdentifier = @"StationCell";
-    DockSmartMapViewController *controller = self.tabBarController.childViewControllers[0];
+    DockSmartMapViewController *mapViewController = self.tabBarController.childViewControllers[0];
     
-    if (controller.class != [DockSmartMapViewController class])
+    if (mapViewController.class != [DockSmartMapViewController class])
     {
         NSLog(@"ERROR: Incorrect class of TabBarController index!");
         return nil;
@@ -161,7 +173,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    Station *stationAtIndex = [controller.dataController objectInStationListAtIndex:indexPath.row];
+    Station *stationAtIndex = [mapViewController.dataController objectInSortedStationListAtIndex:indexPath.row];
     
     [[cell textLabel] setText:stationAtIndex.name];
 //    [[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)sightingAtIndex.date]];
@@ -214,7 +226,7 @@
 {
     // Navigation logic may go here. Create and push another view controller.
     /*
-     <#DetailViewController#> *detailViewControlle`r = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
      // ...
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
@@ -226,8 +238,96 @@
     if ([[segue identifier] isEqualToString:@"DestinationsToStationDetail"]) {
         DockSmartMapViewController *mapViewController = self.tabBarController.childViewControllers[0];
         DockSmartStationDetailViewController *detailViewController = [segue destinationViewController];
-        detailViewController.station = [mapViewController.dataController objectInStationListAtIndex:[self.tableView indexPathForSelectedRow].row];
+        detailViewController.station = [mapViewController.dataController objectInSortedStationListAtIndex:[self.tableView indexPathForSelectedRow].row];
     }
+}
+
+/* Search Bar Implementation - Pilfered & tweaked from Apple's TableSearch example project */
+
+#pragma mark - Content Filtering
+
+- (void)updateFilteredContentForLocationName:(NSString *)locationName type:(NSString *)typeName
+{
+	/*
+	 Update the filtered array based on the search text and scope.
+	 */
+    if ((locationName == nil) || [locationName length] == 0)
+    {
+        // If there is no search string and the scope is "All".
+        if (typeName == nil)
+        {
+            self.searchResults = [self.products mutableCopy];
+        }
+        else
+        {
+            // If there is no search string and the scope is chosen.
+            NSMutableArray *searchResults = [[NSMutableArray alloc] init];
+            for (APLProduct *product in self.products)
+            {
+                if ([product.type isEqualToString:typeName])
+                {
+                    [searchResults addObject:product];
+                }
+            }
+            self.searchResults = searchResults;
+        }
+        return;
+    }
+    
+    
+    [self.searchResults removeAllObjects]; // First clear the filtered array.
+	/*
+	 Search the main list for products whose type matches the scope (if selected) and whose name matches searchText; add items that match to the filtered array.
+	 */
+    for (APLProduct *product in self.products)
+	{
+		if ((typeName == nil) || [product.type isEqualToString:typeName])
+		{
+            NSUInteger searchOptions = NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+            NSRange productNameRange = NSMakeRange(0, product.name.length);
+            NSRange foundRange = [product.name rangeOfString:productName options:searchOptions range:productNameRange];
+            if (foundRange.length > 0)
+			{
+				[self.searchResults addObject:product];
+            }
+		}
+	}
+}
+
+
+#pragma mark - UISearchDisplayController Delegate Methods
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    NSString *scope;
+    
+    NSInteger selectedScopeButtonIndex = [self.searchDisplayController.searchBar selectedScopeButtonIndex];
+    if (selectedScopeButtonIndex > 0)
+    {
+        scope = [[APLProduct deviceTypeNames] objectAtIndex:(selectedScopeButtonIndex - 1)];
+    }
+    
+    [self updateFilteredContentForProductName:searchString type:scope];
+    
+    // Return YES to cause the search result table view to be reloaded.
+    return YES;
+}
+
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
+{
+    NSString *searchString = [self.searchDisplayController.searchBar text];
+    NSString *scope;
+    
+    if (searchOption > 0)
+    {
+        scope = [[APLProduct deviceTypeNames] objectAtIndex:(searchOption - 1)];
+    }
+    
+    [self updateFilteredContentForProductName:searchString type:scope];
+    
+    // Return YES to cause the search result table view to be reloaded.
+    return YES;
 }
 
 @end

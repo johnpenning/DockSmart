@@ -52,6 +52,10 @@
     return [self.stationList objectAtIndex:index];
 }
 
+- (Station *)objectInSortedStationListAtIndex:(NSUInteger)index {
+    return [self.sortedStationList objectAtIndex:index];
+}
+
 - (void)addStationListObject:(Station *)station
 {
     [self.stationList addObject:station];
@@ -60,6 +64,32 @@
 - (void)addStationListObjectsFromArray:(NSArray *)stations
 {
     [self.stationList addObjectsFromArray:stations];
+}
+
+- (NSArray *)sortStationList:(NSMutableArray *)stations byMethod:(StationDataSortMethod)method;
+{
+    NSSortDescriptor *sortDescriptor;
+    
+    switch (method) {
+        case StationDataSortByName:
+        default:
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+            break;
+        case StationDataSortByBikes:
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"nbBikes" ascending:NO];
+            break;
+        case StationDataSortByDocks:
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"nbEmptyDocks" ascending:NO];
+            break;
+//        case StationDataSortByDistance:
+//            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"distance" ascending:YES];
+//            break;
+    }
+    
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray;
+    sortedArray = [stations sortedArrayUsingDescriptors:sortDescriptors];
+    return sortedArray;
 }
 
 @end
