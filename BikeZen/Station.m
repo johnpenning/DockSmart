@@ -7,6 +7,7 @@
 //
 
 #import "Station.h"
+#import "MyLocation.h"
 
 @implementation Station
 
@@ -17,10 +18,10 @@
     if (self)
     {
         _stationID = stationID;
-        _name = name;
-        _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-        _latitude = latitude;
-        _longitude = longitude;
+//        _name = name;
+//        _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+//        _latitude = latitude;
+//        _longitude = longitude;
         _installed = installed;
         _locked = locked;
         _publiclyViewable = publiclyViewable;
@@ -32,16 +33,16 @@
     return nil;
 }
 
-- (void)initCoordinateWithLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude
-{
-    _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-}
+//- (void)initCoordinateWithLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude
+//{
+//    _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+//}
 
-- (NSString *)title
-{
-//    return [[NSString alloc] initWithFormat:@"Test name"];
-    return _name;
-}
+//- (NSString *)title
+//{
+////    return [[NSString alloc] initWithFormat:@"Test name"];
+//    return _name;
+//}
 
 - (NSString *)subtitle
 {

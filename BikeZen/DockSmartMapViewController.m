@@ -12,7 +12,7 @@
 #import "DockSmartDestinationsMasterViewController.h"
 #import "define.h"
 #import "Station.h"
-#import "StationDataController.h"
+#import "LocationDataController.h"
 
 //#define METERS_PER_MILE 1609.344
 //#define DUPONT_LAT      38.909600
@@ -35,7 +35,7 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
 	// Do any additional setup after loading the view, typically from a nib.
     
 //    self.stationList = [NSMutableArray array];
-    self.dataController = [[StationDataController alloc] init];
+    self.dataController = [[LocationDataController alloc] init];
     
     // KVO: listen for changes to our station data source for map view updates
     [self addObserver:self forKeyPath:@"stationList" options:0 context:NULL];
@@ -191,7 +191,7 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
     //
     [self willChangeValueForKey:@"stationList"];
 //    [self.stationList addObjectsFromArray:stations];
-    [self.dataController addStationListObjectsFromArray:stations];
+    [self.dataController addLocationObjectsFromArray:stations toList:self.dataController.stationList];
     [self didChangeValueForKey:@"stationList"];
 }
 

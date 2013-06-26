@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
+		CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD351778BA9B00446A9A /* LocationDataController.m */; };
+		CD39AD391778C11100446A9A /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD381778C11100446A9A /* Address.m */; };
 		CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBA1730B77F005420D6 /* UIKit.framework */; };
 		CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBC1730B77F005420D6 /* Foundation.framework */; };
 		CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBE1730B77F005420D6 /* CoreGraphics.framework */; };
@@ -57,6 +59,10 @@
 		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLocation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CD39AD341778BA9B00446A9A /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
+		CD39AD351778BA9B00446A9A /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
+		CD39AD371778C11100446A9A /* Address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Address.h; sourceTree = "<group>"; };
+		CD39AD381778C11100446A9A /* Address.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Address.m; sourceTree = "<group>"; };
 		CD529EB71730B77F005420D6 /* DockSmart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockSmart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD529EBA1730B77F005420D6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CD529EBC1730B77F005420D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -199,6 +205,10 @@
 				CDA95512176E729B003C49DF /* DockSmartStationDetailViewController.m */,
 				CDA95514176E72C4003C49DF /* DockSmartAddressDetailViewController.h */,
 				CDA95515176E72C4003C49DF /* DockSmartAddressDetailViewController.m */,
+				CD39AD341778BA9B00446A9A /* LocationDataController.h */,
+				CD39AD351778BA9B00446A9A /* LocationDataController.m */,
+				CD39AD371778C11100446A9A /* Address.h */,
+				CD39AD381778C11100446A9A /* Address.m */,
 			);
 			name = DockSmart;
 			path = BikeZen;
@@ -370,6 +380,8 @@
 				CDA95510176CCE47003C49DF /* StationDataController.m in Sources */,
 				CDA95513176E729B003C49DF /* DockSmartStationDetailViewController.m in Sources */,
 				CDA95516176E72C4003C49DF /* DockSmartAddressDetailViewController.m in Sources */,
+				CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */,
+				CD39AD391778C11100446A9A /* Address.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

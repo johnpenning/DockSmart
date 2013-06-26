@@ -11,7 +11,7 @@
 
 extern NSString *kRefreshTappedNotif;
 
-@class StationDataController;
+@class LocationDataController;
 
 @interface DockSmartMapViewController : UIViewController <MKMapViewDelegate>
 
@@ -28,6 +28,6 @@ extern NSString *kRefreshTappedNotif;
 //- (void)insertStationList:(NSArray *)array atIndexes:(NSIndexSet *)indexes
 //- (void)plotStationPosition:(NSArray *)stationList;
 
-@property (strong, nonatomic) StationDataController *dataController;
+@property (strong, nonatomic) LocationDataController *dataController;
 
 @end

@@ -9,12 +9,16 @@
 #import "DockSmartDestinationsMasterViewController.h"
 #import "DockSmartAddressDetailViewController.h"
 #import "DockSmartStationDetailViewController.h"
+#import "MyLocation.h"
 #import "Station.h"
-#import "StationDataController.h"
+#import "Address.h"
+#import "LocationDataController.h"
 #import "DockSmartMapViewController.h"
 
 @interface DockSmartDestinationsMasterViewController ()
 
+//The station data controller, copied over from the MapView when this view appears.
+@property (nonatomic) LocationDataController *dataController;
 /*
  The searchResults array contains the content filtered as a result of a search.
  */
@@ -52,15 +56,21 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-//    // KVO: listen for changes to our station data source for map view updates
-//    [self addObserver:self forKeyPath:@"stationList" options:0 context:NULL];
+    // KVO: listen for changes to our station data source for map view updates
+    [self addObserver:self forKeyPath:@"stationList" options:0 context:NULL];
+    
+    /*
+     Create a mutable array to contain products for the search results table.
+     */
+    self.searchResults = [NSMutableArray arrayWithCapacity:[self.dataController countOfLocationList:self.dataController.stationList]];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
-    StationDataController *dataController = [self.tabBarController.childViewControllers[0] dataController];
-    [dataController setSortedStationList:[dataController sortStationList:[dataController stationList] byMethod:StationDataSortByName]];
+    self.dataController = [self.tabBarController.childViewControllers[0] dataController];
+    [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
 
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     //deselect the last row selected
@@ -93,7 +103,7 @@
 {
 #warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 2;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -102,23 +112,49 @@
     // Return the number of rows in the section.
     
     switch (section) {
-        case 0:
+        case DestinationTableSectionSearch: //Search cell
+            if (tableView == self.searchDisplayController.searchResultsTableView)
+            {
+                if ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
+                {
+                    return 1;
+                }
+                return 0;
+            }
+            break;
+        case DestinationTableSectionFavorites: //Favorites
             return 0;
             break;
-        case 1:
+        case DestinationTableSectionRecents: //Recents
+            return 0;
+            break;
+        case DestinationTableSectionStations:
         {
             /* "Stations" section: */
-            //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
-            DockSmartMapViewController *controller = self.tabBarController.childViewControllers[0];
-            if (controller.class == [DockSmartMapViewController class])
+//            //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
+//            DockSmartMapViewController *controller = self.tabBarController.childViewControllers[0];
+//            if (controller.class == [DockSmartMapViewController class])
+//            {
+//                controller = (DockSmartMapViewController*)controller;
+//                return [controller.dataController countOfStationList];
+//            }
+//            else
+//            {
+//                NSLog(@"ERROR: Incorrect class of TabBarController index!");
+//                return 0;
+//            }
+            
+            /*
+             If the requesting table view is the search display controller's table view, return the count of
+             the filtered list, otherwise return the count of the main list.
+             */
+            if (tableView == self.searchDisplayController.searchResultsTableView)
             {
-                controller = (DockSmartMapViewController*)controller;
-                return [controller.dataController countOfStationList];
+                return [self.searchResults count] == 0 ? 0 : ([self.searchResults count] - 1); //TODO change constant arithmetic to dynamic object type counting when other sections come into play
             }
             else
             {
-                NSLog(@"ERROR: Incorrect class of TabBarController index!");
-                return 0;
+                return [self.dataController countOfLocationList:self.dataController.sortedStationList];
             }
         }
             break;
@@ -137,10 +173,16 @@
         return nil; //Do not put a section header on a section with no rows
     
     switch (section) {
-        case 0:
+        case DestinationTableSectionSearch: //Search cell
+            return @"Search for...";
+            break;
+        case DestinationTableSectionFavorites:
             return @"Favorites";
             break;
-        case 1:
+        case DestinationTableSectionRecents:
+            return @"Recents";
+            break;
+        case DestinationTableSectionStations:
             return @"Stations";
             break;
         default:
@@ -156,28 +198,79 @@
     
     // Configure the cell...
     
-    static NSString *CellIdentifier = @"StationCell";
-    DockSmartMapViewController *mapViewController = self.tabBarController.childViewControllers[0];
+    static NSString *CellIdentifier;
     
-    if (mapViewController.class != [DockSmartMapViewController class])
-    {
-        NSLog(@"ERROR: Incorrect class of TabBarController index!");
-        return nil;
-    }
-//    static NSDateFormatter *formatter = nil;
-//    
-//    if (formatter == nil) {
-//        formatter = [[NSDateFormatter alloc] init];
-//        [formatter setDateStyle:NSDateFormatterMediumStyle];
+//    if ((tableView == self.searchDisplayController.searchResultsTableView) && ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]]) && (indexPath.row == 0))
+//    {
+//        CellIdentifier = @"SearchCell";
+//    }
+//    else
+//    {
+//        CellIdentifier = @"StationCell";
 //    }
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    switch ([indexPath section]) {
+        case DestinationTableSectionSearch:
+            CellIdentifier = @"SearchCell";
+            break;
+        case DestinationTableSectionFavorites:
+            break;
+        case DestinationTableSectionRecents:
+            break;
+        case DestinationTableSectionStations:
+            CellIdentifier = @"StationCell";
+            break;
+        default:
+            break;
+    }
     
-    Station *stationAtIndex = [mapViewController.dataController objectInSortedStationListAtIndex:indexPath.row];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    [[cell textLabel] setText:stationAtIndex.name];
-//    [[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)sightingAtIndex.date]];
-
+    MyLocation *locationAtIndex;
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+	{
+        switch ([indexPath section]) {
+            case DestinationTableSectionSearch:
+                locationAtIndex = [self.searchResults objectAtIndex:indexPath.row];
+                break;
+            case DestinationTableSectionFavorites:
+                //TODO
+                break;
+            case DestinationTableSectionRecents:
+                break;
+            case DestinationTableSectionStations:
+                locationAtIndex = [self.searchResults objectAtIndex:(indexPath.row+1)]; //TODO change constant arithmetic to dynamic object type counting when other sections come into play
+                break;
+            default:
+                break;
+        }
+    }
+	else
+	{
+        locationAtIndex = (Station*)[self.dataController objectInLocationList:self.dataController.sortedStationList atIndex:indexPath.row]; //[mapViewController.dataController objectInSortedStationListAtIndex:indexPath.row];
+    }
+    
+    //Set main text label:
+    if ([CellIdentifier isEqualToString:@"SearchCell"])
+    {
+        [[cell textLabel] setText:[NSString stringWithFormat:@"\"%@\"", locationAtIndex.name]];
+    }
+    else
+        [[cell textLabel] setText:locationAtIndex.name];
+    
+    //Set detail text label if applicable:
+    if ([locationAtIndex isKindOfClass:[Station class]])
+    {
+        Station *stationAtIndex = (Station *)locationAtIndex;
+        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %d Docks: %d Distance: 99.99 mi", stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks /*, TODO insert stationAtIndex.distance later*/]];
+    }
+    else if ([locationAtIndex isKindOfClass:[Address class]])
+    {
+//        Address *addressAtIndex = (Address *)locationAtIndex;
+        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Distance: 99.99 mi" /* TODO insert stationAtIndex.distance later*/]];
+    }
+    
     return cell;
 }
 
@@ -236,9 +329,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"DestinationsToStationDetail"]) {
-        DockSmartMapViewController *mapViewController = self.tabBarController.childViewControllers[0];
+//        DockSmartMapViewController *mapViewController = self.tabBarController.childViewControllers[0];
         DockSmartStationDetailViewController *detailViewController = [segue destinationViewController];
-        detailViewController.station = [mapViewController.dataController objectInSortedStationListAtIndex:[self.tableView indexPathForSelectedRow].row];
+        detailViewController.station = (Station *)[self.dataController objectInLocationList:self.dataController.sortedStationList atIndex:[self.tableView indexPathForSelectedRow].row];
     }
 }
 
@@ -256,18 +349,18 @@
         // If there is no search string and the scope is "All".
         if (typeName == nil)
         {
-            self.searchResults = [self.products mutableCopy];
+            self.searchResults = [self.dataController.sortedStationList mutableCopy];
         }
         else
         {
             // If there is no search string and the scope is chosen.
             NSMutableArray *searchResults = [[NSMutableArray alloc] init];
-            for (APLProduct *product in self.products)
+            for (Station *station in self.dataController.sortedStationList)
             {
-                if ([product.type isEqualToString:typeName])
-                {
-                    [searchResults addObject:product];
-                }
+//                if ([product.type isEqualToString:typeName])
+//                {
+                    [searchResults addObject:station];
+//                }
             }
             self.searchResults = searchResults;
         }
@@ -276,22 +369,31 @@
     
     
     [self.searchResults removeAllObjects]; // First clear the filtered array.
+    
+    /* Add a search row at the top, to begin a geocode for the input address.
+       Since this does not have coordinates yet, initialize this simply as a MyLocation object
+       instead of an Address.
+     */
+    MyLocation *newSearchAddress = [[MyLocation alloc] initWithName:locationName latitude:0 longitude:0];
+    [self.searchResults addObject:newSearchAddress];
+    
 	/*
-	 Search the main list for products whose type matches the scope (if selected) and whose name matches searchText; add items that match to the filtered array.
+	 Search the main list for locations whose type matches the scope (if selected) and whose name matches searchText; add items that match to the filtered array.
 	 */
-    for (APLProduct *product in self.products)
+    for (Station *station in self.dataController.sortedStationList)
 	{
-		if ((typeName == nil) || [product.type isEqualToString:typeName])
-		{
+//		if ((typeName == nil) || [product.type isEqualToString:typeName])
+//		{
             NSUInteger searchOptions = NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
-            NSRange productNameRange = NSMakeRange(0, product.name.length);
-            NSRange foundRange = [product.name rangeOfString:productName options:searchOptions range:productNameRange];
+            NSRange stationNameRange = NSMakeRange(0, station.name.length);
+            NSRange foundRange = [station.name rangeOfString:locationName options:searchOptions range:stationNameRange];
             if (foundRange.length > 0)
 			{
-				[self.searchResults addObject:product];
+				[self.searchResults addObject:station];
             }
-		}
+//		}
 	}
+    
 }
 
 
@@ -299,15 +401,15 @@
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
-    NSString *scope;
+    NSString *scope = nil;
     
-    NSInteger selectedScopeButtonIndex = [self.searchDisplayController.searchBar selectedScopeButtonIndex];
-    if (selectedScopeButtonIndex > 0)
-    {
-        scope = [[APLProduct deviceTypeNames] objectAtIndex:(selectedScopeButtonIndex - 1)];
-    }
+//    NSInteger selectedScopeButtonIndex = [self.searchDisplayController.searchBar selectedScopeButtonIndex];
+//    if (selectedScopeButtonIndex > 0)
+//    {
+//        scope = [[APLProduct deviceTypeNames] objectAtIndex:(selectedScopeButtonIndex - 1)];
+//    }
     
-    [self updateFilteredContentForProductName:searchString type:scope];
+    [self updateFilteredContentForLocationName:searchString type:scope];
     
     // Return YES to cause the search result table view to be reloaded.
     return YES;
@@ -319,12 +421,12 @@
     NSString *searchString = [self.searchDisplayController.searchBar text];
     NSString *scope;
     
-    if (searchOption > 0)
-    {
-        scope = [[APLProduct deviceTypeNames] objectAtIndex:(searchOption - 1)];
-    }
+//    if (searchOption > 0)
+//    {
+//        scope = [[APLProduct deviceTypeNames] objectAtIndex:(searchOption - 1)];
+//    }
     
-    [self updateFilteredContentForProductName:searchString type:scope];
+    [self updateFilteredContentForLocationName:searchString type:scope];
     
     // Return YES to cause the search result table view to be reloaded.
     return YES;

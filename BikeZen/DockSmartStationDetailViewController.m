@@ -8,7 +8,6 @@
 
 #import "DockSmartStationDetailViewController.h"
 #import "Station.h"
-#import "StationDataController.h"
 
 @interface DockSmartStationDetailViewController ()
 

@@ -66,7 +66,7 @@
     [self.stationList addObjectsFromArray:stations];
 }
 
-- (NSArray *)sortStationList:(NSMutableArray *)stations byMethod:(StationDataSortMethod)method;
+- (NSArray *)sortStationList:(NSMutableArray *)stations byMethod:(StationDataSortMethod)method
 {
     NSSortDescriptor *sortDescriptor;
     

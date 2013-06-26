@@ -27,4 +27,5 @@ typedef NS_ENUM(NSInteger, StationDataSortMethod) {
 - (void)addStationListObject:(Station *)station;
 - (void)addStationListObjectsFromArray:(NSArray *)stations;
 - (NSArray *)sortStationList:(NSMutableArray *)stations byMethod:(StationDataSortMethod)method;
+
 @end

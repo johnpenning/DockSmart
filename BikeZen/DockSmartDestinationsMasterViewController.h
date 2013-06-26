@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, DestinationTableSectionNumber) {
+    DestinationTableSectionSearch           = 0,
+    DestinationTableSectionFavorites        = 1,
+    DestinationTableSectionRecents          = 2,
+    DestinationTableSectionStations         = 3,
+};
+
 @interface DockSmartDestinationsMasterViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate>
 
 @end
