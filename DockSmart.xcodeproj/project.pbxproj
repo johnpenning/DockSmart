@@ -34,6 +34,8 @@
 		CD529EF71730B77F005420D6 /* DockSmartTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EF61730B77F005420D6 /* DockSmartTests.m */; };
 		CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529F001730BFF0005420D6 /* MapKit.framework */; };
 		CD548C09174C69F10062F61A /* arrest.png in Resources */ = {isa = PBXBuildFile; fileRef = CD548C08174C69F10062F61A /* arrest.png */; };
+		CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5541E3177F997D00167D87 /* MBProgressHUD.m */; };
+		CD5541E5177F997D00167D87 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5541E3177F997D00167D87 /* MBProgressHUD.m */; };
 		CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */; };
 		CD6DCB2B176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6DCB2A176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m */; };
 		CD76273117516B7000E22617 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */; };
@@ -96,6 +98,8 @@
 		CD529F041730C209005420D6 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		CD548C08174C69F10062F61A /* arrest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrest.png; sourceTree = "<group>"; };
 		CD5541DF177E9BE100167D87 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		CD5541E2177F997D00167D87 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = ../MBProgressHUD/MBProgressHUD.h; sourceTree = "<group>"; };
+		CD5541E3177F997D00167D87 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = ../MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		CD6DCB26176AB54100133762 /* DockSmartDestinationsMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartDestinationsMasterViewController.h; sourceTree = "<group>"; };
 		CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartDestinationsMasterViewController.m; sourceTree = "<group>"; };
 		CD6DCB29176AB7BA00133762 /* DockSmartDestinationsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartDestinationsDetailViewController.h; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 		CD529EAE1730B77F005420D6 = {
 			isa = PBXGroup;
 			children = (
+				CD5541E1177F98D600167D87 /* MBProgressHUD */,
 				CD5541DF177E9BE100167D87 /* AddressBookUI.framework */,
 				CD0344341730DC9D00682A78 /* CoreLocation.framework */,
 				CD529F001730BFF0005420D6 /* MapKit.framework */,
@@ -255,6 +260,15 @@
 				CD529EF21730B77F005420D6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CD5541E1177F98D600167D87 /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				CD5541E2177F997D00167D87 /* MBProgressHUD.h */,
+				CD5541E3177F997D00167D87 /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -390,6 +404,7 @@
 				CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */,
 				CD39AD391778C11100446A9A /* Address.m in Sources */,
 				CDF8A4DC177BDE9A00063B07 /* SearchResultsDetailViewController.m in Sources */,
+				CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +413,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD529EF71730B77F005420D6 /* DockSmartTests.m in Sources */,
+				CD5541E5177F997D00167D87 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,6 +15,7 @@
 #import "Address.h"
 #import "LocationDataController.h"
 #import "DockSmartMapViewController.h"
+#import "MBProgressHUD.h"
 
 @interface DockSmartDestinationsMasterViewController ()
 
@@ -23,8 +24,10 @@
 /*
  The searchResults array contains the content filtered as a result of a search.
  */
-@property (nonatomic) NSMutableArray *searchResults;
-@property (nonatomic) NSUInteger geocodeSearchResultsCount;
+@property (nonatomic) MyLocation *searchLocation;
+@property (nonatomic) NSMutableArray *filterResults;
+@property (nonatomic) NSMutableArray *geocodeSearchResults;
+//@property (nonatomic) NSUInteger geocodeSearchResultsCount;
 
 - (void)performStringGeocode:(NSString *)string;
 
@@ -66,7 +69,9 @@
     /*
      Create a mutable array to contain products for the search results table.
      */
-    self.searchResults = [NSMutableArray arrayWithCapacity:[self.dataController countOfLocationList:self.dataController.stationList]];
+    self.filterResults = [NSMutableArray arrayWithCapacity:[self.dataController countOfLocationList:self.dataController.stationList]];
+    //Create geocode search results mutable array.
+    self.geocodeSearchResults = [[NSMutableArray alloc] init];
 
 }
 
@@ -99,6 +104,7 @@
     //Reload station data in Destinations list
 #warning Ineffective listener.
     [self.tableView reloadData];
+    //TODO: reperform search
 }
 
 #pragma mark - Table view data source
@@ -119,26 +125,29 @@
         case DestinationTableSectionSearch: //Search cell
             if (tableView == self.searchDisplayController.searchResultsTableView)
             {
-                if ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-                {
+//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
+//                {
+//                    return 1;
+//                }
+//                return 0;
+                if (self.searchLocation == nil)
+                    return 0;
+                else
                     return 1;
-                }
-                return 0;
             }
+            return 0;
             break;
         case DestinationTableSectionSearchResults:
             if (tableView == self.searchDisplayController.searchResultsTableView)
             {
-//                if ([[self.searchResults objectAtIndex:0] isMemberOfClass:[Address class]])
-//                {
-                    return self.geocodeSearchResultsCount;
-//                }
+                return [self.geocodeSearchResults count];
             }
-            break;
-        case DestinationTableSectionFavorites: //Favorites
             return 0;
             break;
-        case DestinationTableSectionRecents: //Recents
+        case DestinationTableSectionFavorites: //Favorites TODO
+            return 0;
+            break;
+        case DestinationTableSectionRecents: //Recents TODO
             return 0;
             break;
         case DestinationTableSectionStations:
@@ -163,21 +172,23 @@
              */
             if (tableView == self.searchDisplayController.searchResultsTableView)
             {
-                NSInteger numRows = [self.searchResults count]; //start with the full array
+//                NSInteger numRows = [self.filterResults count]; //start with the full array
+//                
+//                //just return 0 if the array is empty
+//                if (numRows == 0)
+//                    return 0;
+//                
+//                //if the first result is a SearchCell (i.e. a geocode prompt), subtract 1
+//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
+//                    numRows--;
+//                
+//                //subtract each of the previous geocode search results, with a sanity check:
+//                if (numRows >= self.geocodeSearchResultsCount)
+//                    numRows -= self.geocodeSearchResultsCount;
+//                
+//                return numRows; //[self.filterResults count] == 0 ? 0 : ([self.filterResults count] - 1); //TODO change constant arithmetic to dynamic object type counting when other sections come into play
                 
-                //just return 0 if the array is empty
-                if (numRows == 0)
-                    return 0;
-                
-                //if the first result is a SearchCell (i.e. a geocode prompt), subtract 1
-                if ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-                    numRows--;
-                
-                //subtract each of the previous geocode search results, with a sanity check:
-                if (numRows >= self.geocodeSearchResultsCount)
-                    numRows -= self.geocodeSearchResultsCount;
-                
-                return numRows; //[self.searchResults count] == 0 ? 0 : ([self.searchResults count] - 1); //TODO change constant arithmetic to dynamic object type counting when other sections come into play
+                return [self.filterResults count];
             }
             else
             {
@@ -230,7 +241,7 @@
     
     static NSString *CellIdentifier;
     
-//    if ((tableView == self.searchDisplayController.searchResultsTableView) && ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]]) && (indexPath.row == 0))
+//    if ((tableView == self.searchDisplayController.searchResultsTableView) && ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]]) && (indexPath.row == 0))
 //    {
 //        CellIdentifier = @"SearchCell";
 //    }
@@ -265,13 +276,18 @@
 	{
         switch ([indexPath section]) {
             case DestinationTableSectionSearch:
-                locationAtIndex = [self.searchResults objectAtIndex:indexPath.row];
+//                locationAtIndex = [self.filterResults objectAtIndex:indexPath.row];
+                if (self.searchLocation != nil)
+                {
+                    locationAtIndex = self.searchLocation;
+                }
                 break;
             case DestinationTableSectionSearchResults:
-                if ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-                    locationAtIndex = [self.searchResults objectAtIndex:(indexPath.row+1)];
-                else
-                    locationAtIndex = [self.searchResults objectAtIndex:indexPath.row];
+//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
+//                    locationAtIndex = [self.filterResults objectAtIndex:(indexPath.row+1)];
+//                else
+//                    locationAtIndex = [self.filterResults objectAtIndex:indexPath.row];
+                locationAtIndex = [self.geocodeSearchResults objectAtIndex:indexPath.row];
                 break;
             case DestinationTableSectionFavorites:
                 //TODO
@@ -280,10 +296,11 @@
                 //TODO
                 break;
             case DestinationTableSectionStations:
-                if ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-                    locationAtIndex = [self.searchResults objectAtIndex:(indexPath.row + self.geocodeSearchResultsCount + 1)]; //TODO change constant arithmetic to dynamic object type counting when other sections come into play
-                else
-                    locationAtIndex = [self.searchResults objectAtIndex:(indexPath.row + self.geocodeSearchResultsCount)];
+//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
+//                    locationAtIndex = [self.filterResults objectAtIndex:(indexPath.row + self.geocodeSearchResultsCount + 1)]; //TODO change constant arithmetic to dynamic object type counting when other sections come into play
+//                else
+//                    locationAtIndex = [self.filterResults objectAtIndex:(indexPath.row + self.geocodeSearchResultsCount)];
+                locationAtIndex = [self.filterResults objectAtIndex:indexPath.row];
                 break;
             default:
                 break;
@@ -372,8 +389,8 @@
     if ((tableView == self.searchDisplayController.searchResultsTableView) && (indexPath.section == DestinationTableSectionSearch) && (indexPath.row == 0))
     {
         // perform the Geocode
-        MyLocation *location = [self.searchResults objectAtIndex:indexPath.row];
-        [self performStringGeocode:location.name];
+//        MyLocation *location = [self.filterResults objectAtIndex:indexPath.row];
+        [self performStringGeocode:self.searchLocation.name];
     }
 }
 
@@ -401,8 +418,8 @@
 
 - (void)updateFilteredContentForLocationName:(NSString *)locationName type:(NSString *)typeName
 {
-    //Clear out old search results: //TODO: keep them? test this
-//    self.geocodeSearchResultsCount = 0;
+    //Remove old search object
+    self.searchLocation = nil;
     
 	/*
 	 Update the filtered array based on the search text and scope.
@@ -412,7 +429,7 @@
         // If there is no search string and the scope is "All".
         if (typeName == nil)
         {
-            self.searchResults = [self.dataController.sortedStationList mutableCopy];
+            self.filterResults = [self.dataController.sortedStationList mutableCopy];
         }
         else
         {
@@ -425,30 +442,33 @@
                     [searchResults addObject:station];
 //                }
             }
-            self.searchResults = searchResults;
+            self.filterResults = searchResults;
         }
         return;
     }
     
-    if ([self.searchResults count])
-    {
-        //remove previous search results, if the top cell was a previous geocode search prompt:
-        if ([[self.searchResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-        {
-            [self.searchResults removeObjectAtIndex:0];
-        }
-        
-        //Remove all the stations for filtering with new locationName (and typeName):
-        NSRange stationRange = NSMakeRange(self.geocodeSearchResultsCount, ([self.searchResults count] - self.geocodeSearchResultsCount));
-        [self.searchResults removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:stationRange]]; // First clear the filtered array.
-    }
+//    if ([self.filterResults count])
+//    {
+//        //remove previous search results, if the top cell was a previous geocode search prompt:
+//        if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
+//        {
+//            [self.filterResults removeObjectAtIndex:0];
+//        }
+//        
+//        //Remove all the stations for filtering with new locationName (and typeName):
+//        NSRange stationRange = NSMakeRange(self.geocodeSearchResultsCount, ([self.filterResults count] - self.geocodeSearchResultsCount));
+//        [self.filterResults removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:stationRange]]; // First clear the filtered array.
+//        
+//    }
+    [self.filterResults removeAllObjects]; // First clear the filtered array.
     
     /* Add a search row at the top, to begin a geocode for the input address.
        Since this does not have coordinates yet, initialize this simply as a MyLocation object
        instead of an Address.
      */
-    MyLocation *newSearchAddress = [[MyLocation alloc] initWithName:locationName latitude:0 longitude:0];
-    [self.searchResults addObject:newSearchAddress];
+//    MyLocation *newSearchAddress = [[MyLocation alloc] initWithName:locationName latitude:0 longitude:0];
+//    [self.filterResults addObject:newSearchAddress];
+    self.searchLocation = [[MyLocation alloc] initWithName:locationName coordinate:CLLocationCoordinate2DMake(0, 0)];
     
 	/*
 	 Search the main list for locations whose type matches the scope (if selected) and whose name matches searchText; add items that match to the filtered array.
@@ -462,7 +482,7 @@
             NSRange foundRange = [station.name rangeOfString:locationName options:searchOptions range:stationNameRange];
             if (foundRange.length > 0)
 			{
-				[self.searchResults addObject:station];
+				[self.filterResults addObject:station];
             }
 //		}
 	}
@@ -514,6 +534,13 @@
 
 #pragma mark - CLGeocoder methods
 
+- (void)lockUI:(BOOL)lock
+{
+    // prevent user interaction while we are processing the forward geocoding
+    self.tableView.allowsSelection = !lock;
+}
+
+
 - (void)performStringGeocode:(NSString *)string
 {
 //    // dismiss the keyboard if it's currently open
@@ -522,11 +549,16 @@
 //        [self.searchStringTextField resignFirstResponder];
 //    }
     
-//    [self lockUI:YES];
+    [self lockUI:YES];
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     
-    self.geocodeSearchResultsCount = 0;
+    //Remove previous geocode results:
+    [self.geocodeSearchResults removeAllObjects];
+    
+    //Start HUD:
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Loading addresses...";
     
     // if we are going to includer region hint
 //    if (self.searchHintSwitch.on)
@@ -556,6 +588,9 @@
             {
                 NSLog(@"Geocode failed with error: %@", error);
 //                [self displayError:error];
+                //Hide the HUD
+                //TODO: add "No results found" text and delay?
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
                 return;
             }
             
@@ -563,19 +598,35 @@
 //            [self displayPlacemarks:placemarks];
             //place them at the top of the searchResults list in searchDisplayController instead of segueing to new view:
             //TODO: a new section in the table for the search results, with "Addresses" header, above everything else
-            NSMutableArray *geocodeResults = [[NSMutableArray alloc] init];
+//            NSMutableArray *geocodeResults = [[NSMutableArray alloc] init];
             for (CLPlacemark *placemark in placemarks)
             {
-//                NSLog(@"Placemark name: %@ thoroughfare: %@ subthoroughfare: %@ sublocality: %@ locality: %@ address: %@", placemark.name, placemark.thoroughfare, placemark.subThoroughfare, placemark.subLocality, placemark.locality);
+                NSLog(@"Placemark name: %@ subthoroughfare: %@ thoroughfare: %@ sublocality: %@ locality: %@ subadministrativearea: %@ administrativearea: %@", placemark.name, placemark.subThoroughfare, placemark.thoroughfare, placemark.subLocality, placemark.locality, placemark.subAdministrativeArea, placemark.administrativeArea);
                 Address *address = [[Address alloc] initWithPlacemark:placemark];
-                [geocodeResults addObject:address];
+                if ([address.name length] > 0)
+                {
+                    [self.geocodeSearchResults addObject:address];
+                }
             }
-            self.geocodeSearchResultsCount = [geocodeResults count];
-            NSRange searchCellRange = NSMakeRange(0, 1);
-            [self.searchResults replaceObjectsInRange:searchCellRange withObjectsFromArray:geocodeResults];
+//            self.geocodeSearchResultsCount = [geocodeResults count];
+//            NSRange searchCellRange = NSMakeRange(0, 1);
+//            [self.filterResults replaceObjectsInRange:searchCellRange withObjectsFromArray:geocodeResults];
+            
+            //Remove old search string object if this search returned results
+            if ([self.geocodeSearchResults count])
+            {
+                self.searchLocation = nil;
+                //TODO: add "No results found" text and delay HUD hide animation if no results were returned?
+            }
+            
+            //Hide the HUD
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             
             //reload the data
             [self.searchDisplayController.searchResultsTableView reloadData];
+            
+            //unlock the UI
+            [self lockUI:NO];
         }];
 //    }
 }
