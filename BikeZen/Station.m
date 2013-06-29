@@ -13,15 +13,15 @@
 
 - (id)initWithStationID:(NSInteger)stationID name:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude installed:(bool)installed locked:(bool)locked publiclyViewable:(bool)publiclyViewable nbBikes:(NSInteger)nbBikes nbEmptyDocks:(NSInteger)nbEmptyDocks lastStationUpdate:(NSDate *)lastStationUpdate
 {
-    self = [super init];
+    self = [super initWithName:name latitude:latitude longitude:longitude];
     
     if (self)
     {
         _stationID = stationID;
 //        _name = name;
 //        _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-//        _latitude = latitude;
-//        _longitude = longitude;
+        _latitude = latitude;
+        _longitude = longitude;
         _installed = installed;
         _locked = locked;
         _publiclyViewable = publiclyViewable;

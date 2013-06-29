@@ -19,8 +19,22 @@
     {
         _name = name;
         _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-        _latitude = latitude;
-        _longitude = longitude;
+//        _latitude = latitude;
+//        _longitude = longitude;
+        return self;
+    }
+    return nil;
+}
+
+- (id)initWithName:(NSString *)name coordinate:(CLLocationCoordinate2D)coordinate
+{
+    
+    self = [super init];
+    
+    if (self)
+    {
+        _name = name;
+        _coordinate = coordinate;
         return self;
     }
     return nil;

@@ -53,8 +53,8 @@
 @property (nonatomic) NSInteger stationID;
 //@property (nonatomic, copy) NSString *name;
 //@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
-//@property (nonatomic) CLLocationDegrees latitude;
-//@property (nonatomic) CLLocationDegrees longitude;
+@property (nonatomic) CLLocationDegrees latitude;
+@property (nonatomic) CLLocationDegrees longitude;
 @property (nonatomic) bool installed;
 @property (nonatomic) bool locked;
 @property (nonatomic) bool publiclyViewable;
