@@ -36,6 +36,10 @@
 {
     // Override point for customization after application launch.
     
+    //Begin location service
+    _userCoordinate = kCLLocationCoordinate2DInvalid;
+    [self startUpdatingCurrentLocation];
+    
 //    self.parseQueue = [NSOperationQueue new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -161,6 +165,12 @@
 //    DockSmartMapViewController *mapViewController = (DockSmartMapViewController *)self.window.rootViewController.childViewControllers[0];
 //    [mapViewController.dataController addStationListObjectsFromArray:stations];
     
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
+//                                                        object:self
+//                                                      userInfo:[NSDictionary dictionaryWithObject:stations
+//                                                                                           forKey:kStationResultsKey]];
+
+    
 }
 
 - (void)loadXMLData
@@ -182,5 +192,94 @@
     
     [self loadXMLData];
 }
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)startUpdatingCurrentLocation
+{
+    // if location services are restricted do nothing
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
+        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)
+    {
+        return;
+    }
+    
+    // if locationManager does not currently exist, create it
+    if (!_locationManager)
+    {
+        _locationManager = [[CLLocationManager alloc] init];
+        [_locationManager setDelegate:self];
+        _locationManager.distanceFilter = 10.0f; // we don't need to be any more accurate than 10m
+//        _locationManager.purpose = @"This will be used as part of the hint region for forward geocoding.";
+    }
+    
+    [_locationManager startUpdatingLocation];
+    
+//    [self showCurrentLocationSpinner:YES];
+}
+
+- (void)stopUpdatingCurrentLocation
+{
+    [_locationManager stopUpdatingLocation];
+    
+//    [self showCurrentLocationSpinner:NO];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    //TODO: make current location button inactive on mapview
+}
+
+//- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+//{
+//    // if the location is older than 30s ignore
+//    if (fabs([newLocation.timestamp timeIntervalSinceDate:[NSDate date]]) > 30)
+//    {
+//        return;
+//    }
+//    
+//    _selectedCoordinate = [newLocation coordinate];
+//    
+//    // update the current location cells detail label with these coords
+//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
+//    cell.detailTextLabel.text = [NSString stringWithFormat:@"φ:%.4F, λ:%.4F", _selectedCoordinate.latitude, _selectedCoordinate.longitude];
+//    
+//    // after recieving a location, stop updating
+//    [self stopUpdatingCurrentLocation];
+//}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    // if the location is older than 30s ignore
+    if (fabs([[manager location].timestamp timeIntervalSinceNow]) > 30)
+    {
+        return;
+    }
+    
+    _userCoordinate = [(CLLocation *)[locations lastObject] coordinate];
+    
+    NSLog(@"Last location: %@", [locations lastObject]);
+    
+    [self stopUpdatingCurrentLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"%@", error);
+    
+    // stop updating
+    [self stopUpdatingCurrentLocation];
+    
+    // since we got an error, set selected location to invalid location
+    _userCoordinate = kCLLocationCoordinate2DInvalid;
+    
+    // show the error alert
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    alert.title = @"Error obtaining location";
+    alert.message = [error localizedDescription];
+    [alert addButtonWithTitle:@"OK"];
+    [alert show];
+}
+
 
 @end

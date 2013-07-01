@@ -20,6 +20,7 @@
 
 // NSNotification name for reporting that refresh was tapped
 NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
+NSString *kStationList = @"stationList";
 // NSNotification userInfo key for obtaining command to refresh the station list
 //NSString *kRefreshStationsKey = @"RefreshStationsKey";
 
@@ -38,7 +39,7 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
     self.dataController = [[LocationDataController alloc] init];
     
     // KVO: listen for changes to our station data source for map view updates
-    [self addObserver:self forKeyPath:@"stationList" options:0 context:NULL];
+    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
     
     //Define the initial zoom location (Dupont Circle for now)
     CLLocationCoordinate2D zoomLocation;// = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
@@ -99,7 +100,7 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
 //    self.stationList = nil;
     self.dataController.stationList = nil;
     
-    [self removeObserver:self forKeyPath:@"stationList"];
+    [self removeObserver:self forKeyPath:kStationList];
 
 }
 
@@ -189,10 +190,10 @@ NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
     // this will allow us as an observer to notified (see observeValueForKeyPath)
     // so we can update our MapView
     //
-    [self willChangeValueForKey:@"stationList"];
+    [self willChangeValueForKey:kStationList];
 //    [self.stationList addObjectsFromArray:stations];
     [self.dataController addLocationObjectsFromArray:stations toList:self.dataController.stationList];
-    [self didChangeValueForKey:@"stationList"];
+    [self didChangeValueForKey:kStationList];
 }
 
 // listen for changes to the station list coming from our app delegate.

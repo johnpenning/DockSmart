@@ -49,7 +49,7 @@
     [super awakeFromNib];
     
     // KVO: listen for changes to our station data source for map view updates
-    [self addObserver:self forKeyPath:@"stationList" options:0 context:NULL];
+//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
 
 }
 
@@ -64,7 +64,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     // KVO: listen for changes to our station data source for map view updates
-    [self addObserver:self forKeyPath:@"stationList" options:0 context:NULL];
+//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
     
     /*
      Create a mutable array to contain products for the search results table.

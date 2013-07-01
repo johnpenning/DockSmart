@@ -10,6 +10,8 @@
 #import <MapKit/MapKit.h>
 
 extern NSString *kRefreshTappedNotif;
+extern NSString *kStationList;
+//extern NSString *kInsertStations
 
 @class LocationDataController;
 

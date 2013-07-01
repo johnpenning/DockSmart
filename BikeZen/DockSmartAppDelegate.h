@@ -16,6 +16,8 @@
 @property (strong, nonatomic) UIWindow *window;
 //@property (strong, nonatomic) IBOutlet DockSmartMapViewController *mapViewController;
 
-//@property (strong, nonatomic) CLLocationManager *locationManager;
+//CLLocationManager properties
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (readonly) CLLocationCoordinate2D userCoordinate;
 
 @end
