@@ -13,10 +13,7 @@
 #import "define.h"
 #import "Station.h"
 #import "LocationDataController.h"
-
-//#define METERS_PER_MILE 1609.344
-//#define DUPONT_LAT      38.909600
-//#define DUPONT_LONG     -77.043400
+#import "ParseOperation.h"
 
 // NSNotification name for reporting that refresh was tapped
 NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
@@ -30,6 +27,18 @@ NSString *kStationList = @"stationList";
 
 @implementation DockSmartMapViewController
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    // KVO: listen for changes to our station data source for map view updates
+//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addStations:)
+                                                 name:kAddStationsNotif
+                                               object:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -38,14 +47,18 @@ NSString *kStationList = @"stationList";
 //    self.stationList = [NSMutableArray array];
     self.dataController = [[LocationDataController alloc] init];
     
-    // KVO: listen for changes to our station data source for map view updates
+//    // KVO: listen for changes to our station data source for map view updates
     [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(addStations:)
+//                                                 name:kAddStationsNotif
+//                                               object:nil];
     
     //Define the initial zoom location (Dupont Circle for now)
-    CLLocationCoordinate2D zoomLocation;// = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
+    CLLocationCoordinate2D zoomLocation = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
     
-    zoomLocation.latitude = DUPONT_LAT;
-    zoomLocation.longitude = DUPONT_LONG;
+//    zoomLocation.latitude = DUPONT_LAT;
+//    zoomLocation.longitude = DUPONT_LONG;
     
     //define the initial view region -> about the size of the neighborhood:
 //    MKCoordinateRegion viewRegion = [self.mapView regionThatFits:MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE)];
@@ -96,12 +109,17 @@ NSString *kStationList = @"stationList";
 //    [self setBikeDockViewSwitch:nil];
 //    [self setRefreshButtonTapped:nil];
     [super viewDidUnload];
-    
-//    self.stationList = nil;
+//    
+//    self.dataController.stationList = nil;
+//    
+//    [self unregisterFromKVO];
+}
+
+- (void)dealloc
+{
     self.dataController.stationList = nil;
     
-    [self removeObserver:self forKeyPath:kStationList];
-
+    [self unregisterFromKVO];
 }
 
 - (void)refreshWasTapped
@@ -185,6 +203,12 @@ NSString *kStationList = @"stationList";
 #pragma mark -
 #pragma mark KVO support
 
+- (void)addStations:(NSNotification *)notif {
+    assert([NSThread isMainThread]);
+    
+    [self insertStations:[[notif userInfo] valueForKey:kStationResultsKey]];
+}
+
 - (void)insertStations:(NSArray *)stations
 {
     // this will allow us as an observer to notified (see observeValueForKeyPath)
@@ -196,15 +220,36 @@ NSString *kStationList = @"stationList";
     [self didChangeValueForKey:kStationList];
 }
 
+- (void)registerForKVO {
+	for (NSString *keyPath in [self observableKeypaths]) {
+		[self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
+	}
+}
+
+- (void)unregisterFromKVO {
+	for (NSString *keyPath in [self observableKeypaths]) {
+		[self removeObserver:self forKeyPath:keyPath];
+	}
+}
+
+- (NSArray *)observableKeypaths {
+	return [NSArray arrayWithObjects:kAddStationsNotif, kStationList, nil];
+}
+
 // listen for changes to the station list coming from our app delegate.
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-//    [self.tableView reloadData];
-    //TODO: reload map view
-    [self plotStationPosition:self.dataController.stationList];
+    //Reload map view
+    if (![NSThread isMainThread]) {
+		[self performSelectorOnMainThread:@selector(plotStationPosition:) withObject:self.dataController.stationList waitUntilDone:NO];
+    }
+    else
+    {
+        [self plotStationPosition:self.dataController.stationList];
+    }
 }
 
 - (IBAction)refeshTapped:(id)sender {

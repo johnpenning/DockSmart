@@ -15,6 +15,7 @@
 #import "Address.h"
 #import "LocationDataController.h"
 #import "DockSmartMapViewController.h"
+#import "ParseOperation.h"
 #import "MBProgressHUD.h"
 
 @interface DockSmartDestinationsMasterViewController ()
@@ -47,10 +48,13 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    // KVO: listen for changes to our station data source for map view updates
-//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
 
+    // KVO: listen for changes to our station data source for table view updates
+//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addStations:)
+                                                 name:kAddStationsNotif
+                                               object:nil];
 }
 
 - (void)viewDidLoad
@@ -64,7 +68,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     // KVO: listen for changes to our station data source for map view updates
-//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
+    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
     
     /*
      Create a mutable array to contain products for the search results table.
@@ -77,7 +81,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
+    //TODO: the following line is perhaps not so super dangerous and dumb as implemented?  Keeps us from having to store twice as many lists...
     self.dataController = [self.tabBarController.childViewControllers[0] dataController];
     [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
 
@@ -95,6 +99,15 @@
 
 #pragma mark - KVO compliance
 
+- (void)addStations:(NSNotification *)notif {
+    assert([NSThread isMainThread]);
+    
+    //This notification came from the parse operation telling us that a new station list has been posted.
+    //Use KVO to tell this view controller to resort the list and update the tableView.
+    [self willChangeValueForKey:kStationList];
+    [self didChangeValueForKey:kStationList];
+}
+
 // listen for changes to the station list coming from our app delegate.
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
@@ -103,6 +116,7 @@
 {
     //Reload station data in Destinations list
 #warning Ineffective listener.
+    [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
     [self.tableView reloadData];
     //TODO: reperform search
 }

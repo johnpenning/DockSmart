@@ -20,7 +20,7 @@
 @property (strong, nonatomic) NSMutableData *stationXMLData;    // the data returned from the NSURLConnection (or from initDataWithURL)
 @property (strong, nonatomic) NSOperationQueue *parseQueue;     // the queue that manages our NSOperation for parsing station data
 
-- (void)addStationsToList:(NSArray *)stations;
+//- (void)addStationsToList:(NSArray *)stations;
 - (void)handleError:(NSError *)error;
 - (void)loadXMLData;
 - (void)refreshStationData;
@@ -42,10 +42,10 @@
     
 //    self.parseQueue = [NSOperationQueue new];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(addStations:)
-                                                 name:kAddStationsNotif
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(addStations:)
+//                                                 name:kAddStationsNotif
+//                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(stationError:)
                                                  name:kStationErrorNotif
@@ -54,6 +54,7 @@
                                              selector:@selector(refreshStationData:)
                                                  name:kRefreshTappedNotif
                                                object:nil];
+    
     
     // Spawn an NSOperation to parse the earthquake data so that the UI is not blocked while the
     // application parses the XML data.
@@ -121,11 +122,13 @@
 
 // Our NSNotification callback from the running NSOperation to add the earthquakes
 //
+#if 0
 - (void)addStations:(NSNotification *)notif {
     assert([NSThread isMainThread]);
     
     [self addStationsToList:[[notif userInfo] valueForKey:kStationResultsKey]];
 }
+#endif
 
 // Our NSNotification callback from the running NSOperation when a parsing error has occurred
 //
@@ -139,6 +142,7 @@
 // which in turn calls this method, with batches of parsed objects.
 // The batch size is set via the kSizeOfEarthquakeBatch constant.
 //
+#if 0
 - (void)addStationsToList:(NSArray *)stations {
     
     // insert the earthquakes into our mapViewController's data source (for KVO purposes)
@@ -172,6 +176,7 @@
 
     
 }
+#endif
 
 - (void)loadXMLData
 {

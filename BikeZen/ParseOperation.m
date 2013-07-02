@@ -134,19 +134,7 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
     self.currentStationObject = nil;
     self.currentParsedCharacterData = nil;
     
-//    [parser release];
 }
-
-//- (void)dealloc {
-//    [self.stationXMLData release];
-//    
-//    [self.currentStationObject release];
-//    [currentParsedCharacterData release];
-//    [currentParseBatch release];
-//    [dateFormatter release];
-//    
-//    [super dealloc];
-//}
 
 
 #pragma mark -
