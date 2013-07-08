@@ -8,12 +8,13 @@
 
 #import "Address.h"
 #import "MyLocation.h"
+#import "define.h"
 
 @implementation Address
 
-- (id)initWithPlacemark:(CLPlacemark *)placemark
+- (id)initWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance
 {
-    self = [super initWithName:[NSString stringWithFormat:@"%@%@%@%@%@", placemark.subThoroughfare ? placemark.subThoroughfare : @"", placemark.subThoroughfare ? @" " : @"", placemark.thoroughfare ? placemark.thoroughfare : @"", (placemark.subThoroughfare || placemark.thoroughfare) ? @", " : @"", placemark.locality ? placemark.locality : @""] coordinate:placemark.location.coordinate];
+    self = [super initWithName:[NSString stringWithFormat:@"%@%@%@%@%@", placemark.subThoroughfare ? placemark.subThoroughfare : @"", placemark.subThoroughfare ? @" " : @"", placemark.thoroughfare ? placemark.thoroughfare : @"", (placemark.subThoroughfare || placemark.thoroughfare) ? @", " : @"", placemark.locality ? placemark.locality : @""] coordinate:placemark.location.coordinate distanceFromUser:distance];
     
     if (self)
     {
@@ -33,7 +34,7 @@
 //    else
 //        addressSummary = [[NSString alloc] initWithFormat:@"%@", _placemark.subLocality]; //TODO: add distance later
     
-    addressSummary = [[NSString alloc] initWithFormat:@"%@", (_placemark.subLocality && (![[_placemark subLocality] isEqualToString:[_placemark locality]])) ? _placemark.subLocality : @""];
+    addressSummary = [[NSString alloc] initWithFormat:@"%@%@Dist: %2.2f mi", (_placemark.subLocality && (![[_placemark subLocality] isEqualToString:[_placemark locality]])) ? _placemark.subLocality : @"", (_placemark.subLocality && (![[_placemark subLocality] isEqualToString:[_placemark locality]])) ? @" - " : @"", [super distanceFromUser]/METERS_PER_MILE];
     
     //    CLLocationDistance *distance = MKMetersBetweenMapPoints(MKMapPointForCoordinate(_coordinate), )
     return addressSummary;

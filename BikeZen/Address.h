@@ -16,6 +16,6 @@
 //geolocation properties/methods to be declared here
 @property (nonatomic, readonly) CLPlacemark *placemark;
 
-- (id)initWithPlacemark:(CLPlacemark *)placemark;
+- (id)initWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance;
 
 @end

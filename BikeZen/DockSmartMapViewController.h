@@ -11,6 +11,7 @@
 
 extern NSString *kRefreshTappedNotif;
 extern NSString *kStationList;
+
 //extern NSString *kInsertStations
 
 @class LocationDataController;
@@ -29,6 +30,7 @@ extern NSString *kStationList;
 - (void)insertStations:(NSArray *)stations;   // addition method of stations (for KVO purposes)
 //- (void)insertStationList:(NSArray *)array atIndexes:(NSIndexSet *)indexes
 //- (void)plotStationPosition:(NSArray *)stationList;
+//- (void)updateDistancesFromUserLocation:(CLLocation *)location;
 
 @property (strong, nonatomic) LocationDataController *dataController;
 

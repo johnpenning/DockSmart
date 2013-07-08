@@ -18,6 +18,7 @@
 // NSNotification name for reporting that refresh was tapped
 NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
 NSString *kStationList = @"stationList";
+
 // NSNotification userInfo key for obtaining command to refresh the station list
 //NSString *kRefreshStationsKey = @"RefreshStationsKey";
 
@@ -36,6 +37,10 @@ NSString *kStationList = @"stationList";
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(addStations:)
                                                  name:kAddStationsNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(startBiking:)
+                                                 name:kStartBikingNotif
                                                object:nil];
 }
 
@@ -203,7 +208,8 @@ NSString *kStationList = @"stationList";
 #pragma mark -
 #pragma mark KVO support
 
-- (void)addStations:(NSNotification *)notif {
+- (void)addStations:(NSNotification *)notif
+{
     assert([NSThread isMainThread]);
     
     [self insertStations:[[notif userInfo] valueForKey:kStationResultsKey]];
@@ -219,6 +225,48 @@ NSString *kStationList = @"stationList";
     [self.dataController addLocationObjectsFromArray:stations toList:self.dataController.stationList];
     [self didChangeValueForKey:kStationList];
 }
+
+- (void)startBiking:(NSNotification *)notif
+{
+    assert([NSThread isMainThread]);
+
+    //Make sure this view is showing (TODO: let the tableViewController handle this?)
+//    [[self view] bringSubviewToFront:[self view]];
+    
+    //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
+    //Equivalent to hitting Refresh:
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
+                                                        object:self
+                                                      userInfo:nil];
+    
+    //Figure out the three closest stations to the destination:
+    //First sort by distance:
+    [self.dataController setSortedStationList:[self.dataController sortLocationList:[self.dataController stationList] byMethod:LocationDataSortByDistance]];
+    //Then grab the top 3:
+    
+    //Figure out the closest station to the user with at least one bike
+    
+    //Change the map view to show the current user location, and the start, end and backup end stations.
+    //Hide the annotations for all other stations.
+    //TODO: change the pin colors/sizes for start, end and backup end stations?
+    
+    //Start the timer, if we have one
+    
+    //Start tracking nbEmptyDocks by refreshing the data every minute until we manually stop
+    //(or until the timer runs out, or until our geofence tells us we are at our destination)
+    
+}
+
+//- (void)updateLocation:(NSNotification *)notif {
+//    assert([NSThread isMainThread]);
+//    
+//    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
+//}
+//
+//- (void)updateDistancesFromUserLocation:(CLLocation *)location
+//{
+//    
+//}
 
 - (void)registerForKVO {
 	for (NSString *keyPath in [self observableKeypaths]) {

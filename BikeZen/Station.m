@@ -8,12 +8,13 @@
 
 #import "Station.h"
 #import "MyLocation.h"
+#import "define.h"
 
 @implementation Station
 
-- (id)initWithStationID:(NSInteger)stationID name:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude installed:(bool)installed locked:(bool)locked publiclyViewable:(bool)publiclyViewable nbBikes:(NSInteger)nbBikes nbEmptyDocks:(NSInteger)nbEmptyDocks lastStationUpdate:(NSDate *)lastStationUpdate
+- (id)initWithStationID:(NSInteger)stationID name:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude installed:(bool)installed locked:(bool)locked publiclyViewable:(bool)publiclyViewable nbBikes:(NSInteger)nbBikes nbEmptyDocks:(NSInteger)nbEmptyDocks lastStationUpdate:(NSDate *)lastStationUpdate distanceFromUser:(CLLocationDistance)distance
 {
-    self = [super initWithName:name latitude:latitude longitude:longitude];
+    self = [super initWithName:name latitude:latitude longitude:longitude distanceFromUser:distance];
     
     if (self)
     {
@@ -46,7 +47,7 @@
 
 - (NSString *)subtitle
 {
-    NSString* bikeSummary = [[NSString alloc] initWithFormat:@"Bikes: %i - Docks: %i", _nbBikes, _nbEmptyDocks];
+    NSString* bikeSummary = [[NSString alloc] initWithFormat:@"Bikes: %i - Docks: %i - Dist: %2.2f mi", _nbBikes, _nbEmptyDocks, [super distanceFromUser]/METERS_PER_MILE];
 //    CLLocationDistance *distance = MKMetersBetweenMapPoints(MKMapPointForCoordinate(_coordinate), )
     return bikeSummary;
 }

@@ -7,8 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class MyLocation, Station, Address;
+
+extern NSString *kLocationUpdateNotif;
+extern NSString *kNewLocationKey;
 
 typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
     LocationDataSortByName          = 0,
@@ -32,5 +36,6 @@ typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
 - (void)addLocationObject:(MyLocation *)location toList:(NSMutableArray *)list;
 - (void)addLocationObjectsFromArray:(NSArray *)locations toList:(NSMutableArray *)list;
 - (NSArray *)sortLocationList:(NSMutableArray *)list byMethod:(LocationDataSortMethod)method;
+- (void)updateDistancesFromUserLocation:(CLLocationCoordinate2D)coordinate;
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation MyLocation
 
-- (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude
+- (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude distanceFromUser:(CLLocationDistance)distance
 {
     
     self = [super init];
@@ -21,12 +21,13 @@
         _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
 //        _latitude = latitude;
 //        _longitude = longitude;
+        _distanceFromUser = distance;
         return self;
     }
     return nil;
 }
 
-- (id)initWithName:(NSString *)name coordinate:(CLLocationCoordinate2D)coordinate
+- (id)initWithName:(NSString *)name coordinate:(CLLocationCoordinate2D)coordinate distanceFromUser:(CLLocationDistance)distance
 {
     
     self = [super init];
@@ -35,6 +36,7 @@
     {
         _name = name;
         _coordinate = coordinate;
+        _distanceFromUser = distance;
         return self;
     }
     return nil;

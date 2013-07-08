@@ -57,7 +57,7 @@
 #import "ParseOperation.h"
 #import "Station.h"
 
-// NSNotification name for sending station data back to the app delegate
+// NSNotification name for sending station data to the map view
 NSString *kAddStationsNotif = @"AddStationsNotif";
 
 // NSNotification userInfo key for obtaining the earthquake data

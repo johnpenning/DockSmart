@@ -15,9 +15,10 @@
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 //@property (nonatomic) CLLocationDegrees latitude;
 //@property (nonatomic) CLLocationDegrees longitude;
+@property (nonatomic) CLLocationDistance distanceFromUser;
 
-- (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude;
-- (id)initWithName:(NSString *)name coordinate:(CLLocationCoordinate2D)coordinate;
+- (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude distanceFromUser:(CLLocationDistance)distance;
+- (id)initWithName:(NSString *)name coordinate:(CLLocationCoordinate2D)coordinate distanceFromUser:(CLLocationDistance)distance;
 - (void)initCoordinateWithLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude;
 
 @end

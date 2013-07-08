@@ -7,12 +7,17 @@
 //
 
 #import "LocationDataController.h"
+#import "DockSmartMapViewController.h"
 #import "MyLocation.h"
 #import "Station.h"
 #import "Address.h"
 #import "define.h"
 
+NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
+NSString *kNewLocationKey = @"NewLocationKey";
+
 @interface LocationDataController ()
+@property CLLocationCoordinate2D userCoordinate;
 - (void)initializeDefaultDataList;
 @end
 
@@ -26,6 +31,12 @@
     self.recentsList = theRecentsList;
     NSMutableArray *theFavoritesList = [[NSMutableArray alloc] init];
     self.favoritesList = theFavoritesList;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateLocation:)
+                                                 name:kLocationUpdateNotif
+                                               object:nil];
+
 }
 
 - (void)setStationList:(NSMutableArray *)stationList
@@ -77,15 +88,24 @@
 - (void)addLocationObject:(MyLocation *)location toList:(NSMutableArray *)list
 {
     [list addObject:location];
+    
+    //update distances:
+    [self updateDistancesFromUserLocation:[self userCoordinate]];
 }
 
 - (void)addLocationObjectsFromArray:(NSArray *)locations toList:(NSMutableArray *)list
 {
     [list addObjectsFromArray:locations];
+
+    //update distances:
+    [self updateDistancesFromUserLocation:[self userCoordinate]];
 }
 
 - (NSArray *)sortLocationList:(NSMutableArray *)locations byMethod:(LocationDataSortMethod)method
 {
+    //first update distances:
+    [self updateDistancesFromUserLocation:[self userCoordinate]];
+
     for (MyLocation *location in locations)
     {
         if ((![location isKindOfClass:[Station class]]) && ((method == LocationDataSortByBikes) || (method == LocationDataSortByDocks)))
@@ -105,9 +125,9 @@
         case LocationDataSortByDocks:
             sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"nbEmptyDocks" ascending:NO];
             break;
-//      case StationDataSortByDistance:
-//          sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"distance" ascending:YES];
-//          break;
+        case LocationDataSortByDistance:
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"distanceFromUser" ascending:YES];
+            break;
         case LocationDataSortByName:
         default:
             sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
@@ -118,6 +138,30 @@
     NSArray *sortedArray;
     sortedArray = [locations sortedArrayUsingDescriptors:sortDescriptors];
     return sortedArray;
+}
+
+#pragma mark -
+#pragma mark KVO compliance
+
+- (void)updateLocation:(NSNotification *)notif {
+    assert([NSThread isMainThread]);
+    
+    [self setUserCoordinate:[(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate]];
+    [self updateDistancesFromUserLocation:[self userCoordinate]];
+}
+
+- (void)updateDistancesFromUserLocation:(CLLocationCoordinate2D)coordinate
+{
+    [self willChangeValueForKey:kStationList];
+    
+    for (Station *station in self.stationList)
+    {
+        [station setDistanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(coordinate), MKMapPointForCoordinate(station.coordinate))];
+    }
+    [self didChangeValueForKey:kStationList];
+    
+    //TODO: Set distances for recents and favorites lists
+
 }
 
 @end

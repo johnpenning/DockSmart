@@ -10,6 +10,7 @@
 #import "Station.h"
 #import "ParseOperation.h"
 #import "DockSmartMapViewController.h"
+#import "LocationDataController.h"
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -178,7 +179,7 @@
 }
 #endif
 
-- (void)loadXMLData
+- (void)loadXMLData //TODO: do this multiple times without adding duplicate stations
 {
     self.parseQueue = [NSOperationQueue new];
     
@@ -264,6 +265,10 @@
     _userCoordinate = [(CLLocation *)[locations lastObject] coordinate];
     
     NSLog(@"Last location: %@", [locations lastObject]);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:[[CLLocation alloc] initWithLatitude:self.userCoordinate.latitude longitude:self.userCoordinate.longitude] forKey:kNewLocationKey]];
     
     [self stopUpdatingCurrentLocation];
 }

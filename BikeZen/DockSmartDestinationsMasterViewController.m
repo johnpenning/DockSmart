@@ -17,6 +17,15 @@
 #import "DockSmartMapViewController.h"
 #import "ParseOperation.h"
 #import "MBProgressHUD.h"
+#import "define.h"
+
+
+// NSNotification name for informing the map view that we want to bike to a destination
+NSString *kStartBikingNotif = @"StartBikingNotif";
+
+// NSNotification userInfo for the MyLocation object to bike to
+NSString *kBikeDestinationKey = @"BikeDestinationKey";
+
 
 @interface DockSmartDestinationsMasterViewController ()
 
@@ -26,11 +35,15 @@
  The searchResults array contains the content filtered as a result of a search.
  */
 @property (nonatomic) MyLocation *searchLocation;
+@property (nonatomic) MyLocation *selectedLocation;
 @property (nonatomic) NSMutableArray *filterResults;
 @property (nonatomic) NSMutableArray *geocodeSearchResults;
 //@property (nonatomic) NSUInteger geocodeSearchResultsCount;
+@property (nonatomic) CLLocationCoordinate2D userCoordinate;
+@property (nonatomic, readwrite) UIActionSheet *navSheet;
 
 - (void)performStringGeocode:(NSString *)string;
+- (void)showNavigateActions:(NSString *)title;
 
 @end
 
@@ -49,11 +62,19 @@
 {
     [super awakeFromNib];
 
+    //initialize local userCoordinate property:
+    self.userCoordinate = CLLocationCoordinate2DMake(0, 0);
+    
     // KVO: listen for changes to our station data source for table view updates
 //    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(addStations:)
                                                  name:kAddStationsNotif
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateLocation:)
+                                                 name:kLocationUpdateNotif
                                                object:nil];
 }
 
@@ -76,7 +97,7 @@
     self.filterResults = [NSMutableArray arrayWithCapacity:[self.dataController countOfLocationList:self.dataController.stationList]];
     //Create geocode search results mutable array.
     self.geocodeSearchResults = [[NSMutableArray alloc] init];
-
+    self.selectedLocation = [[MyLocation alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -98,6 +119,13 @@
 }
 
 #pragma mark - KVO compliance
+
+- (void)updateLocation:(NSNotification *)notif {
+    assert([NSThread isMainThread]);
+    
+    self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
+//    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
+}
 
 - (void)addStations:(NSNotification *)notif {
     assert([NSThread isMainThread]);
@@ -337,7 +365,7 @@
     if ([locationAtIndex isKindOfClass:[Station class]])
     {
         Station *stationAtIndex = (Station *)locationAtIndex;
-        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %d Docks: %d Distance: 99.99 mi", stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks /*, TODO insert stationAtIndex.distance later*/]];
+        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %d Docks: %d Distance: %2.2f mi", stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks, stationAtIndex.distanceFromUser/METERS_PER_MILE /*, TODO insert stationAtIndex.distance later*/]];
     }
     else if ([locationAtIndex isKindOfClass:[Address class]])
     {
@@ -392,22 +420,55 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-    
-    if ((tableView == self.searchDisplayController.searchResultsTableView) && (indexPath.section == DestinationTableSectionSearch) && (indexPath.row == 0))
-    {
-        // perform the Geocode
-//        MyLocation *location = [self.filterResults objectAtIndex:indexPath.row];
-        [self performStringGeocode:self.searchLocation.name];
+    //Ether start a geocode search or open an action sheet to navigate to a destination.
+    switch ([indexPath section]) {
+        case DestinationTableSectionSearch:
+            if ([indexPath row] == 0)
+            {
+                // perform the Geocode
+                [self performStringGeocode:self.searchLocation.name];
+            }
+            break;
+        case DestinationTableSectionSearchResults:
+        {
+            self.selectedLocation = (MyLocation*)[[self geocodeSearchResults] objectAtIndex:[indexPath row]];
+            [self showNavigateActions:self.selectedLocation.name];
+            break;
+        }
+        case DestinationTableSectionFavorites: //TODO
+        {
+            self.selectedLocation = (MyLocation*)[[[self dataController] favoritesList] objectAtIndex:[indexPath row]];
+            [self showNavigateActions:self.selectedLocation.name];
+            break;
+        }
+        case DestinationTableSectionRecents: //TODO
+        {
+            self.selectedLocation = (MyLocation*)[[[self dataController] recentsList] objectAtIndex:[indexPath row]];
+            [self showNavigateActions:self.selectedLocation.name];
+            break;
+        }
+        case DestinationTableSectionStations:
+        {
+            if (tableView == self.searchDisplayController.searchResultsTableView)
+            {
+                //Use filtered station results if in search results view
+                self.selectedLocation = (MyLocation*)[[self filterResults] objectAtIndex:[indexPath row]];
+                [self showNavigateActions:self.selectedLocation.name];
+            }
+            else
+            {
+                //Use full sorted station list if not in search results view
+                self.selectedLocation = (MyLocation*)[[[self dataController] sortedStationList] objectAtIndex:[indexPath row]];
+                [self showNavigateActions:self.selectedLocation.name];
+            }
+            break;
+        }
+        default:
+            break;
     }
 }
 
+#if 0
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"DestinationsToStationDetail"])
@@ -425,6 +486,7 @@
 //        
 //    }
 }
+#endif
 
 /* Search Bar Implementation - Pilfered & tweaked from Apple's TableSearch example project */
 
@@ -482,7 +544,7 @@
      */
 //    MyLocation *newSearchAddress = [[MyLocation alloc] initWithName:locationName latitude:0 longitude:0];
 //    [self.filterResults addObject:newSearchAddress];
-    self.searchLocation = [[MyLocation alloc] initWithName:locationName coordinate:CLLocationCoordinate2DMake(0, 0)];
+    self.searchLocation = [[MyLocation alloc] initWithName:locationName coordinate:CLLocationCoordinate2DMake(0, 0) distanceFromUser:CLLocationDistanceMax];
     
 	/*
 	 Search the main list for locations whose type matches the scope (if selected) and whose name matches searchText; add items that match to the filtered array.
@@ -574,75 +636,98 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Loading addresses...";
     
-    // if we are going to includer region hint
-//    if (self.searchHintSwitch.on)
-//    {
-//        // use hint region
-//        CLLocationDistance dist = self.searchRadiusSlider.value; // 50,000m (50km)
-//        CLLocationCoordinate2D point = _selectedCoordinate;
-//        CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:point radius:dist identifier:@"Hint Region"];
-//        
-//        [geocoder geocodeAddressString:self.searchStringTextField.text inRegion:region completionHandler:^(NSArray *placemarks, NSError *error)
-//         {
-//             if (error){
-//                 NSLog(@"Geocode failed with error: %@", error);
-//                 [self displayError:error]
-//                 return;
-//             }
-//             
-//             NSLog(@"Received placemarks: %@", placemarks);
-//             [self displayPlacemarks:placemarks];
-//         }];
-//    }
-//    else
-//    {
-        // don't use a hint region
-        [geocoder geocodeAddressString:string completionHandler:^(NSArray *placemarks, NSError *error) {
-            if (error)
-            {
-                NSLog(@"Geocode failed with error: %@", error);
-//                [self displayError:error];
-                //Hide the HUD
-                //TODO: add "No results found" text and delay?
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                return;
-            }
-            
-            NSLog(@"Received placemarks: %@", placemarks);
-//            [self displayPlacemarks:placemarks];
-            //place them at the top of the searchResults list in searchDisplayController instead of segueing to new view:
-            //TODO: a new section in the table for the search results, with "Addresses" header, above everything else
-//            NSMutableArray *geocodeResults = [[NSMutableArray alloc] init];
-            for (CLPlacemark *placemark in placemarks)
-            {
-                NSLog(@"Placemark name: %@ subthoroughfare: %@ thoroughfare: %@ sublocality: %@ locality: %@ subadministrativearea: %@ administrativearea: %@", placemark.name, placemark.subThoroughfare, placemark.thoroughfare, placemark.subLocality, placemark.locality, placemark.subAdministrativeArea, placemark.administrativeArea);
-                Address *address = [[Address alloc] initWithPlacemark:placemark];
-                if ([address.name length] > 0)
-                {
-                    [self.geocodeSearchResults addObject:address];
-                }
-            }
-//            self.geocodeSearchResultsCount = [geocodeResults count];
-//            NSRange searchCellRange = NSMakeRange(0, 1);
-//            [self.filterResults replaceObjectsInRange:searchCellRange withObjectsFromArray:geocodeResults];
-            
-            //Remove old search string object if this search returned results
-            if ([self.geocodeSearchResults count])
-            {
-                self.searchLocation = nil;
-                //TODO: add "No results found" text and delay HUD hide animation if no results were returned?
-            }
-            
+    //Create a hint region around the user's current location for the geocoder
+    CLRegion *region = [[CLRegion alloc]
+                        initCircularRegionWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
+    //Perform the geocode
+    [geocoder geocodeAddressString:string inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Geocode failed with error: %@", error);
+            //                [self displayError:error];
             //Hide the HUD
+            //TODO: add "No results found" text and delay?
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            
-            //reload the data
-            [self.searchDisplayController.searchResultsTableView reloadData];
-            
-            //unlock the UI
-            [self lockUI:NO];
-        }];
-//    }
+            return;
+        }
+        
+        NSLog(@"Received placemarks: %@", placemarks);
+        //            [self displayPlacemarks:placemarks];
+        //place them at the top of the searchResults list in searchDisplayController instead of segueing to new view:
+        //TODO: a new section in the table for the search results, with "Addresses" header, above everything else
+        //            NSMutableArray *geocodeResults = [[NSMutableArray alloc] init];
+        for (CLPlacemark *placemark in placemarks)
+        {
+            NSLog(@"Placemark name: %@ subthoroughfare: %@ thoroughfare: %@ sublocality: %@ locality: %@ subadministrativearea: %@ administrativearea: %@", placemark.name, placemark.subThoroughfare, placemark.thoroughfare, placemark.subLocality, placemark.locality, placemark.subAdministrativeArea, placemark.administrativeArea);
+            Address *address = [[Address alloc] initWithPlacemark:placemark distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(placemark.location.coordinate), MKMapPointForCoordinate(self.userCoordinate))];
+            if ([address.name length] > 0)
+            {
+                [self.geocodeSearchResults addObject:address];
+            }
+        }
+        //            self.geocodeSearchResultsCount = [geocodeResults count];
+        //            NSRange searchCellRange = NSMakeRange(0, 1);
+        //            [self.filterResults replaceObjectsInRange:searchCellRange withObjectsFromArray:geocodeResults];
+        
+        //Remove old search string object if this search returned results
+        if ([self.geocodeSearchResults count])
+        {
+            self.searchLocation = nil;
+            //TODO: add "No results found" text and delay HUD hide animation if no results were returned?
+        }
+        
+        //Hide the HUD
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        //reload the data
+        [self.searchDisplayController.searchResultsTableView reloadData];
+        
+        //unlock the UI
+        [self lockUI:NO];
+    }];
 }
+
+#pragma mark -
+#pragma mark UIActionSheet implementation
+
+- (void)showNavigateActions:(NSString *)title {
+    
+    NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
+    NSString *navigateHereTitle = NSLocalizedString(@"Navigate Here", @"Navigate Here button title");
+    
+    // If the user taps a destination to navigate to, present an action sheet to confirm.
+    //TODO: Present more options here (to add/delete to/from Favorites, for example).
+    self.navSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:nil otherButtonTitles:navigateHereTitle, nil];
+//    [self.navSheet showInView:self.view];
+    [self.navSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 0)
+    {
+        /*
+         Inform the map view that the user chose to navigate to this destination.
+         */
+        [[NSNotificationCenter defaultCenter] postNotificationName:kStartBikingNotif
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:self.selectedLocation
+                                                                                               forKey:kBikeDestinationKey]];
+        //Switch over to the map view //TODO: Test this, change from hardcoded 0 to enum?
+        [self.tabBarController setSelectedIndex:0];
+    }
+    else //cancel was pressed
+    {
+        //clear out the selected destination object
+        self.selectedLocation = nil;
+        
+        //deselect the last row selected
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+    self.navSheet = nil;
+}
+
 
 @end
