@@ -34,7 +34,7 @@
  The data we care about is declared in the Station object and parsed appropriately.
  */
 /* TODO: make this a subclass of MyLocation?*/
-@interface Station : MyLocation //<MKAnnotation>
+@interface Station : MyLocation <MKAnnotation>
 
 //{
 //@private
@@ -61,7 +61,7 @@
 @property NSInteger nbBikes;
 @property NSInteger nbEmptyDocks;
 @property (nonatomic, copy) NSDate *lastStationUpdate;
-//TODO: add distance from current user location property?
+@property (nonatomic) CLLocationDistance distanceFromDestination;
 
 - (id)initWithStationID:(NSInteger)stationID name:(NSString*)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude installed:(bool)installed locked:(bool)locked publiclyViewable:(bool)publiclyViewable nbBikes:(NSInteger)nbBikes nbEmptyDocks:(NSInteger)nbEmptyDocks lastStationUpdate:(NSDate *)lastStationUpdate distanceFromUser:(CLLocationDistance)distance;
 

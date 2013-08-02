@@ -222,6 +222,9 @@ NSString *kStationList = @"stationList";
     //
     [self willChangeValueForKey:kStationList];
 //    [self.stationList addObjectsFromArray:stations];
+    //Clear out current stations:
+    [self.dataController.stationList removeAllObjects];
+    //Add new stations:
     [self.dataController addLocationObjectsFromArray:stations toList:self.dataController.stationList];
     [self didChangeValueForKey:kStationList];
 }
@@ -235,20 +238,74 @@ NSString *kStationList = @"stationList";
     
     //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
     //Equivalent to hitting Refresh:
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
-                                                        object:self
-                                                      userInfo:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
+//                                                        object:self
+//                                                      userInfo:nil];
+    
+    //TODO put the rest of this function in a callback after the latest station data arrives?
+    
+    //Calculate and store the distances from the destination to each station:
+    MyLocation *destination = [[notif userInfo] valueForKey:kBikeDestinationKey];
+    for (Station *station in self.dataController.stationList)
+    {
+        station.distanceFromDestination = MKMetersBetweenMapPoints(MKMapPointForCoordinate(station.coordinate), MKMapPointForCoordinate(destination.coordinate));
+    }
     
     //Figure out the three closest stations to the destination:
-    //First sort by distance:
-    [self.dataController setSortedStationList:[self.dataController sortLocationList:[self.dataController stationList] byMethod:LocationDataSortByDistance]];
+    //First sort by distance from destination:
+    [self.dataController setSortedStationList:[self.dataController sortLocationList:[self.dataController stationList] byMethod:LocationDataSortByDistanceFromDestination]];
     //Then grab the top 3:
+//    NSMutableArray *closestStationsToDestination = [[NSMutableArray alloc] initWithCapacity:3];
+    NSArray *closestStationsToDestination = [self.dataController.sortedStationList objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)]];
     
     //Figure out the closest station to the user with at least one bike
+    //First sort by distance from user:
+    [self.dataController setSortedStationList:[self.dataController sortLocationList:[self.dataController stationList] byMethod:LocationDataSortByDistanceFromUser]];
+    //Then grab the top one with a bike:
+    Station *sourceStation;
+    for (Station *station in self.dataController.sortedStationList)
+    {
+        if ([station nbBikes] >= 1)
+        {
+            sourceStation = station;
+            break;
+        }
+    }
     
-    //Change the map view to show the current user location, and the start, end and backup end stations.
+    /* Change the map view to show the current user location, and the start, end and backup end stations */
+    
+    //Really nice code for this adapted from https://gist.github.com/andrewgleave/915374 via http://stackoverflow.com/a/7141612 :
+    //Start with the user coordinate:
+    MKMapPoint annotationPoint = MKMapPointForCoordinate(self.dataController.userCoordinate);
+    MKMapRect zoomRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    //Then add the closest station to the user:
+    annotationPoint = MKMapPointForCoordinate(sourceStation.coordinate);
+    MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    zoomRect = MKMapRectUnion(zoomRect, pointRect);
+    //Then add the destination:
+    annotationPoint = MKMapPointForCoordinate(destination.coordinate);
+    pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    zoomRect = MKMapRectUnion(zoomRect, pointRect);
+    //Then add the closest stations to the destination:
+    for (Station* station in closestStationsToDestination)
+    {
+        annotationPoint = MKMapPointForCoordinate(station.coordinate);
+        pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+        zoomRect = MKMapRectUnion(zoomRect, pointRect);
+    }
+    [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(44, 5, 5, 5) animated:YES];
+    
     //Hide the annotations for all other stations.
     //TODO: change the pin colors/sizes for start, end and backup end stations?
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView addAnnotation:sourceStation];
+    [self.mapView addAnnotation:destination];
+    for (Station* station in closestStationsToDestination)
+    {
+        [self.mapView addAnnotation:station];
+    }
+    
+    //TODO: If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
     
     //Start the timer, if we have one
     

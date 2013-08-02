@@ -29,6 +29,7 @@
         _nbBikes = nbBikes;
         _nbEmptyDocks = nbEmptyDocks;
         _lastStationUpdate = lastStationUpdate;
+        _distanceFromDestination = CLLocationDistanceMax; //to be filled in when the user chooses a destination
         return self;
     }
     return nil;

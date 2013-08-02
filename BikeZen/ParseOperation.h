@@ -29,4 +29,6 @@ extern NSString *kStationsMsgErrorKey;
 @property bool didAbortParsing;
 @property NSUInteger parsedStationsCounter;
 
+- (id)initWithData:(NSData *)parseData;
+
 @end

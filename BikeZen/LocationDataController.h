@@ -16,9 +16,10 @@ extern NSString *kNewLocationKey;
 
 typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
     LocationDataSortByName          = 0,
-    LocationDataSortByDistance      = 1,
-    LocationDataSortByBikes         = 2,
-    LocationDataSortByDocks         = 3,
+    LocationDataSortByDistanceFromUser,
+    LocationDataSortByDistanceFromDestination,
+    LocationDataSortByBikes,
+    LocationDataSortByDocks,
 };
 
 @interface LocationDataController : NSObject
@@ -29,6 +30,7 @@ typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
 @property (nonatomic, copy) NSArray *sortedRecentsList;
 @property (nonatomic, copy) NSMutableArray *favoritesList;
 @property (nonatomic, copy) NSArray *sortedFavoritesList;
+@property CLLocationCoordinate2D userCoordinate;
 
 - (NSUInteger)countOfLocationList:(NSArray *)list;
 - (MyLocation *)objectInLocationList:(NSArray *)list atIndex:(NSUInteger)index;

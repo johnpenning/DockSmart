@@ -17,7 +17,6 @@ NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
 NSString *kNewLocationKey = @"NewLocationKey";
 
 @interface LocationDataController ()
-@property CLLocationCoordinate2D userCoordinate;
 - (void)initializeDefaultDataList;
 @end
 
@@ -125,8 +124,11 @@ NSString *kNewLocationKey = @"NewLocationKey";
         case LocationDataSortByDocks:
             sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"nbEmptyDocks" ascending:NO];
             break;
-        case LocationDataSortByDistance:
+        case LocationDataSortByDistanceFromUser:
             sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"distanceFromUser" ascending:YES];
+            break;
+        case LocationDataSortByDistanceFromDestination:
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"distanceFromDestination" ascending:YES];
             break;
         case LocationDataSortByName:
         default:

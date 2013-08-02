@@ -183,7 +183,7 @@
 {
     self.parseQueue = [NSOperationQueue new];
     
-    ParseOperation *parseOperation = [[ParseOperation alloc] init];
+    ParseOperation *parseOperation = [[ParseOperation alloc] initWithData:self.stationXMLData];
     [self.parseQueue addOperation:parseOperation];
     
     // stationXMLData will be retained by the NSOperation until it has finished executing,
