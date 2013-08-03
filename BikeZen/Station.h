@@ -70,3 +70,15 @@
 //- (MKMapItem*) mapItem;
 
 @end
+
+//@interface SourceStation : Station <MKAnnotation>
+//
+//@end
+//
+//@interface DestinationStation : Station <MKAnnotation>
+//
+//@end
+//
+//@interface AlternateStation : Station <MKAnnotation>
+//
+//@end

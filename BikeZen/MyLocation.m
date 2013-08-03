@@ -8,6 +8,13 @@
 
 #import "MyLocation.h"
 
+// Reuse identifiers for MyLocation annotationIdentifer in the MapView
+NSString *kSourceStation = @"SourceStation";
+NSString *kDestinationLocation = @"DestinationLocation";
+NSString *kDestinationStation = @"DestinationStation";
+NSString *kAlternateStation = @"AlternateStation";
+NSString *kStation = @"Station";
+
 @implementation MyLocation
 
 - (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude distanceFromUser:(CLLocationDistance)distance

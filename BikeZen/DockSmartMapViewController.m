@@ -168,20 +168,71 @@ NSString *kStationList = @"stationList";
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-    static NSString *identifier = @"Station";
+//    static NSString *identifier = @"Station";
     
-    if ([annotation isKindOfClass:[Station class]]) {
-        MKPinAnnotationView *annotationView = (MKPinAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-        if (annotationView == nil) {
-            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-            annotationView.enabled = YES;
-            annotationView.canShowCallout = YES;
-//            annotationView.image = [UIImage imageNamed:@"arrest.png"];
-            annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            annotationView.animatesDrop = YES;
+    if ([annotation isKindOfClass:[MyLocation class]]) {
+        MyLocation* location = (MyLocation*)annotation;
+        MKAnnotationView *annotationView;
+        if ([location.annotationIdentifier isEqualToString:kDestinationLocation])
+        {
+            //Use a standard red MKPinAnnotationView for the final destination address, if it's not a station itself
+            annotationView = (MKPinAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:location.annotationIdentifier];
+            if (annotationView == nil)
+            {
+//                MKPinAnnotationView* pinView = (MKPinAnnotationView *)annotationView;
+                MKPinAnnotationView* pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:location.annotationIdentifier];
+                pinView.enabled = YES;
+                pinView.canShowCallout = YES;
+                pinView.pinColor = MKPinAnnotationColorRed;
+                pinView.animatesDrop = YES;
+                pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+                annotationView = pinView;
+            }
+            else
+            {
+                annotationView.annotation = annotation;
+            }
         }
-        else {
-            annotationView.annotation = annotation;
+        else
+        {
+            //Use a generic MKAnnotationView instead of a pin view so we can use our custom image
+            annotationView = [self.mapView dequeueReusableAnnotationViewWithIdentifier:location.annotationIdentifier];
+
+            if (annotationView == nil)
+            {
+                annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:location.annotationIdentifier];
+                annotationView.enabled = YES;
+                annotationView.canShowCallout = YES;
+                annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            }
+            else
+            {
+                annotationView.annotation = annotation;
+            }
+            
+            //Make sure that we're looking at a Station object
+            if ([annotation isKindOfClass:[Station class]])
+            {
+                Station* station = (Station*)annotation;
+                
+                if ([location.annotationIdentifier isEqualToString:kSourceStation])
+                {
+                    //Use green icons to denote a starting point, and show the number of bikes in the start station:
+                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"green%02d.png", (station.nbBikes <= 20 ? station.nbBikes : 20)]];
+                }
+                else if ([location.annotationIdentifier isEqualToString:kDestinationStation])
+                {
+                    //Use red icons to denote destinations, and show the number of empty docks:
+                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"red%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+                }
+                else if ([location.annotationIdentifier isEqualToString:kAlternateStation] || [location.annotationIdentifier isEqualToString:kStation])
+                {
+                    //Use black icons to denote alternate stations and generic station:
+                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+                }
+                //move the centerOffset up so the "point" of the image is pointed at the station location, instead of the image being centered directly over it:
+                annotationView.centerOffset = CGPointMake(0, -13);
+            }
         }
         
         return annotationView;
@@ -295,9 +346,30 @@ NSString *kStationList = @"stationList";
     }
     [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(44, 5, 5, 5) animated:YES];
     
-    //Hide the annotations for all other stations.
+    //Change the annotation identifiers for the Station/MyLocation objects we want to view as annotations on the map:
     //TODO: change the pin colors/sizes for start, end and backup end stations?
+    sourceStation.annotationIdentifier = kSourceStation;
+    destination.annotationIdentifier = kDestinationLocation;
+    //Destintation stations: label the closest one with at least one empty dock as the destination and the rest as "alternates"
+    BOOL destinationFound = NO;
+    for (Station* station in closestStationsToDestination)
+    {
+        if ((station.nbEmptyDocks > 0) && !destinationFound)
+        {
+            station.annotationIdentifier = kDestinationStation;
+            destinationFound = YES;
+        }
+        else
+        {
+            station.annotationIdentifier = kAlternateStation;
+        }
+    }
+    
+    //Hide the annotations for all other stations.
     [self.mapView removeAnnotations:self.mapView.annotations];
+    
+    //Add new annotations.
+    //TODO: if destination and destination station are the same object, which annotation do we show?
     [self.mapView addAnnotation:sourceStation];
     [self.mapView addAnnotation:destination];
     for (Station* station in closestStationsToDestination)
@@ -305,6 +377,7 @@ NSString *kStationList = @"stationList";
         [self.mapView addAnnotation:station];
     }
     
+    //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
     //TODO: If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
     
     //Start the timer, if we have one

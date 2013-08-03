@@ -12,6 +12,18 @@
 
 @implementation Station
 
+- (id)init
+{
+    self = [super init];
+    
+    if (self)
+    {
+        [super setAnnotationIdentifier:kStation];
+        return self;
+    }
+    return nil;
+}
+
 - (id)initWithStationID:(NSInteger)stationID name:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude installed:(bool)installed locked:(bool)locked publiclyViewable:(bool)publiclyViewable nbBikes:(NSInteger)nbBikes nbEmptyDocks:(NSInteger)nbEmptyDocks lastStationUpdate:(NSDate *)lastStationUpdate distanceFromUser:(CLLocationDistance)distance
 {
     self = [super initWithName:name latitude:latitude longitude:longitude distanceFromUser:distance];
@@ -30,6 +42,7 @@
         _nbEmptyDocks = nbEmptyDocks;
         _lastStationUpdate = lastStationUpdate;
         _distanceFromDestination = CLLocationDistanceMax; //to be filled in when the user chooses a destination
+        [super setAnnotationIdentifier:kStation];
         return self;
     }
     return nil;
