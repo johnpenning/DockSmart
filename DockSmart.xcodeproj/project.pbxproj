@@ -21,7 +21,6 @@
 		CD529ECF1730B77F005420D6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ECE1730B77F005420D6 /* Default@2x.png */; };
 		CD529ED11730B77F005420D6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED01730B77F005420D6 /* Default-568h@2x.png */; };
 		CD529ED41730B77F005420D6 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED21730B77F005420D6 /* MainStoryboard.storyboard */; };
-		CD529ED71730B77F005420D6 /* DockSmartFavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529ED61730B77F005420D6 /* DockSmartFavoritesViewController.m */; };
 		CD529ED91730B77F005420D6 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED81730B77F005420D6 /* first.png */; };
 		CD529EDB1730B77F005420D6 /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529EDA1730B77F005420D6 /* first@2x.png */; };
 		CD529EDE1730B77F005420D6 /* DockSmartMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EDD1730B77F005420D6 /* DockSmartMapViewController.m */; };
@@ -37,7 +36,6 @@
 		CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5541E3177F997D00167D87 /* MBProgressHUD.m */; };
 		CD5541E5177F997D00167D87 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5541E3177F997D00167D87 /* MBProgressHUD.m */; };
 		CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */; };
-		CD6DCB2B176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6DCB2A176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m */; };
 		CD76273117516B7000E22617 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */; };
 		CD89122C17AD91FF00F32D53 /* black00.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89114E17AD91FE00F32D53 /* black00.png */; };
 		CD89122D17AD91FF00F32D53 /* black01.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89114F17AD91FE00F32D53 /* black01.png */; };
@@ -263,11 +261,8 @@
 		CD89130917AD91FF00F32D53 /* red99.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89122B17AD91FF00F32D53 /* red99.png */; };
 		CDA9550D176CC765003C49DF /* stationData.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDA9550C176CC765003C49DF /* stationData.plist */; };
 		CDA95510176CCE47003C49DF /* StationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA9550F176CCE47003C49DF /* StationDataController.m */; };
-		CDA95513176E729B003C49DF /* DockSmartStationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA95512176E729B003C49DF /* DockSmartStationDetailViewController.m */; };
-		CDA95516176E72C4003C49DF /* DockSmartAddressDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA95515176E72C4003C49DF /* DockSmartAddressDetailViewController.m */; };
 		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
-		CDF8A4DC177BDE9A00063B07 /* SearchResultsDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1286,20 +1281,15 @@
 			files = (
 				CD529EC71730B77F005420D6 /* main.m in Sources */,
 				CD529ECB1730B77F005420D6 /* DockSmartAppDelegate.m in Sources */,
-				CD529ED71730B77F005420D6 /* DockSmartFavoritesViewController.m in Sources */,
 				CD529EDE1730B77F005420D6 /* DockSmartMapViewController.m in Sources */,
 				CD0344331730D01400682A78 /* MyLocation.m in Sources */,
 				CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */,
 				CDC454001736D7BF008E2966 /* Station.m in Sources */,
 				CD76273117516B7000E22617 /* DockSmartSettingsViewController.m in Sources */,
 				CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */,
-				CD6DCB2B176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m in Sources */,
 				CDA95510176CCE47003C49DF /* StationDataController.m in Sources */,
-				CDA95513176E729B003C49DF /* DockSmartStationDetailViewController.m in Sources */,
-				CDA95516176E72C4003C49DF /* DockSmartAddressDetailViewController.m in Sources */,
 				CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */,
 				CD39AD391778C11100446A9A /* Address.m in Sources */,
-				CDF8A4DC177BDE9A00063B07 /* SearchResultsDetailViewController.m in Sources */,
 				CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

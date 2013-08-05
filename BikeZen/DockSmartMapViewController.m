@@ -24,6 +24,13 @@ NSString *kStationList = @"stationList";
 
 @interface DockSmartMapViewController ()
 - (IBAction)refeshTapped:(id)sender;
+- (IBAction)startStopTapped:(id)sender;
+
+//keep track of where we're going:
+@property (nonatomic) MyLocation* finalDestination;
+@property (nonatomic) Station* currentDestinationStation;
+@property (nonatomic) Station* idealDestinationStation;
+
 @end
 
 @implementation DockSmartMapViewController
@@ -287,19 +294,40 @@ NSString *kStationList = @"stationList";
     //Make sure this view is showing (TODO: let the tableViewController handle this?)
 //    [[self view] bringSubviewToFront:[self view]];
     
+    //Get ready to bike, set the new state and the final destination location
+    self.bikingState = BikingStatePreparingToBike;
+    self.finalDestination = [[notif userInfo] valueForKey:kBikeDestinationKey];
+
     //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
     //Equivalent to hitting Refresh:
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
-//                                                        object:self
-//                                                      userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
+                                                        object:self
+                                                      userInfo:nil];
+}
+
+- (void)stopBiking
+{
+    //Get ready to bike, set the new state and the final destination location
+    self.bikingState = BikingStateInactive;
+    self.finalDestination = nil;
     
+    //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
+    //Equivalent to hitting Refresh:
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
+                                                        object:self
+                                                      userInfo:nil];
+}
+
+- (void)startBikingCallback
+{
+
     //TODO put the rest of this function in a callback after the latest station data arrives?
     
     //Calculate and store the distances from the destination to each station:
-    MyLocation *destination = [[notif userInfo] valueForKey:kBikeDestinationKey];
+//    MyLocation *destination = [[notif userInfo] valueForKey:kBikeDestinationKey];
     for (Station *station in self.dataController.stationList)
     {
-        station.distanceFromDestination = MKMetersBetweenMapPoints(MKMapPointForCoordinate(station.coordinate), MKMapPointForCoordinate(destination.coordinate));
+        station.distanceFromDestination = MKMetersBetweenMapPoints(MKMapPointForCoordinate(station.coordinate), MKMapPointForCoordinate(self.finalDestination.coordinate));
     }
     
     //Figure out the three closest stations to the destination:
@@ -327,14 +355,23 @@ NSString *kStationList = @"stationList";
     
     //Really nice code for this adapted from https://gist.github.com/andrewgleave/915374 via http://stackoverflow.com/a/7141612 :
     //Start with the user coordinate:
-    MKMapPoint annotationPoint = MKMapPointForCoordinate(self.dataController.userCoordinate);
-    MKMapRect zoomRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    MKMapPoint annotationPoint;
+    MKMapRect zoomRect;
+    if (self.dataController.userCoordinate.latitude && self.dataController.userCoordinate.longitude)
+    {
+        annotationPoint = MKMapPointForCoordinate(self.dataController.userCoordinate);
+        zoomRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    }
+    else
+    {
+        zoomRect = MKMapRectNull;
+    }
     //Then add the closest station to the user:
     annotationPoint = MKMapPointForCoordinate(sourceStation.coordinate);
     MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
     zoomRect = MKMapRectUnion(zoomRect, pointRect);
     //Then add the destination:
-    annotationPoint = MKMapPointForCoordinate(destination.coordinate);
+    annotationPoint = MKMapPointForCoordinate(self.finalDestination.coordinate);
     pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
     zoomRect = MKMapRectUnion(zoomRect, pointRect);
     //Then add the closest stations to the destination:
@@ -347,16 +384,19 @@ NSString *kStationList = @"stationList";
     [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(44, 5, 5, 5) animated:YES];
     
     //Change the annotation identifiers for the Station/MyLocation objects we want to view as annotations on the map:
-    //TODO: change the pin colors/sizes for start, end and backup end stations?
+    //i.e. change the pin color (other attributes?) for start, end and backup end stations
     sourceStation.annotationIdentifier = kSourceStation;
-    destination.annotationIdentifier = kDestinationLocation;
-    //Destintation stations: label the closest one with at least one empty dock as the destination and the rest as "alternates"
+    self.finalDestination.annotationIdentifier = kDestinationLocation;
+    //Label the closest destination to the finalDestination as the idealDestinationStation, so if it's full we can check to see if a dock opens up there later.
+    self.idealDestinationStation = [closestStationsToDestination objectAtIndex:0];
+    //Destintation stations: label the closest one with at least one empty dock as the current destination and the rest as "alternates."
     BOOL destinationFound = NO;
     for (Station* station in closestStationsToDestination)
     {
         if ((station.nbEmptyDocks > 0) && !destinationFound)
         {
             station.annotationIdentifier = kDestinationStation;
+            self.currentDestinationStation = station;
             destinationFound = YES;
         }
         else
@@ -369,9 +409,10 @@ NSString *kStationList = @"stationList";
     [self.mapView removeAnnotations:self.mapView.annotations];
     
     //Add new annotations.
-    //TODO: if destination and destination station are the same object, which annotation do we show?
+    //TODO: if final destination and current destination station are the same object, only show the station object
     [self.mapView addAnnotation:sourceStation];
-    [self.mapView addAnnotation:destination];
+    if (![self.finalDestination isEqual:self.currentDestinationStation])
+        [self.mapView addAnnotation:self.finalDestination];
     for (Station* station in closestStationsToDestination)
     {
         [self.mapView addAnnotation:station];
@@ -380,7 +421,7 @@ NSString *kStationList = @"stationList";
     //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
     //TODO: If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
     
-    //Start the timer, if we have one
+    //Start the rental timer, if we have one
     
     //Start tracking nbEmptyDocks by refreshing the data every minute until we manually stop
     //(or until the timer runs out, or until our geofence tells us we are at our destination)
@@ -420,20 +461,46 @@ NSString *kStationList = @"stationList";
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    //Reload map view
-    if (![NSThread isMainThread]) {
-		[self performSelectorOnMainThread:@selector(plotStationPosition:) withObject:self.dataController.stationList waitUntilDone:NO];
+    switch (self.bikingState) {
+        case BikingStateInactive:
+            //Reload map view
+            if (![NSThread isMainThread]) {
+                [self performSelectorOnMainThread:@selector(plotStationPosition:) withObject:self.dataController.stationList waitUntilDone:NO];
+            }
+            else
+            {
+                [self plotStationPosition:self.dataController.stationList];
+            }
+            break;
+        case BikingStatePreparingToBike:
+            //Do not reload the map view yet, just go to the callback to finish the setup to start biking:
+            [self startBikingCallback];
+            break;
+        case BikingStateActive:
+            //Do not reload the map view at all, unless the app is coming back into the foreground.  Just check to see if we need to send a notification based on nbEmptyDocks for our current goal station
+            break;
+        default:
+            break;
     }
-    else
-    {
-        [self plotStationPosition:self.dataController.stationList];
-    }
+
 }
 
 - (IBAction)refeshTapped:(id)sender {
     [self performSelectorOnMainThread:@selector(refreshWasTapped)
                            withObject:nil
                         waitUntilDone:NO];
+}
+
+- (IBAction)startStopTapped:(UIButton *)sender {
+    
+    if ([sender isHighlighted])
+    {
+        
+    }
+    else
+    {
+        
+    }
 }
 
 //- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

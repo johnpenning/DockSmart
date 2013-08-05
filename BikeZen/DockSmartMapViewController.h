@@ -14,6 +14,12 @@ extern NSString *kStationList;
 
 //extern NSString *kInsertStations
 
+typedef NS_ENUM(NSInteger, BikingStateType) {
+    BikingStateInactive = 0,
+    BikingStatePreparingToBike,
+    BikingStateActive,
+};
+
 @class LocationDataController;
 
 @interface DockSmartMapViewController : UIViewController <MKMapViewDelegate>
@@ -21,11 +27,7 @@ extern NSString *kStationList;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 //@property NSDate *lastDataUpdate;
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *bikeDockViewSwitch;
-
-//@property (nonatomic) NSMutableArray *stationList;
-
 //@property (nonatomic, retain, readonly) NSDateFormatter *dateFormatter;
-//- (IBAction)refreshTapped:(id)sender;
 
 - (void)insertStations:(NSArray *)stations;   // addition method of stations (for KVO purposes)
 //- (void)insertStationList:(NSArray *)array atIndexes:(NSIndexSet *)indexes
@@ -33,5 +35,6 @@ extern NSString *kStationList;
 //- (void)updateDistancesFromUserLocation:(CLLocation *)location;
 
 @property (strong, nonatomic) LocationDataController *dataController;
+@property BikingStateType bikingState;
 
 @end

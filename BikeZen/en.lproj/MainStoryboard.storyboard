@@ -341,6 +341,17 @@
                                             <action selector="refeshTapped:" destination="3" id="bv1-MD-h0N"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="RBU-RD-uR0"/>
+                                    <barButtonItem style="plain" id="eO9-cu-qgR">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="tCo-CB-c4v">
+                                            <rect key="frame" x="226" y="7" width="88" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="Bikes"/>
+                                                <segment title="Docks"/>
+                                            </segments>
+                                        </segmentedControl>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8R-L6-wV5">
@@ -352,18 +363,35 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="startStopTapped:" destination="3" eventType="touchUpInside" id="oZz-TG-ufi"/>
+                                </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj4-f2-tGQ">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHO-8W-KV6">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="j8R-L6-wV5" firstAttribute="centerX" secondItem="lTq-OJ-asp" secondAttribute="centerX" type="default" id="0S5-aR-cuz"/>
+                            <constraint firstItem="LHO-8W-KV6" firstAttribute="centerX" secondItem="lTq-OJ-asp" secondAttribute="centerX" type="default" id="33b-kQ-1aG"/>
                             <constraint firstAttribute="bottom" secondItem="j8R-L6-wV5" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="B1q-QN-sTy"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="trailing" secondItem="17" secondAttribute="trailing" type="default" id="FRQ-Jn-srf"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="top" secondItem="17" secondAttribute="top" type="default" id="Y4L-eT-fZ5"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="leading" secondItem="17" secondAttribute="leading" type="default" id="aII-16-U0j"/>
+                            <constraint firstItem="LHO-8W-KV6" firstAttribute="top" secondItem="17" secondAttribute="top" constant="11" id="b8j-1q-Zu9"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="top" secondItem="17" secondAttribute="top" type="default" id="hXN-xi-Nly"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="leading" secondItem="17" secondAttribute="leading" type="default" id="kFN-TW-3Lu"/>
+                            <constraint firstItem="j8R-L6-wV5" firstAttribute="top" secondItem="Kj4-f2-tGQ" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="nlW-dd-NHh"/>
+                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="centerX" secondItem="j8R-L6-wV5" secondAttribute="centerX" type="default" id="s2O-DJ-FV2"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="trailing" secondItem="17" secondAttribute="trailing" type="default" id="uTK-Ib-IZU"/>
+                            <constraint firstItem="LHO-8W-KV6" firstAttribute="leading" secondItem="Kj4-f2-tGQ" secondAttribute="leading" priority="1" type="user" id="vL6-PA-SfF"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="bottom" secondItem="17" secondAttribute="bottom" type="default" id="zNk-P8-EJJ"/>
                         </constraints>
                     </view>
@@ -519,6 +547,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DockSmartMapViewController.h"/>
             <relationships>
                 <relationship kind="action" name="refeshTapped:"/>
+                <relationship kind="action" name="startStopTapped:"/>
                 <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
             </relationships>
         </class>

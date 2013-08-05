@@ -63,7 +63,8 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     [super awakeFromNib];
 
     //initialize local userCoordinate property:
-    self.userCoordinate = CLLocationCoordinate2DMake(0, 0);
+//    self.userCoordinate = CLLocationCoordinate2DMake(0, 0);
+    self.userCoordinate = kCLLocationCoordinate2DInvalid;
     
     // KVO: listen for changes to our station data source for table view updates
 //    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
@@ -143,7 +144,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                        context:(void *)context
 {
     //Reload station data in Destinations list
-#warning Ineffective listener.
     [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
     [self.tableView reloadData];
     //TODO: reperform search
@@ -153,25 +153,18 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     
     switch (section) {
         case DestinationTableSectionSearch: //Search cell
             if (tableView == self.searchDisplayController.searchResultsTableView)
             {
-//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-//                {
-//                    return 1;
-//                }
-//                return 0;
                 if (self.searchLocation == nil)
                     return 0;
                 else
@@ -195,18 +188,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
         case DestinationTableSectionStations:
         {
             /* "Stations" section: */
-//            //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
-//            DockSmartMapViewController *controller = self.tabBarController.childViewControllers[0];
-//            if (controller.class == [DockSmartMapViewController class])
-//            {
-//                controller = (DockSmartMapViewController*)controller;
-//                return [controller.dataController countOfStationList];
-//            }
-//            else
-//            {
-//                NSLog(@"ERROR: Incorrect class of TabBarController index!");
-//                return 0;
-//            }
             
             /*
              If the requesting table view is the search display controller's table view, return the count of
@@ -214,22 +195,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
              */
             if (tableView == self.searchDisplayController.searchResultsTableView)
             {
-//                NSInteger numRows = [self.filterResults count]; //start with the full array
-//                
-//                //just return 0 if the array is empty
-//                if (numRows == 0)
-//                    return 0;
-//                
-//                //if the first result is a SearchCell (i.e. a geocode prompt), subtract 1
-//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-//                    numRows--;
-//                
-//                //subtract each of the previous geocode search results, with a sanity check:
-//                if (numRows >= self.geocodeSearchResultsCount)
-//                    numRows -= self.geocodeSearchResultsCount;
-//                
-//                return numRows; //[self.filterResults count] == 0 ? 0 : ([self.filterResults count] - 1); //TODO change constant arithmetic to dynamic object type counting when other sections come into play
-                
                 return [self.filterResults count];
             }
             else
@@ -275,23 +240,11 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+{    
     // Configure the cell...
     
     static NSString *CellIdentifier;
-    
-//    if ((tableView == self.searchDisplayController.searchResultsTableView) && ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]]) && (indexPath.row == 0))
-//    {
-//        CellIdentifier = @"SearchCell";
-//    }
-//    else
-//    {
-//        CellIdentifier = @"StationCell";
-//    }
-    
+        
     switch ([indexPath section]) {
         case DestinationTableSectionSearch:
             CellIdentifier = @"SearchCell";
@@ -318,17 +271,12 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 	{
         switch ([indexPath section]) {
             case DestinationTableSectionSearch:
-//                locationAtIndex = [self.filterResults objectAtIndex:indexPath.row];
                 if (self.searchLocation != nil)
                 {
                     locationAtIndex = self.searchLocation;
                 }
                 break;
             case DestinationTableSectionSearchResults:
-//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-//                    locationAtIndex = [self.filterResults objectAtIndex:(indexPath.row+1)];
-//                else
-//                    locationAtIndex = [self.filterResults objectAtIndex:indexPath.row];
                 locationAtIndex = [self.geocodeSearchResults objectAtIndex:indexPath.row];
                 break;
             case DestinationTableSectionFavorites:
@@ -338,10 +286,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                 //TODO
                 break;
             case DestinationTableSectionStations:
-//                if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-//                    locationAtIndex = [self.filterResults objectAtIndex:(indexPath.row + self.geocodeSearchResultsCount + 1)]; //TODO change constant arithmetic to dynamic object type counting when other sections come into play
-//                else
-//                    locationAtIndex = [self.filterResults objectAtIndex:(indexPath.row + self.geocodeSearchResultsCount)];
                 locationAtIndex = [self.filterResults objectAtIndex:indexPath.row];
                 break;
             default:
@@ -350,7 +294,7 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     }
 	else
 	{
-        locationAtIndex = (Station*)[self.dataController objectInLocationList:self.dataController.sortedStationList atIndex:indexPath.row]; //[mapViewController.dataController objectInSortedStationListAtIndex:indexPath.row];
+        locationAtIndex = (Station*)[self.dataController objectInLocationList:self.dataController.sortedStationList atIndex:indexPath.row];
     }
     
     //Set main text label:
@@ -365,7 +309,7 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     if ([locationAtIndex isKindOfClass:[Station class]])
     {
         Station *stationAtIndex = (Station *)locationAtIndex;
-        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %d Docks: %d Distance: %2.2f mi", stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks, stationAtIndex.distanceFromUser/METERS_PER_MILE /*, TODO insert stationAtIndex.distance later*/]];
+        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %d Docks: %d Distance: %2.2f mi", stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks, stationAtIndex.distanceFromUser/METERS_PER_MILE]];
     }
     else if ([locationAtIndex isKindOfClass:[Address class]])
     {
@@ -477,14 +421,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
         DockSmartStationDetailViewController *detailViewController = [segue destinationViewController];
         detailViewController.station = (Station *)[self.dataController objectInLocationList:self.dataController.sortedStationList atIndex:[self.tableView indexPathForSelectedRow].row];
     }
-//    else if ([[segue identifier] isEqualToString:@"SearchCellToSearchResults"])
-//    {
-//        // perform the Geocode
-//        [self performStringGeocode:self];
-//
-//        SearchResultsDetailViewController *resultsViewController = [segue destinationViewController];
-//        
-//    }
 }
 #endif
 
@@ -665,9 +601,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                 [self.geocodeSearchResults addObject:address];
             }
         }
-        //            self.geocodeSearchResultsCount = [geocodeResults count];
-        //            NSRange searchCellRange = NSMakeRange(0, 1);
-        //            [self.filterResults replaceObjectsInRange:searchCellRange withObjectsFromArray:geocodeResults];
         
         //Remove old search string object if this search returned results
         if ([self.geocodeSearchResults count])
@@ -714,7 +647,7 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                                                             object:self
                                                           userInfo:[NSDictionary dictionaryWithObject:self.selectedLocation
                                                                                                forKey:kBikeDestinationKey]];
-        //Switch over to the map view //TODO: Test this, change from hardcoded 0 to enum?
+        //Switch over to the map view //TODO: Change from hardcoded 0 to enum?
         [self.tabBarController setSelectedIndex:0];
     }
     else //cancel was pressed

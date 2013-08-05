@@ -31,6 +31,8 @@ NSString *kNewLocationKey = @"NewLocationKey";
     NSMutableArray *theFavoritesList = [[NSMutableArray alloc] init];
     self.favoritesList = theFavoritesList;
     
+    self.userCoordinate = kCLLocationCoordinate2DInvalid;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateLocation:)
                                                  name:kLocationUpdateNotif
