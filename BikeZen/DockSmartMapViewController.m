@@ -12,6 +12,7 @@
 #import "DockSmartDestinationsMasterViewController.h"
 #import "define.h"
 #import "Station.h"
+#import "Address.h"
 #import "LocationDataController.h"
 #import "ParseOperation.h"
 
@@ -25,6 +26,12 @@ NSString *kStationList = @"stationList";
 @interface DockSmartMapViewController ()
 - (IBAction)refeshTapped:(id)sender;
 - (IBAction)startStopTapped:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *startStopButton;
+@property (weak, nonatomic) IBOutlet UILabel *destinationDetailLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *bikeCrosshairImage;
+
+//location property for the center of the map:
+@property (nonatomic) Address* mapCenterAddress;
 
 //keep track of where we're going:
 @property (nonatomic) MyLocation* finalDestination;
@@ -58,7 +65,7 @@ NSString *kStationList = @"stationList";
     
 //    self.stationList = [NSMutableArray array];
     self.dataController = [[LocationDataController alloc] init];
-    
+    self.mapCenterAddress = [[Address alloc] init];
 //    // KVO: listen for changes to our station data source for map view updates
     [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
 //    [[NSNotificationCenter defaultCenter] addObserver:self
@@ -120,6 +127,9 @@ NSString *kStationList = @"stationList";
 - (void)viewDidUnload {
 //    [self setBikeDockViewSwitch:nil];
 //    [self setRefreshButtonTapped:nil];
+    [self setStartStopButton:nil];
+    [self setDestinationDetailLabel:nil];
+    [self setBikeCrosshairImage:nil];
     [super viewDidUnload];
 //    
 //    self.dataController.stationList = nil;
@@ -172,6 +182,9 @@ NSString *kStationList = @"stationList";
 //    }
     
 }
+
+#pragma mark -
+#pragma mark MKMapViewDelegate
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
@@ -248,6 +261,40 @@ NSString *kStationList = @"stationList";
     return nil;
 }
 
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    if (animated == YES)
+    {
+        [self.destinationDetailLabel setText:nil];
+//        [self.destinationDetailLabel setAlpha:0.5];
+        [self.startStopButton setEnabled:NO];
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    //geocode new location, then create a new MyLocation object
+    CLLocationCoordinate2D centerCoord = self.mapView.centerCoordinate;
+    CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    
+    [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
+    
+    [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Reverse geocode failed with error: %@", error);
+            //still use the center coordinate for mapCenterAddress
+            return;
+        }
+
+        [self.mapCenterAddress initWithPlacemark:[placemarks objectAtIndex:0] distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(centerCoord), MKMapPointForCoordinate(self.dataController.userCoordinate))];
+        
+        [self.destinationDetailLabel setText:[self.mapCenterAddress name]];
+
+    }];
+}
+
 //- (IBAction)refreshTapped:(id)sender
 //{
 //    [self performSelectorOnMainThread:@selector(refreshWasTapped:)
@@ -255,13 +302,20 @@ NSString *kStationList = @"stationList";
 //                        waitUntilDone:NO];
 //}
 
-//- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
-//{
-//    Station *station = (Station*)view.annotation;
-//    
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
+    MyLocation *location = (MyLocation*)view.annotation;
+    
 //    NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
 //    [station.mapItem openInMapsWithLaunchOptions:launchOptions];
-//}
+    
+    //Use this location as our final destination, same as selecting it from the Destinations tableView
+    //TODO: add action sheet later for adding this location to favorites
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kStartBikingNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:location forKey:kBikeDestinationKey]];
+}
 
 #pragma mark -
 #pragma mark KVO support
@@ -492,14 +546,18 @@ NSString *kStationList = @"stationList";
 }
 
 - (IBAction)startStopTapped:(UIButton *)sender {
-    
-    if ([sender isHighlighted])
-    {
-        
-    }
-    else
-    {
-        
+    switch (self.bikingState) {
+        case BikingStateInactive:
+            //set the final destination to equal the placemark at the center of the crosshairs
+            //then call startBiking: with the location
+//            [self startBiking:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:[self.mapView centerCoordinate] forKey:kBikeDestinationKey]]];
+            break;
+        case BikingStatePreparingToBike:
+            break;
+        case BikingStateActive:
+            break;
+        default:
+            break;
     }
 }
 

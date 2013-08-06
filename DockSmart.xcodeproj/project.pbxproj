@@ -263,6 +263,7 @@
 		CDA95510176CCE47003C49DF /* StationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA9550F176CCE47003C49DF /* StationDataController.m */; };
 		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
+		CDDD4CE217B0904F00E45B21 /* bikepointer.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDD4CE117B0904F00E45B21 /* bikepointer.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -556,6 +557,7 @@
 		CDC453FC1736D5DA008E2966 /* ParseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ParseOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Station.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CDC453FF1736D7BF008E2966 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Station.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CDDD4CE117B0904F00E45B21 /* bikepointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bikepointer.png; sourceTree = "<group>"; };
 		CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultsDetailViewController.h; sourceTree = "<group>"; };
 		CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultsDetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -714,6 +716,7 @@
 		CD89114D17AD91FE00F32D53 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CDDD4CE117B0904F00E45B21 /* bikepointer.png */,
 				CD89114E17AD91FE00F32D53 /* black00.png */,
 				CD89114F17AD91FE00F32D53 /* black01.png */,
 				CD89115017AD91FE00F32D53 /* black02.png */,
@@ -1245,6 +1248,7 @@
 				CD89130717AD91FF00F32D53 /* red97.png in Resources */,
 				CD89130817AD91FF00F32D53 /* red98.png in Resources */,
 				CD89130917AD91FF00F32D53 /* red99.png in Resources */,
+				CDDD4CE217B0904F00E45B21 /* bikepointer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
