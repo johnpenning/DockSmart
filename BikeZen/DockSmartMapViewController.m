@@ -25,10 +25,14 @@ NSString *kStationList = @"stationList";
 
 @interface DockSmartMapViewController ()
 - (IBAction)refeshTapped:(id)sender;
+- (IBAction)cancelTapped:(id)sender;
 - (IBAction)startStopTapped:(id)sender;
+- (IBAction)bikesDocksToggled:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *startStopButton;
 @property (weak, nonatomic) IBOutlet UILabel *destinationDetailLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *bikeCrosshairImage;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *bikesDocksControl;
 
 //location property for the center of the map:
 @property (nonatomic) Address* mapCenterAddress;
@@ -130,6 +134,8 @@ NSString *kStationList = @"stationList";
     [self setStartStopButton:nil];
     [self setDestinationDetailLabel:nil];
     [self setBikeCrosshairImage:nil];
+    [self setCancelButton:nil];
+    [self setBikesDocksControl:nil];
     [super viewDidUnload];
 //    
 //    self.dataController.stationList = nil;
@@ -188,72 +194,96 @@ NSString *kStationList = @"stationList";
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-//    static NSString *identifier = @"Station";
+    //TODO: place annotations on top of center bike image, if possible?
+    
+    //    static NSString *identifier = @"Station";
     
     if ([annotation isKindOfClass:[MyLocation class]]) {
         MyLocation* location = (MyLocation*)annotation;
         MKAnnotationView *annotationView;
-        if ([location.annotationIdentifier isEqualToString:kDestinationLocation])
+        //        if ([location.annotationIdentifier isEqualToString:kDestinationLocation])
+        //        {
+        //            //Use a standard red MKPinAnnotationView for the final destination address, if it's not a station itself
+        //            annotationView = (MKPinAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:location.annotationIdentifier];
+        //            if (annotationView == nil)
+        //            {
+        ////                MKPinAnnotationView* pinView = (MKPinAnnotationView *)annotationView;
+        //                MKPinAnnotationView* pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:location.annotationIdentifier];
+        //                pinView.enabled = YES;
+        //                pinView.canShowCallout = YES;
+        //                pinView.pinColor = MKPinAnnotationColorRed;
+        //                pinView.animatesDrop = YES;
+        //                pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        //                annotationView = pinView;
+        //            }
+        //            else
+        //            {
+        //                annotationView.annotation = annotation;
+        //            }
+        //        }
+        //        else
+        //        {
+        //Use a generic MKAnnotationView instead of a pin view so we can use our custom image
+        annotationView = [self.mapView dequeueReusableAnnotationViewWithIdentifier:location.annotationIdentifier];
+        
+        if (annotationView == nil)
         {
-            //Use a standard red MKPinAnnotationView for the final destination address, if it's not a station itself
-            annotationView = (MKPinAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:location.annotationIdentifier];
-            if (annotationView == nil)
-            {
-//                MKPinAnnotationView* pinView = (MKPinAnnotationView *)annotationView;
-                MKPinAnnotationView* pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:location.annotationIdentifier];
-                pinView.enabled = YES;
-                pinView.canShowCallout = YES;
-                pinView.pinColor = MKPinAnnotationColorRed;
-                pinView.animatesDrop = YES;
-                pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-                annotationView = pinView;
-            }
-            else
-            {
-                annotationView.annotation = annotation;
-            }
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:location.annotationIdentifier];
+            annotationView.enabled = YES;
+            annotationView.canShowCallout = YES;
+            annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
         }
         else
         {
-            //Use a generic MKAnnotationView instead of a pin view so we can use our custom image
-            annotationView = [self.mapView dequeueReusableAnnotationViewWithIdentifier:location.annotationIdentifier];
-
-            if (annotationView == nil)
-            {
-                annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:location.annotationIdentifier];
-                annotationView.enabled = YES;
-                annotationView.canShowCallout = YES;
-                annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            }
-            else
-            {
-                annotationView.annotation = annotation;
-            }
+            annotationView.annotation = annotation;
+        }
+        
+        //Make sure that we're looking at a Station object
+        if ([annotation isKindOfClass:[Station class]])
+        {
+            Station* station = (Station*)annotation;
             
-            //Make sure that we're looking at a Station object
-            if ([annotation isKindOfClass:[Station class]])
+            if ([location.annotationIdentifier isEqualToString:kSourceStation])
             {
-                Station* station = (Station*)annotation;
-                
-                if ([location.annotationIdentifier isEqualToString:kSourceStation])
+                //Use green icons to denote a starting point, and show the number of bikes in the start station:
+                //TODO create green icons for numbers above 20
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"green%02d.png", (station.nbBikes <= 20 ? station.nbBikes : 20)]];
+            }
+            else if ([location.annotationIdentifier isEqualToString:kDestinationStation])
+            {
+                //Use red icons to denote destinations, and show the number of empty docks:
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"red%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+            }
+            else if ([location.annotationIdentifier isEqualToString:kAlternateStation])
+            {
+                //Use black icons to denote alternate stations:
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+            }
+            else if ([location.annotationIdentifier isEqualToString:kStation])
+            {
+                //Use black icons for generic stations in Inactive state as well, but switch between showing the number of bikes or docks based on the toggle control:
+                NSInteger numberToShow = ([self.bikesDocksControl selectedSegmentIndex] == 0) ? station.nbBikes : station.nbEmptyDocks;
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (numberToShow <= 99 ? numberToShow : 99)]];
+            }
+            //move the centerOffset up so the "point" of the image is pointed at the station location, instead of the image being centered directly over it:
+            annotationView.centerOffset = CGPointMake(0, -13);
+        }
+        else if ([annotation isKindOfClass:[Address class]])
+        {
+            Address* address = (Address*)annotation;
+            
+            if ([address.annotationIdentifier isEqualToString:kDestinationLocation])
+            {
+                //do not show a separate destination annotation if it's the station the user is actually about to bike to
+                if (address.coordinate.latitude == self.currentDestinationStation.coordinate.latitude && address.coordinate.longitude == self.currentDestinationStation.coordinate.longitude)
                 {
-                    //Use green icons to denote a starting point, and show the number of bikes in the start station:
-                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"green%02d.png", (station.nbBikes <= 20 ? station.nbBikes : 20)]];
+                    return nil;
                 }
-                else if ([location.annotationIdentifier isEqualToString:kDestinationStation])
-                {
-                    //Use red icons to denote destinations, and show the number of empty docks:
-                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"red%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
-                }
-                else if ([location.annotationIdentifier isEqualToString:kAlternateStation] || [location.annotationIdentifier isEqualToString:kStation])
-                {
-                    //Use black icons to denote alternate stations and generic station:
-                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
-                }
-                //move the centerOffset up so the "point" of the image is pointed at the station location, instead of the image being centered directly over it:
-                annotationView.centerOffset = CGPointMake(0, -13);
+                annotationView.image = [UIImage imageNamed:@"bikepointer.png"];
+                annotationView.centerOffset = CGPointMake(0, 0);
             }
         }
+        //        }
         
         return annotationView;
     }
@@ -273,26 +303,31 @@ NSString *kStationList = @"stationList";
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-    //geocode new location, then create a new MyLocation object
-    CLLocationCoordinate2D centerCoord = self.mapView.centerCoordinate;
-    CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [self.startStopButton setEnabled:YES];
     
-    [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
-    
-    [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (error)
-        {
-            NSLog(@"Reverse geocode failed with error: %@", error);
-            //still use the center coordinate for mapCenterAddress
-            return;
-        }
-
-        [self.mapCenterAddress initWithPlacemark:[placemarks objectAtIndex:0] distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(centerCoord), MKMapPointForCoordinate(self.dataController.userCoordinate))];
+    if (self.bikingState == BikingStateInactive)
+    {
+        //geocode new location, then create a new MyLocation object
+        CLLocationCoordinate2D centerCoord = self.mapView.centerCoordinate;
+        CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
+        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
         
-        [self.destinationDetailLabel setText:[self.mapCenterAddress name]];
-
-    }];
+        [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
+        
+        [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (error)
+            {
+                NSLog(@"Reverse geocode failed with error: %@", error);
+                //still use the center coordinate for mapCenterAddress
+                return;
+            }
+            
+            [self.mapCenterAddress initWithPlacemark:[placemarks objectAtIndex:0] distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(centerCoord), MKMapPointForCoordinate(self.dataController.userCoordinate))];
+            
+            [self.destinationDetailLabel setText:[self.mapCenterAddress name]];
+            
+        }];
+    }
 }
 
 //- (IBAction)refreshTapped:(id)sender
@@ -351,7 +386,10 @@ NSString *kStationList = @"stationList";
     //Get ready to bike, set the new state and the final destination location
     self.bikingState = BikingStatePreparingToBike;
     self.finalDestination = [[notif userInfo] valueForKey:kBikeDestinationKey];
-
+    
+    //Disable the bikes/docks toggle:
+    [self.bikesDocksControl setHidden:YES];
+    
     //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
     //Equivalent to hitting Refresh:
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
@@ -360,16 +398,32 @@ NSString *kStationList = @"stationList";
 }
 
 - (void)stopBiking
-{
-    //Get ready to bike, set the new state and the final destination location
-    self.bikingState = BikingStateInactive;
-    self.finalDestination = nil;
-    
+{    
     //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
     //Equivalent to hitting Refresh:
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
                                                         object:self
                                                       userInfo:nil];
+    //re-center map on previous final destination
+    [self.mapView setCenterCoordinate:self.finalDestination.coordinate animated:YES];
+    
+    //re-display center bike pointer image
+    [self.bikeCrosshairImage setHidden:NO];
+    
+    //re-enable the bikes/docks toggle:
+    [self.bikesDocksControl setHidden:NO];
+    
+    //Change buttons and label:
+    [self.destinationDetailLabel setText:[self.finalDestination name]];
+//    [self.startStopButton setBackgroundColor:[UIColor whiteColor]];
+    [self.startStopButton setTitleColor:[UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0] forState:UIControlStateNormal];
+    [self.startStopButton setTitle:@"Set Destination" forState:UIControlStateNormal];
+    //hide cancel button
+    [self.cancelButton setHidden:YES];
+    
+    //Return to idle/inactive state
+    self.bikingState = BikingStateInactive;
+    self.finalDestination = nil;
 }
 
 - (void)startBikingCallback
@@ -461,11 +515,21 @@ NSString *kStationList = @"stationList";
     
     //Hide the annotations for all other stations.
     [self.mapView removeAnnotations:self.mapView.annotations];
+    //Hide center bike pointer image
+    [self.bikeCrosshairImage setHidden:YES];
     
+    //Change buttons and label:
+    [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", sourceStation.name, sourceStation.nbBikes, (sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
+//    [self.startStopButton setBackgroundColor:[UIColor greenColor]];
+    [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [self.startStopButton setTitle:@"Start Station Tracking" forState:UIControlStateNormal];
+    [self.cancelButton setHidden:NO];
+
     //Add new annotations.
     //TODO: if final destination and current destination station are the same object, only show the station object
     [self.mapView addAnnotation:sourceStation];
-    if (![self.finalDestination isEqual:self.currentDestinationStation])
+//    if (![self.finalDestination isEqual:self.currentDestinationStation])
+    if (self.finalDestination.coordinate.latitude != self.currentDestinationStation.coordinate.latitude && self.finalDestination.coordinate.longitude != self.currentDestinationStation.coordinate.longitude)
         [self.mapView addAnnotation:self.finalDestination];
     for (Station* station in closestStationsToDestination)
     {
@@ -545,20 +609,41 @@ NSString *kStationList = @"stationList";
                         waitUntilDone:NO];
 }
 
+- (IBAction)cancelTapped:(id)sender {
+    //reset to inactive
+    [self stopBiking];
+}
+
 - (IBAction)startStopTapped:(UIButton *)sender {
     switch (self.bikingState) {
         case BikingStateInactive:
             //set the final destination to equal the placemark at the center of the crosshairs
             //then call startBiking: with the location
-//            [self startBiking:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:[self.mapView centerCoordinate] forKey:kBikeDestinationKey]]];
+            [self startBiking:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.mapCenterAddress forKey:kBikeDestinationKey]]];
             break;
         case BikingStatePreparingToBike:
+            //start station tracking (TODO)
+            //For now... just do this
+            //Change buttons:
+//            [self.startStopButton setBackgroundColor:[UIColor redColor]];
+            [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [self.startStopButton setTitle:@"Stop Station Tracking" forState:UIControlStateNormal];
+            [self.cancelButton setHidden:YES];
+            //Change the state to active:
+            self.bikingState = BikingStateActive;
             break;
         case BikingStateActive:
+            //stop station tracking and return PreparingToBike state
+            [self startBiking:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.finalDestination forKey:kBikeDestinationKey]]];
             break;
         default:
             break;
     }
+}
+
+- (IBAction)bikesDocksToggled:(id)sender {
+    //replot the station annotations with either the number of bikes or empty docks at each
+    [self plotStationPosition:self.dataController.stationList];
 }
 
 //- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

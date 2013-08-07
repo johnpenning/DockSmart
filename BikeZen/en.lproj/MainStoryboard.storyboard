@@ -343,14 +343,20 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="RBU-RD-uR0"/>
                                     <barButtonItem style="plain" id="eO9-cu-qgR">
-                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="tCo-CB-c4v">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="1" id="tCo-CB-c4v">
                                             <rect key="frame" x="226" y="7" width="88" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Bikes"/>
                                                 <segment title="Docks"/>
                                             </segments>
+                                            <connections>
+                                                <action selector="bikesDocksToggled:" destination="3" eventType="valueChanged" id="ZOJ-hW-HdH"/>
+                                            </connections>
                                         </segmentedControl>
+                                        <connections>
+                                            <action selector="bikesDocksToggled:" destination="3" id="fSN-N1-zZr"/>
+                                        </connections>
                                     </barButtonItem>
                                 </items>
                             </toolbar>
@@ -370,12 +376,30 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="bikepointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="rhK-Ye-sEA"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1IL-EO-eSi">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="Leu-pc-eWF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" image="close.png">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="cancelTapped:" destination="3" eventType="touchUpInside" id="q6R-8i-ceM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="1IL-EO-eSi" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="3sF-Eo-zCJ"/>
                             <constraint firstAttribute="trailing" secondItem="Kj4-f2-tGQ" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="5ax-MB-xSX"/>
                             <constraint firstAttribute="bottom" secondItem="j8R-L6-wV5" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="B1q-QN-sTy"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="trailing" secondItem="17" secondAttribute="trailing" type="default" id="FRQ-Jn-srf"/>
+                            <constraint firstAttribute="trailing" secondItem="1IL-EO-eSi" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="K3e-N4-qad"/>
                             <constraint firstItem="j8R-L6-wV5" firstAttribute="leading" secondItem="17" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="NE5-P6-RyD"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="top" secondItem="17" secondAttribute="top" type="default" id="Y4L-eT-fZ5"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="leading" secondItem="17" secondAttribute="leading" type="default" id="aII-16-U0j"/>
@@ -395,6 +419,8 @@
                     <tabBarItem key="tabBarItem" title="Map" image="second" id="6"/>
                     <connections>
                         <outlet property="bikeCrosshairImage" destination="rhK-Ye-sEA" id="85n-59-Qqf"/>
+                        <outlet property="bikesDocksControl" destination="tCo-CB-c4v" id="xpc-lP-Lbc"/>
+                        <outlet property="cancelButton" destination="1IL-EO-eSi" id="n11-Kg-6D4"/>
                         <outlet property="destinationDetailLabel" destination="Kj4-f2-tGQ" id="t5k-oB-rpK"/>
                         <outlet property="mapView" destination="bko-ft-Kfm" id="ehq-V1-CIH"/>
                         <outlet property="startStopButton" destination="j8R-L6-wV5" id="1V7-lr-hJg"/>
@@ -531,6 +557,7 @@
     </scenes>
     <resources>
         <image name="bikepointer.png" width="25" height="50"/>
+        <image name="close.png" width="42" height="42"/>
         <image name="first" width="16" height="16"/>
         <image name="second" width="16" height="16"/>
     </resources>
@@ -547,9 +574,13 @@
         <class className="DockSmartMapViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DockSmartMapViewController.h"/>
             <relationships>
+                <relationship kind="action" name="bikesDocksToggled:"/>
+                <relationship kind="action" name="cancelTapped:"/>
                 <relationship kind="action" name="refeshTapped:"/>
                 <relationship kind="action" name="startStopTapped:"/>
                 <relationship kind="outlet" name="bikeCrosshairImage" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="bikesDocksControl" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="cancelButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="destinationDetailLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
                 <relationship kind="outlet" name="startStopButton" candidateClass="UIButton"/>
