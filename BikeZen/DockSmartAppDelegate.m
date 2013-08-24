@@ -73,7 +73,24 @@
     
     return YES;
 }
-							
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSString *notificationMessage = [notification alertBody];
+    UIAlertView *alertView =
+    [[UIAlertView alloc] initWithTitle:
+     NSLocalizedString(@"Notification Title",
+                       @"Title for alert displayed when bike destination change message appears.")
+                               message:notificationMessage
+                              delegate:nil
+                     cancelButtonTitle:@"OK"
+                     otherButtonTitles:nil];
+    [alertView show];
+    
+    //TODO: Reload mapView w/ new icon colors
+
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
