@@ -92,7 +92,11 @@ NSString *kStationList = @"stationList";
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE);
     
     [self.mapView setRegion:viewRegion animated:YES];
-
+    
+    //Parse test:
+    PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
+    [testObject setObject:@"bar" forKey:@"foo"];
+    [testObject save];
 }
 
 - (void)didReceiveMemoryWarning

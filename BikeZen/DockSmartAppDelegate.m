@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
 
+#import <Parse/Parse.h>
 #import "DockSmartAppDelegate.h"
 #import "Station.h"
 #import "ParseOperation.h"
@@ -37,6 +38,10 @@
 {
     // Override point for customization after application launch.
     
+    // Set up Parse
+    // Parse analytics
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+
     //Begin location service
     _userCoordinate = kCLLocationCoordinate2DInvalid;
     [self startUpdatingCurrentLocation];

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <Parse/Parse.h>
 
 @class MyLocation, Station, Address;
 

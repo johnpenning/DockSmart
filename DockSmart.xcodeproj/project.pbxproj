@@ -259,6 +259,15 @@
 		CD89130717AD91FF00F32D53 /* red97.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89122917AD91FF00F32D53 /* red97.png */; };
 		CD89130817AD91FF00F32D53 /* red98.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89122A17AD91FF00F32D53 /* red98.png */; };
 		CD89130917AD91FF00F32D53 /* red99.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89122B17AD91FF00F32D53 /* red99.png */; };
+		CDA28E6017C94C700005211B /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E5F17C94C700005211B /* Parse.framework */; };
+		CDA28E6217C94CBE0005211B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6117C94CBE0005211B /* AudioToolbox.framework */; };
+		CDA28E6417C94CCB0005211B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6317C94CCB0005211B /* CFNetwork.framework */; };
+		CDA28E6617C94CD90005211B /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6517C94CD90005211B /* libz.1.1.3.dylib */; };
+		CDA28E6817C94CE10005211B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6717C94CE10005211B /* MobileCoreServices.framework */; };
+		CDA28E6A17C94CE80005211B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6917C94CE80005211B /* QuartzCore.framework */; };
+		CDA28E6C17C94CEE0005211B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6B17C94CEE0005211B /* Security.framework */; };
+		CDA28E6E17C94CF40005211B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6D17C94CF40005211B /* StoreKit.framework */; };
+		CDA28E7017C94CFA0005211B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA28E6F17C94CFA0005211B /* SystemConfiguration.framework */; };
 		CDA9550D176CC765003C49DF /* stationData.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDA9550C176CC765003C49DF /* stationData.plist */; };
 		CDA95510176CCE47003C49DF /* StationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA9550F176CCE47003C49DF /* StationDataController.m */; };
 		CDB13C1517B1EAA500DD86C1 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = CDB13C1417B1EAA500DD86C1 /* close.png */; };
@@ -547,6 +556,15 @@
 		CD89122917AD91FF00F32D53 /* red97.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red97.png; sourceTree = "<group>"; };
 		CD89122A17AD91FF00F32D53 /* red98.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red98.png; sourceTree = "<group>"; };
 		CD89122B17AD91FF00F32D53 /* red99.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red99.png; sourceTree = "<group>"; };
+		CDA28E5F17C94C700005211B /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		CDA28E6117C94CBE0005211B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		CDA28E6317C94CCB0005211B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		CDA28E6517C94CD90005211B /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
+		CDA28E6717C94CE10005211B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		CDA28E6917C94CE80005211B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CDA28E6B17C94CEE0005211B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CDA28E6D17C94CF40005211B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		CDA28E6F17C94CFA0005211B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CDA9550C176CC765003C49DF /* stationData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = stationData.plist; sourceTree = "<group>"; };
 		CDA9550E176CCE47003C49DF /* StationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StationDataController.h; sourceTree = "<group>"; };
 		CDA9550F176CCE47003C49DF /* StationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StationDataController.m; sourceTree = "<group>"; };
@@ -569,11 +587,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDA28E7017C94CFA0005211B /* SystemConfiguration.framework in Frameworks */,
+				CDA28E6E17C94CF40005211B /* StoreKit.framework in Frameworks */,
+				CDA28E6C17C94CEE0005211B /* Security.framework in Frameworks */,
+				CDA28E6A17C94CE80005211B /* QuartzCore.framework in Frameworks */,
+				CDA28E6817C94CE10005211B /* MobileCoreServices.framework in Frameworks */,
+				CDA28E6617C94CD90005211B /* libz.1.1.3.dylib in Frameworks */,
+				CDA28E6417C94CCB0005211B /* CFNetwork.framework in Frameworks */,
+				CDA28E6217C94CBE0005211B /* AudioToolbox.framework in Frameworks */,
 				CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */,
 				CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */,
 				CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */,
 				CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */,
 				CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */,
+				CDA28E6017C94C700005211B /* Parse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,6 +620,14 @@
 		CD529EAE1730B77F005420D6 = {
 			isa = PBXGroup;
 			children = (
+				CDA28E6F17C94CFA0005211B /* SystemConfiguration.framework */,
+				CDA28E6D17C94CF40005211B /* StoreKit.framework */,
+				CDA28E6B17C94CEE0005211B /* Security.framework */,
+				CDA28E6917C94CE80005211B /* QuartzCore.framework */,
+				CDA28E6717C94CE10005211B /* MobileCoreServices.framework */,
+				CDA28E6517C94CD90005211B /* libz.1.1.3.dylib */,
+				CDA28E6317C94CCB0005211B /* CFNetwork.framework */,
+				CDA28E6117C94CBE0005211B /* AudioToolbox.framework */,
 				CD5541E1177F98D600167D87 /* MBProgressHUD */,
 				CD5541DF177E9BE100167D87 /* AddressBookUI.framework */,
 				CD0344341730DC9D00682A78 /* CoreLocation.framework */,
@@ -616,6 +651,7 @@
 		CD529EB91730B77F005420D6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CDA28E5F17C94C700005211B /* Parse.framework */,
 				CD529EBA1730B77F005420D6 /* UIKit.framework */,
 				CD529EBC1730B77F005420D6 /* Foundation.framework */,
 				CD529EBE1730B77F005420D6 /* CoreGraphics.framework */,
@@ -1412,6 +1448,10 @@
 		CD529EFB1730B77F005420D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";
@@ -1424,6 +1464,10 @@
 		CD529EFC1730B77F005420D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";

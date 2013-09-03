@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <Parse/Parse.h>
 
 extern NSString *kRefreshTappedNotif;
 extern NSString *kStationList;

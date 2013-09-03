@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import <Parse/Parse.h>
 
 // Reuse identifiers for MyLocation annotations in the MapView
 extern NSString *kSourceStation;
@@ -16,7 +17,7 @@ extern NSString *kDestinationStation;
 extern NSString *kAlternateStation;
 extern NSString *kStation;
 
-@interface MyLocation : NSObject <MKAnnotation>
+@interface MyLocation : NSObject <MKAnnotation> //PFObject <MKAnnotation, PFSubclassing>
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;

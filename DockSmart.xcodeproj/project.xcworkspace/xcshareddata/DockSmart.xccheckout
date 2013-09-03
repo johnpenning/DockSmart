@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F1C8020C-87CC-43D4-944B-F21F597EF8CA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DockSmart</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7EA1A8AB-1715-46BE-B60A-E182609A448B</key>
+		<string>https://github.com/johnpenning/BikeZen.git</string>
+		<key>7F9B8422-E0AA-424C-876A-C4F344EC23AF</key>
+		<string>https://github.com/matej/MBProgressHUD.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>DockSmart.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7EA1A8AB-1715-46BE-B60A-E182609A448B</key>
+		<string>../..</string>
+		<key>7F9B8422-E0AA-424C-876A-C4F344EC23AF</key>
+		<string>../../../MBProgressHUD</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/johnpenning/BikeZen.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>7EA1A8AB-1715-46BE-B60A-E182609A448B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7EA1A8AB-1715-46BE-B60A-E182609A448B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BikeZen</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7F9B8422-E0AA-424C-876A-C4F344EC23AF</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MBProgressHUD</string>
+		</dict>
+	</array>
+</dict>
+</plist>
