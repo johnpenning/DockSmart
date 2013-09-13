@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString *kLogToTextViewNotif;
+extern NSString *kLogTextKey;
+
 @interface DockSmartSettingsViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet UITextView *settingsTextView;
 
 @end

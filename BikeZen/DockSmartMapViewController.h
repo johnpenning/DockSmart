@@ -10,6 +10,8 @@
 #import <MapKit/MapKit.h>
 
 extern NSString *kRefreshTappedNotif;
+extern NSString *kTrackingStartedNotif;
+extern NSString *kTrackingStoppedNotif;
 extern NSString *kStationList;
 
 //extern NSString *kInsertStations

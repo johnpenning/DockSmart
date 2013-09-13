@@ -96,7 +96,7 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
 }
 
 - (void)addStationsToList:(NSArray *)stations {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
                                                         object:self

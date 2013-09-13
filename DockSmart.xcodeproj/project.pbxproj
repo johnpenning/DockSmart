@@ -11,6 +11,9 @@
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
 		CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD351778BA9B00446A9A /* LocationDataController.m */; };
 		CD39AD391778C11100446A9A /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD381778C11100446A9A /* Address.m */; };
+		CD4C1BDB17DBAE87008B0900 /* DupontTo14RIDriving.gpx in Resources */ = {isa = PBXBuildFile; fileRef = CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */; };
+		CD4C1BDD17DBBA29008B0900 /* DupontTo14RIDriving2.gpx in Resources */ = {isa = PBXBuildFile; fileRef = CD4C1BDC17DBBA29008B0900 /* DupontTo14RIDriving2.gpx */; };
+		CD4C1BDF17DBBDE2008B0900 /* DupontTo14thBiking.gpx in Resources */ = {isa = PBXBuildFile; fileRef = CD4C1BDE17DBBDE2008B0900 /* DupontTo14thBiking.gpx */; };
 		CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBA1730B77F005420D6 /* UIKit.framework */; };
 		CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBC1730B77F005420D6 /* Foundation.framework */; };
 		CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBE1730B77F005420D6 /* CoreGraphics.framework */; };
@@ -285,6 +288,9 @@
 		CD39AD351778BA9B00446A9A /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
 		CD39AD371778C11100446A9A /* Address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Address.h; sourceTree = "<group>"; };
 		CD39AD381778C11100446A9A /* Address.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Address.m; sourceTree = "<group>"; };
+		CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DupontTo14RIDriving.gpx; path = ../../../Documents/DupontTo14RIDriving.gpx; sourceTree = "<group>"; };
+		CD4C1BDC17DBBA29008B0900 /* DupontTo14RIDriving2.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DupontTo14RIDriving2.gpx; path = ../../../Documents/DupontTo14RIDriving2.gpx; sourceTree = "<group>"; };
+		CD4C1BDE17DBBDE2008B0900 /* DupontTo14thBiking.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DupontTo14thBiking.gpx; path = ../../../Documents/DupontTo14thBiking.gpx; sourceTree = "<group>"; };
 		CD529EB71730B77F005420D6 /* DockSmart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockSmart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD529EBA1730B77F005420D6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CD529EBC1730B77F005420D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -593,6 +599,9 @@
 		CD529EAE1730B77F005420D6 = {
 			isa = PBXGroup;
 			children = (
+				CD4C1BDE17DBBDE2008B0900 /* DupontTo14thBiking.gpx */,
+				CD4C1BDC17DBBA29008B0900 /* DupontTo14RIDriving2.gpx */,
+				CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */,
 				CD5541E1177F98D600167D87 /* MBProgressHUD */,
 				CD5541DF177E9BE100167D87 /* AddressBookUI.framework */,
 				CD0344341730DC9D00682A78 /* CoreLocation.framework */,
@@ -1253,6 +1262,9 @@
 				CD89130917AD91FF00F32D53 /* red99.png in Resources */,
 				CDDD4CE217B0904F00E45B21 /* bikepointer.png in Resources */,
 				CDB13C1517B1EAA500DD86C1 /* close.png in Resources */,
+				CD4C1BDB17DBAE87008B0900 /* DupontTo14RIDriving.gpx in Resources */,
+				CD4C1BDD17DBBA29008B0900 /* DupontTo14RIDriving2.gpx in Resources */,
+				CD4C1BDF17DBBDE2008B0900 /* DupontTo14thBiking.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

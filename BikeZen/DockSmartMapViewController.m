@@ -15,9 +15,12 @@
 #import "Address.h"
 #import "LocationDataController.h"
 #import "ParseOperation.h"
+#import "DockSmartSettingsViewController.h"
 
 // NSNotification name for reporting that refresh was tapped
 NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
+NSString *kTrackingStartedNotif = @"TrackingStartedNotif";
+NSString *kTrackingStoppedNotif = @"TrackingStoppedNotif";
 NSString *kStationList = @"stationList";
 
 // NSNotification userInfo key for obtaining command to refresh the station list
@@ -157,7 +160,7 @@ NSString *kStationList = @"stationList";
 
 - (void)refreshWasTapped
 {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
                                                         object:self
@@ -166,7 +169,8 @@ NSString *kStationList = @"stationList";
 
 - (void)plotStationPosition:(NSArray *)stationList {
     for (id<MKAnnotation> annotation in self.mapView.annotations) {
-        [self.mapView removeAnnotation:annotation];
+        if(![annotation isKindOfClass: [MKUserLocation class]])
+            [self.mapView removeAnnotation:annotation];
     }
     
     for (Station* station in stationList)
@@ -202,6 +206,9 @@ NSString *kStationList = @"stationList";
     //TODO: place annotations on top of center bike image, if possible?
     
     static NSString *identifier = @"Station";
+    
+    if([annotation isKindOfClass: [MKUserLocation class]])
+        return nil;
     
     if ([annotation isKindOfClass:[MyLocation class]]) {
 //        MyLocation* location = (MyLocation*)annotation;
@@ -384,7 +391,7 @@ NSString *kStationList = @"stationList";
 
 - (void)addStations:(NSNotification *)notif
 {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     [self insertStations:[[notif userInfo] valueForKey:kStationResultsKey]];
 }
@@ -405,7 +412,7 @@ NSString *kStationList = @"stationList";
 
 - (void)startBiking:(NSNotification *)notif
 {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
 
     //Make sure this view is showing (TODO: let the tableViewController handle this?)
 //    [[self view] bringSubviewToFront:[self view]];
@@ -466,6 +473,12 @@ NSString *kStationList = @"stationList";
     
     //Start the rental timer, if we have one
     
+    NSString* logText = [NSString stringWithFormat:@"Starting minute timer"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     //Start tracking nbEmptyDocks by refreshing the data every minute until we manually stop
     //(or until the timer runs out, or until our geofence tells us we are at our destination)
     NSTimer *minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
@@ -565,7 +578,11 @@ NSString *kStationList = @"stationList";
     }
     
     //Hide the annotations for all other stations.
-    [self.mapView removeAnnotations:self.mapView.annotations];
+//    [self.mapView removeAnnotations:self.mapView.annotations];
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
+        if(![annotation isKindOfClass: [MKUserLocation class]])
+            [self.mapView removeAnnotation:annotation];
+    }
     //Hide center bike pointer image
     [self.bikeCrosshairImage setHidden:YES];
     
@@ -625,16 +642,22 @@ NSString *kStationList = @"stationList";
                         change:(NSDictionary *)change
                        context:(void *)context
 {
+    NSString* logText = [NSString stringWithFormat:@"NEW STATION DATA: bikingState: %d", self.bikingState];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     switch (self.bikingState) {
         case BikingStateInactive:
             //Reload map view
-            if (![NSThread isMainThread]) {
-                [self performSelectorOnMainThread:@selector(plotStationPosition:) withObject:self.dataController.stationList waitUntilDone:NO];
-            }
-            else
-            {
+//            if (![NSThread isMainThread]) {
+//                [self performSelectorOnMainThread:@selector(plotStationPosition:) withObject:self.dataController.stationList waitUntilDone:NO];
+//            }
+//            else
+//            {
                 [self plotStationPosition:self.dataController.stationList];
-            }
+//            }
             break;
         case BikingStatePreparingToBike:
             //Do not reload the map view yet, just go to the callback to finish the setup to start biking:
@@ -687,9 +710,9 @@ NSString *kStationList = @"stationList";
                     //update this pointer... will always continue to be the same stationID
                     self.idealDestinationStation = station;
                 }
-                /*else*/ if (station.stationID == self.currentDestinationStation.stationID)
+                if (station.stationID == self.currentDestinationStation.stationID)
                 {
-                    //if we didn't have any luck with the ideal station, check if the currentDestinationStation filled up:
+                    //the ideal non-current station did not empty out... but check if the currentDestinationStation filled up:
                     if (self.currentDestinationStation.nbEmptyDocks > 0 && station.nbEmptyDocks == 0)
                     {
                         //it filled up... alert the user to go to the next non-empty station
@@ -767,7 +790,11 @@ NSString *kStationList = @"stationList";
 //                [self updateActiveBikingViewWithNewDestination:NO];
                 
                 //Hide the annotations for all other stations.
-                [self.mapView removeAnnotations:self.mapView.annotations];
+//                [self.mapView removeAnnotations:self.mapView.annotations];
+                for (id<MKAnnotation> annotation in self.mapView.annotations) {
+                    if(![annotation isKindOfClass: [MKUserLocation class]])
+                        [self.mapView removeAnnotation:annotation];
+                }
                 
                 //Change buttons and label:
                 [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", self.sourceStation.name, self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];

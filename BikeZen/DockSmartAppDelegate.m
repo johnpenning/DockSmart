@@ -11,6 +11,7 @@
 #import "ParseOperation.h"
 #import "DockSmartMapViewController.h"
 #import "LocationDataController.h"
+#import "DockSmartSettingsViewController.h"
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -24,7 +25,8 @@
 //- (void)addStationsToList:(NSArray *)stations;
 - (void)handleError:(NSError *)error;
 - (void)loadXMLData;
-- (void)refreshStationData;
+- (void)refreshStationData:(NSNotification *)notif;
+- (void)stationError:(NSNotification *)notif;
 @end
 
 
@@ -39,7 +41,10 @@
     
     //Begin location service
     _userCoordinate = kCLLocationCoordinate2DInvalid;
+    
+    //Make sure the user has enabled location services before attempting to get the location
     [self startUpdatingCurrentLocation];
+
     
 //    self.parseQueue = [NSOperationQueue new];
     
@@ -55,7 +60,14 @@
                                              selector:@selector(refreshStationData:)
                                                  name:kRefreshTappedNotif
                                                object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(trackingDidStart:)
+                                                 name:kTrackingStartedNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(trackingDidStop:)
+                                                 name:kTrackingStoppedNotif
+                                               object:nil];
     
     // Spawn an NSOperation to parse the earthquake data so that the UI is not blocked while the
     // application parses the XML data.
@@ -70,6 +82,16 @@
 //    self.stationXMLData = nil;
     
     [self loadXMLData];
+    
+    NSNumber *startLocation = [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey];
+    UILocalNotification *triggeredNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    
+    
+    NSString* logText = [NSString stringWithFormat:@"didFinishLaunchingWithOptions: startLocation %@ triggeredNotification %@ applicationState: %d", startLocation, [triggeredNotification alertBody], [application applicationState]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
     
     return YES;
 }
@@ -95,29 +117,90 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    NSString* logText = [NSString stringWithFormat:@"applicationWillResignActive: applicationState: %d", [application applicationState]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    NSString* logText = [NSString stringWithFormat:@"applicationDidEnterBackground: applicationState: %d", [application applicationState]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+    //Stop standard location service:
+    [self stopUpdatingCurrentLocation];
+    //Switch to significant change location service:
+    //TODO: Change to use notifications/KVO?
+    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+    if (controller.bikingState == BikingStateActive)
+    {
+        [self.locationManager startMonitoringSignificantLocationChanges];
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+
+    NSString* logText = [NSString stringWithFormat:@"applicationWillEnterForeground: applicationState: %d", [application applicationState]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+    // Stop significant location change updates
+    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+    if (controller.bikingState == BikingStateActive)
+    {
+        [self.locationManager stopMonitoringSignificantLocationChanges];
+        // Start standard location service
+        [self.locationManager startUpdatingLocation];
+    }
+
+    // TODO: Reload the station data?
+//    [self loadXMLData];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    // TODO: Reload the station data?
+    NSString* logText = [NSString stringWithFormat:@"applicationDidBecomeActive: applicationState: %d", [application applicationState]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+//    // Stop significant location change updates
+//    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+//    if (controller.bikingState == BikingStateActive)
+//    {
+//        [self.locationManager stopMonitoringSignificantLocationChanges];
+//        // Start standard location service
+//        [self.locationManager startUpdatingLocation];
+//    }
+    
+//    // TODO: Reload the station data?
+    [self loadXMLData];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    NSString* logText = [NSString stringWithFormat:@"applicationWillTerminate: applicationState: %d", [application applicationState]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
 }
 
 // Handle errors in the download by showing an alert to the user. This is a very
@@ -126,16 +209,22 @@
 // way and provide offline functionality to the user.
 //
 - (void)handleError:(NSError *)error {
-    NSString *errorMessage = [error localizedDescription];
-    UIAlertView *alertView =
-    [[UIAlertView alloc] initWithTitle:
-     NSLocalizedString(@"Error Title",
-                       @"Title for alert displayed when download or parse error occurs.")
-                               message:errorMessage
-                              delegate:nil
-                     cancelButtonTitle:@"OK"
-                     otherButtonTitles:nil];
-    [alertView show];
+//    NSString *errorMessage = [error localizedDescription];
+//    UIAlertView *alertView =
+//    [[UIAlertView alloc] initWithTitle:
+//     NSLocalizedString(@"Error Title",
+//                       @"Title for alert displayed when download or parse error occurs.")
+//                               message:errorMessage
+//                              delegate:nil
+//                     cancelButtonTitle:@"OK"
+//                     otherButtonTitles:nil];
+//    [alertView show];
+    NSString* logText = [NSString stringWithFormat:@"NSXMLParser error: %@", [error localizedDescription]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
 }
 
 // Our NSNotification callback from the running NSOperation to add the earthquakes
@@ -151,7 +240,7 @@
 // Our NSNotification callback from the running NSOperation when a parsing error has occurred
 //
 - (void)stationError:(NSNotification *)notif {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     [self handleError:[[notif userInfo] valueForKey:kStationsMsgErrorKey]];
 }
@@ -198,6 +287,13 @@
 
 - (void)loadXMLData //TODO: do this multiple times without adding duplicate stations
 {
+    //log the new parse operation
+    NSString* logText = [NSString stringWithFormat:@"XML parse operation started"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     self.parseQueue = [NSOperationQueue new];
     
     ParseOperation *parseOperation = [[ParseOperation alloc] initWithData:self.stationXMLData];
@@ -206,12 +302,11 @@
     // stationXMLData will be retained by the NSOperation until it has finished executing,
     // so we no longer need a reference to it in the main thread.
     self.stationXMLData = nil;
-
 }
 
 - (void)refreshStationData:(NSNotification *)notif
 {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     [self loadXMLData];
 }
@@ -222,19 +317,30 @@
 {
     // if location services are restricted do nothing
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
-        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)
+        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ||
+        [CLLocationManager locationServicesEnabled] == NO)
     {
         return;
     }
+    
+    NSString* logText = [NSString stringWithFormat:@"startUpdatingCurrentLocation"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     
     // if locationManager does not currently exist, create it
     if (!_locationManager)
     {
         _locationManager = [[CLLocationManager alloc] init];
-        [_locationManager setDelegate:self];
-        _locationManager.distanceFilter = 10.0f; // we don't need to be any more accurate than 10m
-//        _locationManager.purpose = @"This will be used as part of the hint region for forward geocoding.";
     }
+    
+    [_locationManager setDelegate:self];
+    
+    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    _locationManager.distanceFilter = 5; //10.0f; // we don't need to be any more accurate than 10m
+    //        _locationManager.purpose = @"This will be used as part of the hint region for forward geocoding.";
     
     [_locationManager startUpdatingLocation];
     
@@ -243,8 +349,13 @@
 
 - (void)stopUpdatingCurrentLocation
 {
+    NSString* logText = [NSString stringWithFormat:@"stopUpdatingCurrentLocation"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     [_locationManager stopUpdatingLocation];
-    
 //    [self showCurrentLocationSpinner:NO];
 }
 
@@ -273,26 +384,66 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    // if the location is older than 30s ignore
-    if (fabs([[manager location].timestamp timeIntervalSinceNow]) > 30)
-    {
-        return;
-    }
+    // If it's a relatively recent event, turn off updates to save power
+    CLLocation* location = [locations lastObject];
+    NSDate* eventDate = location.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
     
-    _userCoordinate = [(CLLocation *)[locations lastObject] coordinate];
-    
-    NSLog(@"Last location: %@", [locations lastObject]);
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
+    NSString* logText = [NSString stringWithFormat:@"didUpdateLocations: location: %@", location];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:[[CLLocation alloc] initWithLatitude:self.userCoordinate.latitude longitude:self.userCoordinate.longitude] forKey:kNewLocationKey]];
-    
-    [self stopUpdatingCurrentLocation];
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+    if (abs(howRecent) < 15.0)
+    {
+        // If the event is recent, do something with it.
+
+        _userCoordinate = [location coordinate];
+        
+        NSLog(@"New location: %@", location);
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:[[CLLocation alloc] initWithLatitude:self.userCoordinate.latitude longitude:self.userCoordinate.longitude] forKey:kNewLocationKey]];
+        
+        //If we're not actively biking, stop updating location to save battery
+        DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+        if (controller.bikingState != BikingStateActive)
+        {
+            [self stopUpdatingCurrentLocation];
+        }
+    }
+}
+
+- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
+{
+    //For testing: local notification
+    UILocalNotification *locationUpdatesPausedNotification = [[UILocalNotification alloc] init];
+    [locationUpdatesPausedNotification setAlertBody:[NSString stringWithFormat:@"Location updates paused: %f, %f %@", _userCoordinate.latitude, _userCoordinate.longitude, [NSDate date]]];
+    [locationUpdatesPausedNotification setFireDate:[NSDate date]];
+    [[UIApplication sharedApplication] presentLocalNotificationNow:locationUpdatesPausedNotification];
+}
+
+- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager
+{
+    //For testing: local notification
+    UILocalNotification *locationUpdatesResumedNotification = [[UILocalNotification alloc] init];
+    [locationUpdatesResumedNotification setAlertBody:[NSString stringWithFormat:@"Location updates resumed: %f, %f %@", _userCoordinate.latitude, _userCoordinate.longitude, [NSDate date]]];
+    [locationUpdatesResumedNotification setFireDate:[NSDate date]];
+    [[UIApplication sharedApplication] presentLocalNotificationNow:locationUpdatesResumedNotification];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     NSLog(@"%@", error);
+    
+    NSString* logText = [NSString stringWithFormat:@"locationManagerDidFailWithError: %@", [error localizedDescription]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     
     // stop updating
     [self stopUpdatingCurrentLocation];
@@ -301,11 +452,11 @@
     _userCoordinate = kCLLocationCoordinate2DInvalid;
     
     // show the error alert
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    alert.title = @"Error obtaining location";
-    alert.message = [error localizedDescription];
-    [alert addButtonWithTitle:@"OK"];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc] init];
+//    alert.title = @"Error obtaining location";
+//    alert.message = [error localizedDescription];
+//    [alert addButtonWithTitle:@"OK"];
+//    [alert show];
 }
 
 

@@ -8,7 +8,17 @@
 
 #import "DockSmartSettingsViewController.h"
 
+// NSNotification name for sending a log to the text view
+NSString *kLogToTextViewNotif = @"LogToTextViewNotif";
+
+// NSNotification userInfo key for obtaining the log text
+NSString *kLogTextKey = @"LogTextKey";
+
 @interface DockSmartSettingsViewController ()
+
+@property (nonatomic, copy) NSString* preloadText;
+
+- (void)logToTextView:(NSNotification*)notif;
 
 @end
 
@@ -23,16 +33,47 @@
 //    return self;
 //}
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(logToTextView:)
+                                                 name:kLogToTextViewNotif
+                                               object:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+
+    NSString *oldText = [self.settingsTextView text];
+    [self.settingsTextView setText:[NSString stringWithFormat:@"%@\n%@", oldText, self.preloadText]];
+
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidUnload {
+    [self setSettingsTextView:nil];
+    [super viewDidUnload];
+}
+
+- (void)logToTextView:(NSNotification*)notif
+{
+    NSString *oldText = [self.settingsTextView text];
+    NSString *newText = [[notif userInfo] valueForKey:kLogTextKey];
+    if ([self isViewLoaded])
+        [self.settingsTextView setText:[NSString stringWithFormat:@"%@\n%@ %@", oldText, [NSDate date], newText]];
+    else
+    {
+        self.preloadText = [NSString stringWithFormat:@"%@\n%@ %@", self.preloadText, [NSDate date], newText];
+    }
 }
 
 @end

@@ -6,3 +6,7 @@
 BikeZen/getimgs.py
 
 BikeZen/Images/bikepointer.xcf
+
+*.xcscheme
+
+DockSmart.xcodeproj/xcuserdata/jpenning.xcuserdatad/xcschemes/xcschememanagement.plist
