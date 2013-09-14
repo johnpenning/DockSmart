@@ -13,7 +13,7 @@
 #import "Address.h"
 #import "define.h"
 
-NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
+//NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
 NSString *kNewLocationKey = @"NewLocationKey";
 
 @interface LocationDataController ()
@@ -33,10 +33,12 @@ NSString *kNewLocationKey = @"NewLocationKey";
     
     self.userCoordinate = kCLLocationCoordinate2DInvalid;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateLocation:)
-                                                 name:kLocationUpdateNotif
-                                               object:nil];
+    [LocationController sharedInstance].delegate = self;
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(updateLocation:)
+//                                                 name:kLocationUpdateNotif
+//                                               object:nil];
 
 }
 
@@ -148,15 +150,22 @@ NSString *kNewLocationKey = @"NewLocationKey";
     return sortedArray;
 }
 
-#pragma mark -
-#pragma mark KVO compliance
+#pragma mark - LocationControllerDelegate
 
-- (void)updateLocation:(NSNotification *)notif {
-//    assert([NSThread isMainThread]);
-    
-    [self setUserCoordinate:[(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate]];
+- (void)locationUpdate:(CLLocation *)location
+{
+    [self setUserCoordinate:[location coordinate]];
     [self updateDistancesFromUserLocation:[self userCoordinate]];
 }
+
+#pragma mark - KVO compliance
+
+//- (void)updateLocation:(NSNotification *)notif {
+////    assert([NSThread isMainThread]);
+//    
+//    [self setUserCoordinate:[(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate]];
+//    [self updateDistancesFromUserLocation:[self userCoordinate]];
+//}
 
 - (void)updateDistancesFromUserLocation:(CLLocationCoordinate2D)coordinate
 {

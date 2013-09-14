@@ -73,15 +73,20 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                                                  name:kAddStationsNotif
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateLocation:)
-                                                 name:kLocationUpdateNotif
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(updateLocation:)
+//                                                 name:kLocationUpdateNotif
+//                                               object:nil];
+    
+    [LocationController sharedInstance].delegate = self;
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+//    [LocationController sharedInstance].delegate = self;
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -119,14 +124,21 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - LocationControllerDelegate
+
+- (void)locationUpdate:(CLLocation *)location
+{
+    self.userCoordinate = [location coordinate];
+}
+
 #pragma mark - KVO compliance
 
-- (void)updateLocation:(NSNotification *)notif {
-//    assert([NSThread isMainThread]);
-    
-    self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
-//    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
-}
+//- (void)updateLocation:(NSNotification *)notif {
+////    assert([NSThread isMainThread]);
+//    
+//    self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
+////    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
+//}
 
 - (void)addStations:(NSNotification *)notif {
 //    assert([NSThread isMainThread]);

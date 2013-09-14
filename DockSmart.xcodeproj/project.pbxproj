@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
+		CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1E6E4217E51052004C3C8D /* LocationController.m */; };
 		CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD351778BA9B00446A9A /* LocationDataController.m */; };
 		CD39AD391778C11100446A9A /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD381778C11100446A9A /* Address.m */; };
 		CD4C1BDB17DBAE87008B0900 /* DupontTo14RIDriving.gpx in Resources */ = {isa = PBXBuildFile; fileRef = CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */; };
@@ -284,6 +285,8 @@
 		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLocation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CD1E6E4117E51052004C3C8D /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
+		CD1E6E4217E51052004C3C8D /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
 		CD39AD341778BA9B00446A9A /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
 		CD39AD351778BA9B00446A9A /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
 		CD39AD371778C11100446A9A /* Address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Address.h; sourceTree = "<group>"; };
@@ -647,6 +650,8 @@
 				CD529EDA1730B77F005420D6 /* first@2x.png */,
 				CD529EDC1730B77F005420D6 /* DockSmartMapViewController.h */,
 				CD529EDD1730B77F005420D6 /* DockSmartMapViewController.m */,
+				CD1E6E4117E51052004C3C8D /* LocationController.h */,
+				CD1E6E4217E51052004C3C8D /* LocationController.m */,
 				CD529EDF1730B77F005420D6 /* second.png */,
 				CD529EE11730B77F005420D6 /* second@2x.png */,
 				CD529EC11730B77F005420D6 /* Supporting Files */,
@@ -1311,6 +1316,7 @@
 				CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */,
 				CD39AD391778C11100446A9A /* Address.m in Sources */,
 				CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */,
+				CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

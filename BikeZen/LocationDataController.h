@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "LocationController.h"
 
 @class MyLocation, Station, Address;
 
-extern NSString *kLocationUpdateNotif;
+//extern NSString *kLocationUpdateNotif;
 extern NSString *kNewLocationKey;
 
 typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
@@ -22,7 +23,7 @@ typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
     LocationDataSortByDocks,
 };
 
-@interface LocationDataController : NSObject
+@interface LocationDataController : NSObject <LocationControllerDelegate>
 
 @property (nonatomic, copy) NSMutableArray *stationList;
 @property (nonatomic, copy) NSArray *sortedStationList;

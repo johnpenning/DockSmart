@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "LocationController.h"
 
 extern NSString *kRefreshTappedNotif;
 extern NSString *kTrackingStartedNotif;
@@ -24,7 +25,7 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
 
 @class LocationDataController;
 
-@interface DockSmartMapViewController : UIViewController <MKMapViewDelegate>
+@interface DockSmartMapViewController : UIViewController <MKMapViewDelegate, LocationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 //@property NSDate *lastDataUpdate;

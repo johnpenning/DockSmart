@@ -8,16 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "LocationController.h"
 
 @class Station, DockSmartMapViewController;
 
-@interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, NSXMLParserDelegate, CLLocationManagerDelegate>
+@interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, NSXMLParserDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 //@property (strong, nonatomic) IBOutlet DockSmartMapViewController *mapViewController;
 
 //CLLocationManager properties
-@property (strong, nonatomic) CLLocationManager *locationManager;
-@property (readonly) CLLocationCoordinate2D userCoordinate;
+//@property (strong, nonatomic) CLLocationManager *locationManager;
+//@property (readonly) CLLocationCoordinate2D userCoordinate;
 
 @end

@@ -872,4 +872,14 @@ NSString *kStationList = @"stationList";
 //    };
 //}
 
+#pragma mark - LocationControllerDelegate
+
+- (void)locationUpdate:(CLLocation *)location
+{
+    if (self.bikingState != BikingStateActive)
+    {
+        [[LocationController sharedInstance] stopUpdatingCurrentLocation];
+    }
+}
+
 @end

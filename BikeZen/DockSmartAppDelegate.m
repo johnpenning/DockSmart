@@ -40,11 +40,12 @@
     // Override point for customization after application launch.
     
     //Begin location service
-    _userCoordinate = kCLLocationCoordinate2DInvalid;
+//    _userCoordinate = kCLLocationCoordinate2DInvalid;
+    
+//    [[LocationController sharedInstance] init];
     
     //Make sure the user has enabled location services before attempting to get the location
-    [self startUpdatingCurrentLocation];
-
+    [[LocationController sharedInstance] startUpdatingCurrentLocation];
     
 //    self.parseQueue = [NSOperationQueue new];
     
@@ -136,13 +137,13 @@
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
     //Stop standard location service:
-    [self stopUpdatingCurrentLocation];
+    [[LocationController sharedInstance] stopUpdatingCurrentLocation];
     //Switch to significant change location service:
     //TODO: Change to use notifications/KVO?
     DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
     if (controller.bikingState == BikingStateActive)
     {
-        [self.locationManager startMonitoringSignificantLocationChanges];
+        [[LocationController sharedInstance].locationManager startMonitoringSignificantLocationChanges];
     }
 }
 
@@ -160,9 +161,9 @@
     DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
     if (controller.bikingState == BikingStateActive)
     {
-        [self.locationManager stopMonitoringSignificantLocationChanges];
+        [[LocationController sharedInstance].locationManager stopMonitoringSignificantLocationChanges];
         // Start standard location service
-        [self.locationManager startUpdatingLocation];
+        [[LocationController sharedInstance].locationManager startUpdatingLocation];
     }
 
     // TODO: Reload the station data?
@@ -312,7 +313,7 @@
 }
 
 #pragma mark - CLLocationManagerDelegate
-
+#if 0
 - (void)startUpdatingCurrentLocation
 {
     // if location services are restricted do nothing
@@ -403,9 +404,9 @@
         
         NSLog(@"New location: %@", location);
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
-                                                            object:self
-                                                          userInfo:[NSDictionary dictionaryWithObject:[[CLLocation alloc] initWithLatitude:self.userCoordinate.latitude longitude:self.userCoordinate.longitude] forKey:kNewLocationKey]];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
+//                                                            object:self
+//                                                          userInfo:[NSDictionary dictionaryWithObject:[[CLLocation alloc] initWithLatitude:self.userCoordinate.latitude longitude:self.userCoordinate.longitude] forKey:kNewLocationKey]];
         
         //If we're not actively biking, stop updating location to save battery
         DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
@@ -458,6 +459,6 @@
 //    [alert addButtonWithTitle:@"OK"];
 //    [alert show];
 }
-
+#endif
 
 @end
