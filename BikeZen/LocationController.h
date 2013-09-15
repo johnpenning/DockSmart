@@ -15,6 +15,8 @@
 @protocol LocationControllerDelegate
 @required
 - (void)locationUpdate:(CLLocation*)location;
+@optional
+- (void)regionUpdate:(CLRegion*)region;
 @end
 
 @interface LocationController : NSObject <CLLocationManagerDelegate>
@@ -25,6 +27,8 @@
 
 - (void)startUpdatingCurrentLocation;
 - (void)stopUpdatingCurrentLocation;
+- (BOOL)registerRegionWithCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius identifier:(NSString*)identifier accuracy:(CLLocationAccuracy)accuracy;
+- (void)stopAllRegionMonitoring;
 
 + (LocationController*)sharedInstance; // Singleton method
 

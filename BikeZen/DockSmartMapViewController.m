@@ -23,6 +23,13 @@ NSString *kTrackingStartedNotif = @"TrackingStartedNotif";
 NSString *kTrackingStoppedNotif = @"TrackingStoppedNotif";
 NSString *kStationList = @"stationList";
 
+// Region monitoring identifiers:
+NSString *kRegionMonitor2km = @"RegionMonitor2km";
+NSString *kRegionMonitor1km = @"RegionMonitor1km";
+NSString *kRegionMonitorStation1 = @"RegionMonitorStation1";
+NSString *kRegionMonitorStation2 = @"RegionMonitorStation2";
+NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
+
 // NSNotification userInfo key for obtaining command to refresh the station list
 //NSString *kRefreshStationsKey = @"RefreshStationsKey";
 
@@ -48,6 +55,9 @@ NSString *kStationList = @"stationList";
 @property (nonatomic) Station* idealDestinationStation;
 @property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
 
+//timer to refresh data:
+@property (nonatomic) NSTimer* minuteTimer;
+
 @end
 
 @implementation DockSmartMapViewController
@@ -63,7 +73,7 @@ NSString *kStationList = @"stationList";
                                                  name:kAddStationsNotif
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(startBiking:)
+                                             selector:@selector(prepareBikeRoute:)
                                                  name:kStartBikingNotif
                                                object:nil];
 }
@@ -410,7 +420,7 @@ NSString *kStationList = @"stationList";
     [self didChangeValueForKey:kStationList];
 }
 
-- (void)startBiking:(NSNotification *)notif
+- (void)prepareBikeRoute:(NSNotification *)notif
 {
 //    assert([NSThread isMainThread]);
 
@@ -431,8 +441,26 @@ NSString *kStationList = @"stationList";
                                                       userInfo:nil];
 }
 
-- (void)stopBiking
-{    
+- (void)prepareBikeRouteCallback
+{
+
+    [self updateActiveBikingViewWithNewDestination:YES];
+    
+    //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
+    //TODO: If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
+    
+    //Start the rental timer, if we have one
+    
+
+    //Start tracking nbEmptyDocks by refreshing the data every minute until we manually stop
+    //(or until the timer runs out, or until our geofence tells us we are at our destination)
+//    NSTimer *minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
+//    [minuteTimer setFireDate:[NSDate date]];
+    
+}
+
+- (void)clearBikeRoute
+{
     //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
     //Equivalent to hitting Refresh:
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
@@ -461,29 +489,6 @@ NSString *kStationList = @"stationList";
     self.currentDestinationStation = nil;
     self.idealDestinationStation = nil;
     self.closestStationsToDestination = nil;
-}
-
-- (void)startBikingCallback
-{
-
-    [self updateActiveBikingViewWithNewDestination:YES];
-    
-    //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
-    //TODO: If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
-    
-    //Start the rental timer, if we have one
-    
-    NSString* logText = [NSString stringWithFormat:@"Starting minute timer"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
-
-    //Start tracking nbEmptyDocks by refreshing the data every minute until we manually stop
-    //(or until the timer runs out, or until our geofence tells us we are at our destination)
-    NSTimer *minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
-//    [minuteTimer setFireDate:[NSDate date]];
-    
 }
 
 - (void)updateActiveBikingViewWithNewDestination:(BOOL)newDest
@@ -609,6 +614,50 @@ NSString *kStationList = @"stationList";
     }
 }
 
+- (void)startStationTracking
+{
+
+    //Create regions to monitor via geofencing app wakeups:
+    //Two concentric circles, getting closer to the final destination:
+    //TODO: change the distance dynamically based on total trip distance? For example, halfway there and 3/4 of the way there, or 1/3 and 2/3?
+    [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate radius:2000 identifier:kRegionMonitor2km accuracy:kCLLocationAccuracyNearestTenMeters];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate radius:1000 identifier:kRegionMonitor1km accuracy:kCLLocationAccuracyNearestTenMeters];
+    
+    //One more region for each of the three closest stations to the final destination:
+//    for (Station* station in self.closestStationsToDestination)
+//    {
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:0]).coordinate radius:10 identifier:kRegionMonitorStation1 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:1]).coordinate radius:10 identifier:kRegionMonitorStation2 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:2]).coordinate radius:10 identifier:kRegionMonitorStation3 accuracy:kCLLocationAccuracyBest];
+
+//    }
+    
+    //TODO: Start the rental timer, if we have one
+    
+    //Start minute timer:
+    
+    NSString* logText = [NSString stringWithFormat:@"Starting minute timer"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+    
+    self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
+    
+    //Change the state to active:
+    self.bikingState = BikingStateActive;
+}
+
+- (void)stopStationTracking
+{
+    //Stop timer:
+    [self.minuteTimer invalidate];
+    self.minuteTimer = nil;
+    
+    //Turn off geofencing:
+    [[LocationController sharedInstance] stopAllRegionMonitoring];
+}
+
 //- (void)updateLocation:(NSNotification *)notif {
 //    assert([NSThread isMainThread]);
 //    
@@ -661,7 +710,7 @@ NSString *kStationList = @"stationList";
             break;
         case BikingStatePreparingToBike:
             //Do not reload the map view yet, just go to the callback to finish the setup to start biking:
-            [self startBikingCallback];
+            [self prepareBikeRouteCallback];
             break;
         case BikingStateActive:
             //Do not reload the map view at all, unless the app is coming back into the foreground.  Just check to see if we need to send a notification based on nbEmptyDocks for our current goal station
@@ -824,7 +873,7 @@ NSString *kStationList = @"stationList";
 
 - (IBAction)cancelTapped:(id)sender {
     //reset to inactive
-    [self stopBiking];
+    [self clearBikeRoute];
 }
 
 - (IBAction)startStopTapped:(UIButton *)sender {
@@ -832,22 +881,24 @@ NSString *kStationList = @"stationList";
         case BikingStateInactive:
             //set the final destination to equal the placemark at the center of the crosshairs
             //then call startBiking: with the location
-            [self startBiking:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.mapCenterAddress forKey:kBikeDestinationKey]]];
+            [self prepareBikeRoute:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.mapCenterAddress forKey:kBikeDestinationKey]]];
             break;
         case BikingStatePreparingToBike:
-            //start station tracking (TODO)
-            //For now... just do this
             //Change buttons:
 //            [self.startStopButton setBackgroundColor:[UIColor redColor]];
             [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
             [self.startStopButton setTitle:@"Stop Station Tracking" forState:UIControlStateNormal];
             [self.cancelButton setHidden:YES];
-            //Change the state to active:
-            self.bikingState = BikingStateActive;
+            
+            //Start station tracking:
+            [self startStationTracking];
+            
             break;
         case BikingStateActive:
             //stop station tracking and return PreparingToBike state
-            [self startBiking:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.finalDestination forKey:kBikeDestinationKey]]];
+            [self stopStationTracking];
+            //setup PreparingToBike:
+            [self prepareBikeRoute:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.finalDestination forKey:kBikeDestinationKey]]];
             break;
         default:
             break;
@@ -880,6 +931,14 @@ NSString *kStationList = @"stationList";
     {
         [[LocationController sharedInstance] stopUpdatingCurrentLocation];
     }
+}
+
+- (void)regionUpdate:(CLRegion *)region
+{
+    [self refreshWasTapped];
+    
+    //TODO: stop tracking if we've reached either the ideal or current destination station?
+    //TODO: if the user is at current and ideal is open, notify them?
 }
 
 @end

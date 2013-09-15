@@ -4,7 +4,7 @@
 //
 //  Created by John Penning on 9/14/13.
 //  Copyright (c) 2013 John Penning. All rights reserved.
-//  (With help from http://jinru.wordpress.com/2010/08/15/singletons-in-objective-c-an-example-of-cllocationmanager/ )
+//  (With help from Jinru Liu: http://jinru.wordpress.com/2010/08/15/singletons-in-objective-c-an-example-of-cllocationmanager/ )
 //
 
 #import "LocationController.h"
@@ -12,7 +12,6 @@
 //static LocationController* sharedCLDelegate = nil;
 
 @implementation LocationController
-
 
 - (id)init
 {
@@ -177,6 +176,37 @@
     //    [alert show];
 }
 
+- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
+{
+    NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ %f, %f withError: %@", region.identifier, region.center.latitude, region.center.longitude, [error localizedDescription]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+}
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+{
+    NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+    
+    [self.delegate regionUpdate:region];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+    NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+    [self.delegate regionUpdate:region];
+}
 
 #pragma mark - Singleton implementation in ARC
 + (LocationController *)sharedInstance
@@ -187,6 +217,45 @@
         sharedLocationControllerInstance = [[self alloc] init];
     });
     return sharedLocationControllerInstance;
+}
+
+#pragma mark - Region monitoring support
+
+- (BOOL)registerRegionWithCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius identifier:(NSString*)identifier accuracy:(CLLocationAccuracy)accuracy
+{
+    // Do not create regions if support is unavailable or disabled
+    if ( ![CLLocationManager regionMonitoringAvailable])
+        return NO;
+    
+    // Check the authorization status
+    if (([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) &&
+        ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusNotDetermined))
+        return NO;
+    
+    // Clear out any old regions to prevent buildup.
+    if ([self.locationManager.monitoredRegions count] > 5) {
+        for (id obj in self.locationManager.monitoredRegions)
+            [self.locationManager stopMonitoringForRegion:obj];
+    }
+    
+    // If the overlay's radius is too large, registration fails automatically,
+    // so clamp the radius to the max value.
+    if (radius > self.locationManager.maximumRegionMonitoringDistance) {
+        radius = self.locationManager.maximumRegionMonitoringDistance;
+    }
+    
+    // Create the region to be monitored.
+    CLRegion* region = [[CLRegion alloc] initCircularRegionWithCenter:coordinate
+                                                               radius:radius identifier:identifier];
+    [self.locationManager startMonitoringForRegion:region desiredAccuracy:accuracy];
+    return YES;
+}
+
+- (void)stopAllRegionMonitoring
+{
+    // Clear out all old regions when we are done monitoring them.
+    for (id obj in self.locationManager.monitoredRegions)
+        [self.locationManager stopMonitoringForRegion:obj];
 }
 
 @end
