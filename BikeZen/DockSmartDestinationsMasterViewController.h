@@ -20,6 +20,6 @@ typedef NS_ENUM(NSInteger, DestinationTableSectionNumber) {
 extern NSString *kStartBikingNotif;
 extern NSString *kBikeDestinationKey;
 
-@interface DockSmartDestinationsMasterViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchBarDelegate, UIActionSheetDelegate, LocationControllerDelegate>
+@interface DockSmartDestinationsMasterViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchBarDelegate, UIActionSheetDelegate>
 
 @end

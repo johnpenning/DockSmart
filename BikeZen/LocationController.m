@@ -11,6 +11,11 @@
 
 //static LocationController* sharedCLDelegate = nil;
 
+NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
+NSString *kNewLocationKey = @"NewLocationKey";
+NSString *kRegionUpdateNotif = @"RegionUpdateNotif";
+NSString *kNewRegionKey = @"NewRegionKey";
+
 @implementation LocationController
 
 - (id)init
@@ -37,6 +42,7 @@
     }
     
     NSString* logText = [NSString stringWithFormat:@"startUpdatingCurrentLocation"];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -63,6 +69,7 @@
 - (void)stopUpdatingCurrentLocation
 {
     NSString* logText = [NSString stringWithFormat:@"stopUpdatingCurrentLocation"];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -103,6 +110,7 @@
     NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
     
     NSString* logText = [NSString stringWithFormat:@"didUpdateLocations: location: %@", location];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -116,11 +124,11 @@
         
         NSLog(@"New location: %@", location);
         
-//        [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
-//                                                            object:self
-//                                                          userInfo:[NSDictionary dictionaryWithObject:[[CLLocation alloc] initWithLatitude:self.userCoordinate.latitude longitude:self.userCoordinate.longitude] forKey:kNewLocationKey]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:location forKey:kNewLocationKey]];
         
-        [self.delegate locationUpdate:location];
+//        [self.delegate locationUpdate:location];
         
         //If we're not actively biking, stop updating location to save battery
 //        DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
@@ -156,6 +164,7 @@
     NSLog(@"%@", error);
     
     NSString* logText = [NSString stringWithFormat:@"locationManagerDidFailWithError: %@", [error localizedDescription]];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -179,6 +188,7 @@
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
 {
     NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ %f, %f withError: %@", region.identifier, region.center.latitude, region.center.longitude, [error localizedDescription]];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -189,23 +199,39 @@
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
     NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
     
-    [self.delegate regionUpdate:region];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRegionUpdateNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
+
+//    if([self.delegate respondsToSelector: @selector(regionUpdate:)])
+//    {
+//        [self.delegate regionUpdate:region];
+//    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
     NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
 
-    [self.delegate regionUpdate:region];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRegionUpdateNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
+
+//    if([self.delegate respondsToSelector: @selector(regionUpdate:)])
+//    {
+//        [self.delegate regionUpdate:region];
+//    }
 }
 
 #pragma mark - Singleton implementation in ARC

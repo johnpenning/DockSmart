@@ -73,12 +73,12 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                                                  name:kAddStationsNotif
                                                object:nil];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(updateLocation:)
-//                                                 name:kLocationUpdateNotif
-//                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateLocation:)
+                                                 name:kLocationUpdateNotif
+                                               object:nil];
     
-    [LocationController sharedInstance].delegate = self;
+//    [LocationController sharedInstance].delegate = self;
 
 }
 
@@ -126,19 +126,19 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 
 #pragma mark - LocationControllerDelegate
 
-- (void)locationUpdate:(CLLocation *)location
-{
-    self.userCoordinate = [location coordinate];
-}
+//- (void)locationUpdate:(CLLocation *)location
+//{
+//    self.userCoordinate = [location coordinate];
+//}
 
 #pragma mark - KVO compliance
 
-//- (void)updateLocation:(NSNotification *)notif {
-////    assert([NSThread isMainThread]);
-//    
-//    self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
-////    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
-//}
+- (void)updateLocation:(NSNotification *)notif {
+//    assert([NSThread isMainThread]);
+    
+    self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
+//    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
+}
 
 - (void)addStations:(NSNotification *)notif {
 //    assert([NSThread isMainThread]);

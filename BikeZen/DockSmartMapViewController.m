@@ -76,6 +76,15 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
                                              selector:@selector(prepareBikeRoute:)
                                                  name:kStartBikingNotif
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateLocation:)
+                                                 name:kLocationUpdateNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateRegion:)
+                                                 name:kRegionUpdateNotif
+                                               object:nil];
+
 }
 
 - (void)viewDidLoad
@@ -604,6 +613,7 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     
     //Add new annotations.
     //TODO: if final destination and current destination station are the same object, only show the station object
+    //TODO: update distanceFromUser, etc (other properties) in local MyLocation objects (finalDestination, etc) here? instead of in startStationTracking for example?
     [self.mapView addAnnotation:self.sourceStation];
     //    if (![self.finalDestination isEqual:self.currentDestinationStation])
     if (self.finalDestination.coordinate.latitude != self.currentDestinationStation.coordinate.latitude && self.finalDestination.coordinate.longitude != self.currentDestinationStation.coordinate.longitude)
@@ -620,8 +630,19 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     //Create regions to monitor via geofencing app wakeups:
     //Two concentric circles, getting closer to the final destination:
     //TODO: change the distance dynamically based on total trip distance? For example, halfway there and 3/4 of the way there, or 1/3 and 2/3?
-    [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate radius:2000 identifier:kRegionMonitor2km accuracy:kCLLocationAccuracyNearestTenMeters];
-    [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate radius:1000 identifier:kRegionMonitor1km accuracy:kCLLocationAccuracyNearestTenMeters];
+    
+    [self.finalDestination setDistanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(self.dataController.userCoordinate  ), MKMapPointForCoordinate(self.finalDestination.coordinate))];
+    
+    
+    
+    [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate 
+                                                               radius:(self.finalDestination.distanceFromUser*0.67f)
+                                                           identifier:kRegionMonitor2km 
+                                                             accuracy:kCLLocationAccuracyNearestTenMeters];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate 
+                                                               radius:(self.finalDestination.distanceFromUser*0.33f)
+                                                           identifier:kRegionMonitor1km 
+                                                             accuracy:kCLLocationAccuracyNearestTenMeters];
     
     //One more region for each of the three closest stations to the final destination:
 //    for (Station* station in self.closestStationsToDestination)
@@ -637,6 +658,7 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     //Start minute timer:
     
     NSString* logText = [NSString stringWithFormat:@"Starting minute timer"];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -692,6 +714,7 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
                        context:(void *)context
 {
     NSString* logText = [NSString stringWithFormat:@"NEW STATION DATA: bikingState: %d", self.bikingState];
+    NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -849,6 +872,7 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
                 [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", self.sourceStation.name, self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
                                 
                 //Add new annotations.
+                //TODO: pull this into its own method for code reuse
                 //if final destination and current destination station are the same object, only show the station object
                 [self.mapView addAnnotation:self.sourceStation];
                 if (self.finalDestination.coordinate.latitude != self.currentDestinationStation.coordinate.latitude && self.finalDestination.coordinate.longitude != self.currentDestinationStation.coordinate.longitude)
@@ -925,7 +949,15 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
 
 #pragma mark - LocationControllerDelegate
 
-- (void)locationUpdate:(CLLocation *)location
+//- (void)locationUpdate:(CLLocation *)location
+//{
+//    if (self.bikingState != BikingStateActive)
+//    {
+//        [[LocationController sharedInstance] stopUpdatingCurrentLocation];
+//    }
+//}
+
+- (void)updateLocation:(NSNotification *)notif
 {
     if (self.bikingState != BikingStateActive)
     {
@@ -933,7 +965,15 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     }
 }
 
-- (void)regionUpdate:(CLRegion *)region
+//- (void)regionUpdate:(CLRegion *)region
+//{
+//    [self refreshWasTapped];
+//    
+//    //TODO: stop tracking if we've reached either the ideal or current destination station?
+//    //TODO: if the user is at current and ideal is open, notify them?
+//}
+
+- (void)updateRegion:(NSNotification *)notif
 {
     [self refreshWasTapped];
     

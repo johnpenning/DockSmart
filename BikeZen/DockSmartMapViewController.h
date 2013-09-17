@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
 
 @class LocationDataController;
 
-@interface DockSmartMapViewController : UIViewController <MKMapViewDelegate, LocationControllerDelegate>
+@interface DockSmartMapViewController : UIViewController <MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 //@property NSDate *lastDataUpdate;

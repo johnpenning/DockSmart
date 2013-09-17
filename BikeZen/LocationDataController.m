@@ -8,13 +8,11 @@
 
 #import "LocationDataController.h"
 #import "DockSmartMapViewController.h"
+#import "LocationController.h"
 #import "MyLocation.h"
 #import "Station.h"
 #import "Address.h"
 #import "define.h"
-
-//NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
-NSString *kNewLocationKey = @"NewLocationKey";
 
 @interface LocationDataController ()
 - (void)initializeDefaultDataList;
@@ -33,12 +31,12 @@ NSString *kNewLocationKey = @"NewLocationKey";
     
     self.userCoordinate = kCLLocationCoordinate2DInvalid;
     
-    [LocationController sharedInstance].delegate = self;
+//    [LocationController sharedInstance].delegate = self;
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(updateLocation:)
-//                                                 name:kLocationUpdateNotif
-//                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateLocation:)
+                                                 name:kLocationUpdateNotif
+                                               object:nil];
 
 }
 
@@ -150,22 +148,14 @@ NSString *kNewLocationKey = @"NewLocationKey";
     return sortedArray;
 }
 
-#pragma mark - LocationControllerDelegate
-
-- (void)locationUpdate:(CLLocation *)location
-{
-    [self setUserCoordinate:[location coordinate]];
-    [self updateDistancesFromUserLocation:[self userCoordinate]];
-}
-
 #pragma mark - KVO compliance
 
-//- (void)updateLocation:(NSNotification *)notif {
-////    assert([NSThread isMainThread]);
-//    
-//    [self setUserCoordinate:[(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate]];
-//    [self updateDistancesFromUserLocation:[self userCoordinate]];
-//}
+- (void)updateLocation:(NSNotification *)notif {
+//    assert([NSThread isMainThread]);
+    
+    [self setUserCoordinate:[(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate]];
+    [self updateDistancesFromUserLocation:[self userCoordinate]];
+}
 
 - (void)updateDistancesFromUserLocation:(CLLocationCoordinate2D)coordinate
 {

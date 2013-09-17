@@ -12,9 +12,6 @@
 
 @class MyLocation, Station, Address;
 
-//extern NSString *kLocationUpdateNotif;
-extern NSString *kNewLocationKey;
-
 typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
     LocationDataSortByName          = 0,
     LocationDataSortByDistanceFromUser,
@@ -23,7 +20,7 @@ typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
     LocationDataSortByDocks,
 };
 
-@interface LocationDataController : NSObject <LocationControllerDelegate>
+@interface LocationDataController : NSObject
 
 @property (nonatomic, copy) NSMutableArray *stationList;
 @property (nonatomic, copy) NSArray *sortedStationList;

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "LocationDataController.h"
 #import "DockSmartSettingsViewController.h"
 
 // protocol for sending location updates to another view controller
@@ -18,6 +19,11 @@
 @optional
 - (void)regionUpdate:(CLRegion*)region;
 @end
+
+extern NSString *kLocationUpdateNotif;
+extern NSString *kNewLocationKey;
+extern NSString *kRegionUpdateNotif;
+extern NSString *kNewRegionKey;
 
 @interface LocationController : NSObject <CLLocationManagerDelegate>
 
