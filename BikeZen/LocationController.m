@@ -273,7 +273,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
     // Create the region to be monitored.
     CLRegion* region = [[CLRegion alloc] initCircularRegionWithCenter:coordinate
                                                                radius:radius identifier:identifier];
-    [self.locationManager startMonitoringForRegion:region desiredAccuracy:accuracy];
+    [self.locationManager startMonitoringForRegion:region];// desiredAccuracy:accuracy];
     return YES;
 }
 

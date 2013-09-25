@@ -84,13 +84,20 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
                                              selector:@selector(updateRegion:)
                                                  name:kRegionUpdateNotif
                                                object:nil];
-
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    //iOS7 compatibility: allow us to programmatically attach the toolbar to the status bar
+    [self.topMapToolbar setDelegate:self];
+    //NOTE:moving the toolbar down 20px was done in Interface Builder by lining it up with the topLayoutGuide
+//    CGRect frame = self.topMapToolbar.frame;
+//    frame.origin.y = 20;
+//    [self.topMapToolbar setFrame:frame];
+//    [self.view addSubview:self.topMapToolbar];
     
 //    self.stationList = [NSMutableArray array];
     self.dataController = [[LocationDataController alloc] init];
@@ -979,6 +986,14 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     
     //TODO: stop tracking if we've reached either the ideal or current destination station?
     //TODO: if the user is at current and ideal is open, notify them?
+}
+
+#pragma mark - UIBarPositioningDelegate
+
+//iOS7 compatibility: attach toolbar to the status bar instead of overlapping the two
+- (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar
+{
+    return UIBarPositionTopAttached;
 }
 
 @end
