@@ -161,6 +161,8 @@
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
 
+    
+    //TODO: get rid of this and just keep significant location changes?  We don't need standard location service when we're in the foreground, since we have the minute timer running then.
     // Stop significant location change updates
     DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
     if (controller.bikingState == BikingStateActive)
