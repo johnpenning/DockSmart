@@ -47,8 +47,6 @@ NSString *kLogTextKey = @"LogTextKey";
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    //TODO: if we care before deleting this debug view, fix the top/bottom insets due to the status bar and tab bar
-    self.automaticallyAdjustsScrollViewInsets = YES;
 
     NSString *oldText = [self.settingsTextView text];
     [self.settingsTextView setText:[NSString stringWithFormat:@"%@\n%@", oldText, self.preloadText]];
