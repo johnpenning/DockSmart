@@ -137,21 +137,21 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 //    [self.view addConstraints:constraints];
     
 //    [self.tableView setContentInset:UIEdgeInsetsMake(20, 0, 0, 0)];
-//    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 //    [self.navigationController setEdgesForExtendedLayout:UIRectEdgeNone];
 //    [[self.navigationController navigationBar] setFrame:[[UIApplication sharedApplication] statusBarFrame]];
 
-//    float systemVersion=[[[UIDevice currentDevice] systemVersion] floatValue];
-//    if(systemVersion>=7.0f)
-//    { 
-//        CGRect tempRect;
-//        for(UIView *sub in [[self view] subviews])
-//        {
-//            tempRect = [sub frame];
-//            tempRect.origin.y += 20.0f; //Height of status bar
-//            [sub setFrame:tempRect];
-//        }
-//    }
+    float systemVersion=[[[UIDevice currentDevice] systemVersion] floatValue];
+    if(systemVersion>=7.0f)
+    {
+        CGRect tempRect;
+        for(UIView *sub in [[self view] subviews])
+        {
+            tempRect = [sub frame];
+            tempRect.origin.y += 20.0f; //Height of status bar
+            [sub setFrame:tempRect];
+        }
+    }
 //    [LocationController sharedInstance].delegate = self;
 
     // Uncomment the following line to preserve selection between presentations.
