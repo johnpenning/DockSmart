@@ -85,73 +85,7 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    //iOS7 compatibility: allow us to programmatically attach the search bar to the status bar
-    [self.searchBar setDelegate:self];
-    
-//    [[self.navigationController navigationBar] setHidden:NO];
-//    
-//    if ([self.navigationController respondsToSelector:@selector(edgesForExtendedLayout)])
-//        [self.navigationController setEdgesForExtendedLayout:UIRectEdgeNone];
-    
-    //NOTE:moving the toolbar down 20px was done in Interface Builder by lining it up with the topLayoutGuide
-//    CGRect frame = self.tableView.frame;
-//    frame.origin.y = 20;
-//    [self.tableView setFrame:frame];
-//    [self.view addSubview:self.topMapToolbar];
-    
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-//        CGRect statusBarFrame =  [[UIApplication sharedApplication] statusBarFrame];
-//        [UIView animateWithDuration:0.25 animations:^{
-//            for (UIView *subview in self.view.subviews)
-//                subview.transform = CGAffineTransformMakeTranslation(0, statusBarFrame.size.height);
-//        }];
-//    }
-    
-//    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
-//        [self setEdgesForExtendedLayout:UIRectEdgeNone];
-    
-//    [self.tableView setTranslatesAutoresizingMaskIntoConstraints: NO];
-//    id topGuide = self.topLayoutGuide;
-//    id theView = self.tableView;
-//    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings (theView, topGuide);
-//    [self.view addConstraints:
-//     [NSLayoutConstraint constraintsWithVisualFormat: @"V: [topGuide]-20-[theView]"
-//                                             options: 0
-//                                             metrics: nil
-//                                               views: viewsDictionary]
-//     ];
-//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:<#(id)#> attribute:<#(NSLayoutAttribute)#> relatedBy:<#(NSLayoutRelation)#> toItem:<#(id)#> attribute:<#(NSLayoutAttribute)#> multiplier:<#(CGFloat)#> constant:<#(CGFloat)#>]]
 
-//    UIView *statusBarBackground = [UIView alloc]
-    
-//    NSMutableArray *constraints = [[NSMutableArray alloc] init];
-//    NSString *verticalConstraint = @"V:|[v]|";
-//    NSMutableDictionary *views = [NSMutableDictionary new];
-//    views[@"v"] = self.tableView;
-//    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
-//        views[@"topLayoutGuide"] = [self topLayoutGuide];//self.topLayoutGuide;
-//        verticalConstraint = @"V:[topLayoutGuide][v]";
-//    }
-//    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:verticalConstraint options:0 metrics:nil views:views]];
-//    [self.view addConstraints:constraints];
-    
-//    [self.tableView setContentInset:UIEdgeInsetsMake(20, 0, 0, 0)];
-//    [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    [self.navigationController setEdgesForExtendedLayout:UIRectEdgeNone];
-//    [[self.navigationController navigationBar] setFrame:[[UIApplication sharedApplication] statusBarFrame]];
-
-//    float systemVersion=[[[UIDevice currentDevice] systemVersion] floatValue];
-//    if(systemVersion>=7.0f)
-//    { 
-//        CGRect tempRect;
-//        for(UIView *sub in [[self view] subviews])
-//        {
-//            tempRect = [sub frame];
-//            tempRect.origin.y += 20.0f; //Height of status bar
-//            [sub setFrame:tempRect];
-//        }
-//    }
 //    [LocationController sharedInstance].delegate = self;
 
     // Uncomment the following line to preserve selection between presentations.
@@ -502,11 +436,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 }
 #endif
 
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    
-//}
-
 /* Search Bar Implementation - Pilfered & tweaked from Apple's TableSearch example project */
 
 #pragma mark - Content Filtering
@@ -745,12 +674,5 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     self.navSheet = nil;
 }
 
-#pragma mark - UIBarPositioningDelegate
-
-//iOS7 compatibility
-- (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar
-{
-    return UIBarPositionTopAttached;
-}
 
 @end

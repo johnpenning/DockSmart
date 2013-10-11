@@ -38,10 +38,13 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
 - (IBAction)cancelTapped:(id)sender;
 - (IBAction)startStopTapped:(id)sender;
 - (IBAction)bikesDocksToggled:(id)sender;
-@property (weak, nonatomic) IBOutlet UIButton *startStopButton;
+- (IBAction)updateLocationTapped:(id)sender;
+
+//@property (weak, nonatomic) IBOutlet UIBarButtonItem *startStopButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *startStopButton;
 @property (weak, nonatomic) IBOutlet UILabel *destinationDetailLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *bikeCrosshairImage;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *bikesDocksControl;
 
 //location property for the center of the map:
@@ -109,6 +112,10 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
 //                                             selector:@selector(addStations:)
 //                                                 name:kAddStationsNotif
 //                                               object:nil];
+    
+    //initialize states
+    [self setBikingState:BikingStateInactive];
+    [self setUpdateLocationState:UpdateLocationStateInactive];
     
     //Define the initial zoom location (Dupont Circle for now)
     CLLocationCoordinate2D zoomLocation = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
@@ -493,10 +500,19 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     //Change buttons and label:
     [self.destinationDetailLabel setText:[self.finalDestination name]];
 //    [self.startStopButton setBackgroundColor:[UIColor whiteColor]];
-    [self.startStopButton setTitleColor:[UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0] forState:UIControlStateNormal];
-    [self.startStopButton setTitle:@"Set Destination" forState:UIControlStateNormal];
+    
+    /* iOS6 : pre-toolbar */
+//    [self.startStopButton setTitleColor:[UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0] forState:UIControlStateNormal];
+//    [self.startStopButton setTitle:@"Set Destination" forState:UIControlStateNormal];
+    /* iOS7 : with toolbar */
+    [self.startStopButton setTintColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+    [self.startStopButton setTitle:@"Set Destination"];
+    
     //hide cancel button
-    [self.cancelButton setHidden:YES];
+    /* iOS6 : pre-toolbar */
+//    [self.cancelButton setHidden:YES];
+    /* iOS7 : with toolbar */
+    [self.cancelButton setEnabled:NO];
     
     //Return to idle/inactive state
     self.bikingState = BikingStateInactive;
@@ -612,10 +628,14 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     
     if (newDest)
     {
-        //    [self.startStopButton setBackgroundColor:[UIColor greenColor]];
-        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-        [self.startStopButton setTitle:@"Start Station Tracking" forState:UIControlStateNormal];
-        [self.cancelButton setHidden:NO];
+        /* iOS6 : pre-toolbar */
+//        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+//        [self.startStopButton setTitle:@"Start Station Tracking" forState:UIControlStateNormal];
+//        [self.cancelButton setHidden:NO];
+        /* iOS7 : with toolbar */
+        [self.startStopButton setTintColor:[UIColor greenColor]];
+        [self.startStopButton setTitle:@"Start Station Tracking"];
+        [self.cancelButton setEnabled:YES];
     }
     
     //Add new annotations.
@@ -916,10 +936,16 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
             break;
         case BikingStatePreparingToBike:
             //Change buttons:
-//            [self.startStopButton setBackgroundColor:[UIColor redColor]];
-            [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-            [self.startStopButton setTitle:@"Stop Station Tracking" forState:UIControlStateNormal];
-            [self.cancelButton setHidden:YES];
+
+            /* iOS6 : pre-toolbar */
+//            [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//            [self.startStopButton setTitle:@"Stop Station Tracking" forState:UIControlStateNormal];
+//            [self.cancelButton setHidden:YES];
+            
+            /* iOS7 : with toolbar */
+            [self.startStopButton setTintColor:[UIColor redColor]];
+            [self.startStopButton setTitle:@"Stop Station Tracking"];
+            [self.cancelButton setEnabled:NO];
             
             //Start station tracking:
             [self startStationTracking];
@@ -939,6 +965,11 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
 - (IBAction)bikesDocksToggled:(id)sender {
     //replot the station annotations with either the number of bikes or empty docks at each
     [self plotStationPosition:self.dataController.stationList];
+}
+
+- (IBAction)updateLocationTapped:(id)sender {
+    [[LocationController sharedInstance] startUpdatingCurrentLocation];
+    [self setUpdateLocationState:UpdateLocationStateActive];
 }
 
 //- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -969,6 +1000,14 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
     if (self.bikingState != BikingStateActive)
     {
         [[LocationController sharedInstance] stopUpdatingCurrentLocation];
+    }
+    
+    if (self.updateLocationState == UpdateLocationStateActive)
+    {
+        MKCoordinateRegion region = [self.mapView region];
+        region.center = [self.dataController userCoordinate];
+        [self.mapView setRegion:region animated:YES];
+        [self setUpdateLocationState:UpdateLocationStateInactive];
     }
 }
 

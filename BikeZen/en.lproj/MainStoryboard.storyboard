@@ -151,7 +151,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Destinations" id="B1h-zV-4Gz"/>
                     <connections>
-                        <outlet property="searchBar" destination="WjL-JQ-SzA" id="jaK-mE-MMD"/>
                         <outlet property="searchDisplayController" destination="Fwm-Ua-gda" id="mBA-pv-MCc"/>
                     </connections>
                 </tableViewController>
@@ -159,6 +158,7 @@
                 <searchDisplayController id="Fwm-Ua-gda">
                     <connections>
                         <outlet property="delegate" destination="kjC-Hl-9fH" id="eQW-pD-O0Q"/>
+                        <outlet property="searchBar" destination="WjL-JQ-SzA" id="Bvc-Np-yNe"/>
                         <outlet property="searchContentsController" destination="kjC-Hl-9fH" id="d29-ft-gnb"/>
                         <outlet property="searchResultsDataSource" destination="kjC-Hl-9fH" id="gUC-IT-qKJ"/>
                         <outlet property="searchResultsDelegate" destination="kjC-Hl-9fH" id="riv-M6-lC5"/>
@@ -380,16 +380,7 @@
                                 <state key="normal" title="Set Destination">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="startStopTapped:" destination="3" eventType="touchUpInside" id="oZz-TG-ufi"/>
-                                </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kj4-f2-tGQ">
-                                <rect key="frame" x="20" y="445" width="280" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="bikepointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="rhK-Ye-sEA">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                             </imageView>
@@ -406,33 +397,65 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="cancelTapped:" destination="3" eventType="touchUpInside" id="q6R-8i-ceM"/>
-                                </connections>
                             </button>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ess-m6-m8a">
+                                <rect key="frame" x="0.0" y="475" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem title="Loc" id="dVs-pM-MfS">
+                                        <connections>
+                                            <action selector="updateLocationTapped:" destination="3" id="uzN-LT-rkK"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="rKf-fN-W8o"/>
+                                    <barButtonItem title="Set Destination" id="Xjb-g8-cGh">
+                                        <connections>
+                                            <action selector="startStopTapped:" destination="3" id="eTJ-kJ-8Gb"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="SBw-JF-j7x"/>
+                                    <barButtonItem enabled="NO" systemItem="stop" id="Anm-Gv-Wi3">
+                                        <connections>
+                                            <action selector="cancelTapped:" destination="3" id="THh-gD-eCQ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kj4-f2-tGQ">
+                                <rect key="frame" x="0.0" y="431" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="NxG-kw-rpD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="trailing" secondItem="1IL-EO-eSi" secondAttribute="trailing" constant="20" id="3Rg-qQ-jhT"/>
+                            <constraint firstItem="nB1-ES-hGh" firstAttribute="top" secondItem="ess-m6-m8a" secondAttribute="bottom" id="3lu-aJ-F8S"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="trailing" secondItem="rhK-Ye-sEA" secondAttribute="trailing" id="49R-DN-BqS"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="trailing" secondItem="lTq-OJ-asp" secondAttribute="trailing" id="5Cg-yW-OXI"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="leading" secondItem="17" secondAttribute="leading" id="7XW-Xt-Rai"/>
+                            <constraint firstItem="rhK-Ye-sEA" firstAttribute="leading" secondItem="ess-m6-m8a" secondAttribute="trailing" constant="-320" id="Aj3-aH-EMW"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="leading" secondItem="rhK-Ye-sEA" secondAttribute="leading" id="DEM-jN-Xe8"/>
                             <constraint firstItem="nB1-ES-hGh" firstAttribute="top" secondItem="1IL-EO-eSi" secondAttribute="bottom" constant="18" id="E4A-6o-RpY"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="top" secondItem="rhK-Ye-sEA" secondAttribute="top" id="FNc-Si-XZ7"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="top" secondItem="17" secondAttribute="top" id="Iab-kS-VUd"/>
-                            <constraint firstItem="j8R-L6-wV5" firstAttribute="top" secondItem="Kj4-f2-tGQ" secondAttribute="bottom" constant="6" id="Pea-ZM-SP8"/>
                             <constraint firstAttribute="trailing" secondItem="lTq-OJ-asp" secondAttribute="trailing" id="S3Y-Ml-R0P"/>
-                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="trailing" secondItem="1IL-EO-eSi" secondAttribute="trailing" id="aSO-Fv-sFB"/>
+                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="leading" secondItem="17" secondAttribute="leading" id="WtA-oN-Str"/>
+                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="centerX" secondItem="ess-m6-m8a" secondAttribute="centerX" id="XMx-Jo-q0U"/>
                             <constraint firstAttribute="bottom" secondItem="bko-ft-Kfm" secondAttribute="bottom" id="fiu-vV-cXc"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="leading" secondItem="lTq-OJ-asp" secondAttribute="leading" id="gcR-Iw-KQS"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="bottom" secondItem="rhK-Ye-sEA" secondAttribute="bottom" id="iJc-15-sOX"/>
                             <constraint firstItem="1IL-EO-eSi" firstAttribute="trailing" secondItem="j8R-L6-wV5" secondAttribute="trailing" id="kQb-dV-W9H"/>
-                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="leading" secondItem="17" secondAttribute="leading" constant="20" symbolic="YES" id="nvJ-VS-fTA"/>
                             <constraint firstItem="nB1-ES-hGh" firstAttribute="top" secondItem="j8R-L6-wV5" secondAttribute="bottom" constant="17" id="pIy-qU-p3a"/>
+                            <constraint firstItem="j8R-L6-wV5" firstAttribute="top" secondItem="Kj4-f2-tGQ" secondAttribute="bottom" constant="-3" id="q1U-HC-uJu"/>
+                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="leading" secondItem="j8R-L6-wV5" secondAttribute="leading" constant="-20" id="qaI-bG-k9x"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="leading" secondItem="17" secondAttribute="leading" id="rYe-iq-oV3"/>
-                            <constraint firstItem="j8R-L6-wV5" firstAttribute="leading" secondItem="Kj4-f2-tGQ" secondAttribute="leading" id="vJa-er-tow"/>
+                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="centerX" secondItem="lTq-OJ-asp" secondAttribute="centerX" id="uuM-m9-UQj"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="top" secondItem="tnN-51-lCb" secondAttribute="bottom" id="yHY-XM-QZc"/>
-                            <constraint firstAttribute="trailing" secondItem="Kj4-f2-tGQ" secondAttribute="trailing" constant="20" symbolic="YES" id="zI1-fc-vfc"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
@@ -440,10 +463,10 @@
                     <connections>
                         <outlet property="bikeCrosshairImage" destination="rhK-Ye-sEA" id="85n-59-Qqf"/>
                         <outlet property="bikesDocksControl" destination="tCo-CB-c4v" id="xpc-lP-Lbc"/>
-                        <outlet property="cancelButton" destination="1IL-EO-eSi" id="n11-Kg-6D4"/>
+                        <outlet property="cancelButton" destination="Anm-Gv-Wi3" id="vZO-Wf-BcR"/>
                         <outlet property="destinationDetailLabel" destination="Kj4-f2-tGQ" id="t5k-oB-rpK"/>
                         <outlet property="mapView" destination="bko-ft-Kfm" id="ehq-V1-CIH"/>
-                        <outlet property="startStopButton" destination="j8R-L6-wV5" id="1V7-lr-hJg"/>
+                        <outlet property="startStopButton" destination="Xjb-g8-cGh" id="ZYz-dy-auH"/>
                         <outlet property="topMapToolbar" destination="lTq-OJ-asp" id="z1U-UO-mhC"/>
                     </connections>
                 </viewController>
