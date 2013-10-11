@@ -16,6 +16,7 @@
 #import "LocationDataController.h"
 #import "ParseOperation.h"
 #import "DockSmartSettingsViewController.h"
+#import "DockSmartAppDelegate.h"
 
 // NSNotification name for reporting that refresh was tapped
 NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
@@ -381,7 +382,14 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
         
         [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
         
+        //Start spinning the network activity indicator:
+        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+
         [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+            
+            //Stop spinning the network activity indicator:
+            [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
+
             if (error)
             {
                 NSLog(@"Reverse geocode failed with error: %@", error);

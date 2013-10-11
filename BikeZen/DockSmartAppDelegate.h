@@ -21,4 +21,6 @@
 //@property (strong, nonatomic) CLLocationManager *locationManager;
 //@property (readonly) CLLocationCoordinate2D userCoordinate;
 
+- (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible;
+
 @end

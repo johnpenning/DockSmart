@@ -18,6 +18,7 @@
 #import "ParseOperation.h"
 #import "MBProgressHUD.h"
 #import "define.h"
+#import "DockSmartAppDelegate.h"
 
 
 // NSNotification name for informing the map view that we want to bike to a destination
@@ -583,12 +584,19 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     //Start HUD:
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Loading addresses...";
-    
+    //Start spinning the network activity indicator:
+    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+
     //Create a hint region around the user's current location for the geocoder
     CLRegion *region = [[CLRegion alloc]
                         initCircularRegionWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
+    
     //Perform the geocode
     [geocoder geocodeAddressString:string inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {
+        
+        //Stop spinning the network activity indicator:
+        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
+
         if (error)
         {
             NSLog(@"Geocode failed with error: %@", error);

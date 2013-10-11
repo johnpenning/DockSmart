@@ -25,6 +25,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.locationManager.pausesLocationUpdatesAutomatically = NO;
     }
     return self;
 }

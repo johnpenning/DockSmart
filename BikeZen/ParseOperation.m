@@ -56,6 +56,7 @@
 
 #import "ParseOperation.h"
 #import "Station.h"
+#import "DockSmartAppDelegate.h"
 
 // NSNotification name for sending station data to the map view
 NSString *kAddStationsNotif = @"AddStationsNotif";
@@ -109,6 +110,9 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
     self.currentParseBatch = [NSMutableArray array];
     self.currentParsedCharacterData = [NSMutableString string];
     
+    //Start spinning the network activity indicator:
+    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+    
     // It's also possible to have NSXMLParser download the data, by passing it a URL, but this is
     // not desirable because it gives less control over the network, particularly in responding to
     // connection errors.
@@ -129,6 +133,9 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
                                withObject:self.currentParseBatch
                             waitUntilDone:NO];
     }
+    
+    //Stop spinning the network activity indicator:
+    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
     
     self.currentParseBatch = nil;
     self.currentStationObject = nil;
