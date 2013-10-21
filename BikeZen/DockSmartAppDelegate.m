@@ -212,6 +212,21 @@
 
 }
 
+#pragma mark - State Restoration
+
+-(BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder
+{
+    return YES;
+}
+
+-(BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder
+{
+    //TODO: remember to change this to NO for the first session after an app update
+    return YES;
+}
+
+#pragma mark - NSXMLParser Methods
+
 // Handle errors in the download by showing an alert to the user. This is a very
 // simple way of handling the error, partly because this application does not have any offline
 // functionality for the user. Most real applications should handle the error in a less obtrusive

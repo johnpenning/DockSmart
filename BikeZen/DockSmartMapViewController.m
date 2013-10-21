@@ -103,7 +103,6 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
 //    [self.topMapToolbar setFrame:frame];
 //    [self.view addSubview:self.topMapToolbar];
     
-//    self.stationList = [NSMutableArray array];
     self.dataController = [[LocationDataController alloc] init];
     self.mapCenterAddress = [[Address alloc] init];
 //    self.closestStationsToDestination = [[NSMutableArray alloc] initWithCapacity:3];
@@ -1041,6 +1040,59 @@ NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
 - (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar
 {
     return UIBarPositionTopAttached;
+}
+
+
+#pragma mark - State Restoration
+
+static NSString *BikesDocksControlKey = @"BikesDocksControlKey";
+static NSString *BikingStateKey = @"BikingStateKey";
+static NSString *UpdateLocationStateKey = @"UpdateLocationStateKey";
+//TODO: [mapView region]? mapCenterAddress?
+static NSString *DataControllerKey = @"DataControllerKey";
+static NSString *SourceStationKey = @"SourceStationKey";
+static NSString *FinalDestinationKey = @"FinalDestinationKey";
+static NSString *CurrentDestinationStationKey = @"CurrentDestinationStationKey";
+static NSString *IdealDestinationStationKey = @"IdealDestinationStationKey";
+static NSString *ClosestStationsToDestinationKey = @"ClosestStationsToDestinationKey";
+static NSString *MinuteTimerValidKey = @"MinuteTimerValidKey";
+//TODO: startStopButton state & text, destinationDetailLabel, cancelButton enabled state
+
+
+- (void) encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super encodeRestorableStateWithCoder:coder];
+
+    [coder encodeObject:self.bikesDocksControl forKey:BikesDocksControlKey];
+    [coder encodeInteger:self.bikingState forKey:BikingStateKey];
+    [coder encodeInteger:self.updateLocationState forKey:UpdateLocationStateKey];
+//    [coder encodeObject:self.dataController forKey:DataControllerKey];
+    [coder encodeObject:self.sourceStation forKey:SourceStationKey];
+    [coder encodeObject:self.finalDestination forKey:FinalDestinationKey];
+    [coder encodeObject:self.currentDestinationStation forKey:CurrentDestinationStationKey];
+    [coder encodeObject:self.idealDestinationStation forKey:IdealDestinationStationKey];
+    [coder encodeObject:self.closestStationsToDestination forKey:ClosestStationsToDestinationKey];
+    [coder encodeBool:self.minuteTimer.isValid forKey:MinuteTimerValidKey];
+}
+
+
+- (void) decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super decodeRestorableStateWithCoder:coder];
+
+    self.bikesDocksControl = [coder decodeObjectForKey:BikesDocksControlKey];
+    self.bikingState = [coder decodeIntegerForKey:BikingStateKey];
+    self.updateLocationState = [coder decodeIntegerForKey:UpdateLocationStateKey];
+//    self.dataController = [coder decodeObjectForKey:DataControllerKey];
+    self.sourceStation = [coder decodeObjectForKey:SourceStationKey];
+    self.finalDestination = [coder decodeObjectForKey:FinalDestinationKey];
+    self.currentDestinationStation = [coder decodeObjectForKey:CurrentDestinationStationKey];
+    self.idealDestinationStation = [coder decodeObjectForKey:IdealDestinationStationKey];
+    self.closestStationsToDestination = [coder decodeObjectForKey:ClosestStationsToDestinationKey];
+    if ([coder decodeBoolForKey:MinuteTimerValidKey])
+    {
+        self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
+    }
 }
 
 @end

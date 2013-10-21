@@ -83,4 +83,49 @@
 //    return mapItem;
 //}
 
+#pragma mark - State Restoration
+
+static NSString *StationIDKey = @"StationIDKey";
+static NSString *LatitudeKey = @"LatitudeKey";
+static NSString *LongitudeKey = @"LongitudeKey";
+static NSString *InstalledKey = @"InstalledKey";
+static NSString *LockedKey = @"LockedKey";
+static NSString *PubliclyViewableKey = @"PubliclyViewableKey";
+static NSString *NbBikesKey = @"NbBikesKey";
+static NSString *NbEmptyDocksKey = @"NbEmptyDocksKey";
+static NSString *LastStationUpdateKey = @"LastStationUpdateKey";
+static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super encodeRestorableStateWithCoder:coder];
+    
+    [coder encodeInteger:self.stationID forKey:StationIDKey];
+    [coder encodeDouble:self.latitude forKey:LatitudeKey];
+    [coder encodeDouble:self.longitude forKey:LongitudeKey];
+    [coder encodeBool:self.installed forKey:InstalledKey];
+    [coder encodeBool:self.locked forKey:LockedKey];
+    [coder encodeBool:self.publiclyViewable forKey:PubliclyViewableKey];
+    [coder encodeInteger:self.nbBikes forKey:NbBikesKey];
+    [coder encodeInteger:self.nbEmptyDocks forKey:NbEmptyDocksKey];
+    [coder encodeObject:self.lastStationUpdate forKey:LastStationUpdateKey];
+    [coder encodeDouble:self.distanceFromDestination forKey:DistanceFromDestinationKey];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super decodeRestorableStateWithCoder:coder];
+    
+    self.stationID = [coder decodeIntegerForKey:StationIDKey];
+    self.latitude = [coder decodeDoubleForKey:LatitudeKey];
+    self.longitude = [coder decodeDoubleForKey:LongitudeKey];
+    self.installed = [coder decodeBoolForKey:InstalledKey];
+    self.locked = [coder decodeBoolForKey:LockedKey];
+    self.publiclyViewable = [coder decodeBoolForKey:PubliclyViewableKey];
+    self.nbBikes = [coder decodeIntegerForKey:NbBikesKey];
+    self.nbEmptyDocks = [coder decodeIntegerForKey:NbEmptyDocksKey];
+    self.lastStationUpdate = [coder decodeObjectForKey:LastStationUpdateKey];
+    self.distanceFromDestination = [coder decodeDoubleForKey:DistanceFromDestinationKey];
+}
+
 @end

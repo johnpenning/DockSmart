@@ -59,4 +59,29 @@ NSString *kStation = @"Station";
     return _name;
 }
 
+#pragma mark - State Restoration
+
+static NSString *NameKey = @"NameKey";
+static NSString *CoordinateLatitudeKey = @"CoordinateLatitudeKey";
+static NSString *CoordinateLongitudeKey = @"CoordinateLongitudeKey";
+static NSString *DistanceFromUserKey = @"DistanceFromUserKey";
+static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.name forKey:NameKey];
+    [coder encodeDouble:self.coordinate.latitude forKey:CoordinateLatitudeKey];
+    [coder encodeDouble:self.coordinate.longitude forKey:CoordinateLongitudeKey];
+    [coder encodeDouble:self.distanceFromUser forKey:DistanceFromUserKey];
+    [coder encodeObject:self.annotationIdentifier forKey:AnnotationIdentifierKey];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    self.name = [coder decodeObjectForKey:NameKey];
+    _coordinate = CLLocationCoordinate2DMake([coder decodeDoubleForKey:CoordinateLatitudeKey], [coder decodeDoubleForKey:CoordinateLongitudeKey]);
+    self.distanceFromUser = [coder decodeDoubleForKey:DistanceFromUserKey];
+    self.annotationIdentifier = [coder decodeObjectForKey:AnnotationIdentifierKey];
+}
+
 @end

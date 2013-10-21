@@ -40,4 +40,22 @@
     return addressSummary;
 }
 
+#pragma mark - State Restoration
+
+static NSString *PlacemarkKey = @"PlacemarkKey";
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super encodeRestorableStateWithCoder:coder];
+    
+    [coder encodeObject:_placemark forKey:PlacemarkKey];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super decodeRestorableStateWithCoder:coder];
+    
+    _placemark = [coder decodeObjectForKey:PlacemarkKey];
+}
+
 @end
