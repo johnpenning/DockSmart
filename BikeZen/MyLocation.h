@@ -17,7 +17,7 @@ extern NSString *kDestinationStation;
 extern NSString *kAlternateStation;
 extern NSString *kStation;
 
-@interface MyLocation : NSObject <MKAnnotation, UIStateRestoring>
+@interface MyLocation : NSObject <MKAnnotation, NSCoding>// UIStateRestoring>
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;

@@ -73,21 +73,25 @@ static NSString *CoordinateLongitudeKey = @"CoordinateLongitudeKey";
 static NSString *DistanceFromUserKey = @"DistanceFromUserKey";
 static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+- (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [coder encodeObject:self.name forKey:NameKey];
-    [coder encodeDouble:self.coordinate.latitude forKey:CoordinateLatitudeKey];
-    [coder encodeDouble:self.coordinate.longitude forKey:CoordinateLongitudeKey];
-    [coder encodeDouble:self.distanceFromUser forKey:DistanceFromUserKey];
-    [coder encodeObject:self.annotationIdentifier forKey:AnnotationIdentifierKey];
+    [aCoder encodeObject:self.name forKey:NameKey];
+    [aCoder encodeDouble:self.coordinate.latitude forKey:CoordinateLatitudeKey];
+    [aCoder encodeDouble:self.coordinate.longitude forKey:CoordinateLongitudeKey];
+    [aCoder encodeDouble:self.distanceFromUser forKey:DistanceFromUserKey];
+    [aCoder encodeObject:self.annotationIdentifier forKey:AnnotationIdentifierKey];
 }
 
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self.name = [coder decodeObjectForKey:NameKey];
-    _coordinate = CLLocationCoordinate2DMake([coder decodeDoubleForKey:CoordinateLatitudeKey], [coder decodeDoubleForKey:CoordinateLongitudeKey]);
-    self.distanceFromUser = [coder decodeDoubleForKey:DistanceFromUserKey];
-    self.annotationIdentifier = [coder decodeObjectForKey:AnnotationIdentifierKey];
+    self.name = [aDecoder decodeObjectForKey:NameKey];
+    _coordinate = CLLocationCoordinate2DMake([aDecoder decodeDoubleForKey:CoordinateLatitudeKey], [aDecoder decodeDoubleForKey:CoordinateLongitudeKey]);
+    self.distanceFromUser = [aDecoder decodeDoubleForKey:DistanceFromUserKey];
+    self.annotationIdentifier = [aDecoder decodeObjectForKey:AnnotationIdentifierKey];
+    
+    return self;
 }
 
 - (void)applicationFinishedRestoringState

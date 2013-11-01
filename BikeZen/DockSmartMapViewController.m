@@ -307,6 +307,23 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     [coder encodeDouble:[self.mapView region].center.longitude forKey:RegionCenterLongKey];
     [coder encodeDouble:[self.mapView region].span.latitudeDelta forKey:RegionSpanLatKey];
     [coder encodeDouble:[self.mapView region].span.longitudeDelta forKey:RegionSpanLongKey];
+    
+//    
+//    NSString *error;
+//    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+//    NSString *plistPath = [rootPath stringByAppendingPathComponent:@"yourFile.plist"];
+//    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:rootObj
+//                                                                   format:NSPropertyListXMLFormat_v1_0
+//                                                         errorDescription:&error];
+//    NSData *plistData = [NSPropertyListSerialization dataWithPropertyList:<#(id)#> format:<#(NSPropertyListFormat)#> options:<#(NSPropertyListWriteOptions)#> error:<#(out NSError *__autoreleasing *)#>]
+//    if(plistData) {
+//        [plistData writeToFile:plistPath atomically:YES];
+//    }
+//    else {
+//        NSLog(@"Error : %@",error);
+//        [error release];
+//    }
+
 }
 
 

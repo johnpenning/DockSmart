@@ -96,36 +96,46 @@ static NSString *NbEmptyDocksKey = @"NbEmptyDocksKey";
 static NSString *LastStationUpdateKey = @"LastStationUpdateKey";
 static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
 
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+- (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [super encodeRestorableStateWithCoder:coder];
+//    [super encodeRestorableStateWithCoder:coder];
+    [super encodeWithCoder:aCoder];
     
-    [coder encodeInteger:self.stationID forKey:StationIDKey];
-    [coder encodeDouble:self.latitude forKey:LatitudeKey];
-    [coder encodeDouble:self.longitude forKey:LongitudeKey];
-    [coder encodeBool:self.installed forKey:InstalledKey];
-    [coder encodeBool:self.locked forKey:LockedKey];
-    [coder encodeBool:self.publiclyViewable forKey:PubliclyViewableKey];
-    [coder encodeInteger:self.nbBikes forKey:NbBikesKey];
-    [coder encodeInteger:self.nbEmptyDocks forKey:NbEmptyDocksKey];
-    [coder encodeObject:self.lastStationUpdate forKey:LastStationUpdateKey];
-    [coder encodeDouble:self.distanceFromDestination forKey:DistanceFromDestinationKey];
+    [aCoder encodeInteger:self.stationID forKey:StationIDKey];
+    [aCoder encodeDouble:self.latitude forKey:LatitudeKey];
+    [aCoder encodeDouble:self.longitude forKey:LongitudeKey];
+    [aCoder encodeBool:self.installed forKey:InstalledKey];
+    [aCoder encodeBool:self.locked forKey:LockedKey];
+    [aCoder encodeBool:self.publiclyViewable forKey:PubliclyViewableKey];
+    [aCoder encodeInteger:self.nbBikes forKey:NbBikesKey];
+    [aCoder encodeInteger:self.nbEmptyDocks forKey:NbEmptyDocksKey];
+    [aCoder encodeObject:self.lastStationUpdate forKey:LastStationUpdateKey];
+    [aCoder encodeDouble:self.distanceFromDestination forKey:DistanceFromDestinationKey];
 }
 
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    [super decodeRestorableStateWithCoder:coder];
+//    [super decodeRestorableStateWithCoder:coder];
+    self = [super initWithCoder:aDecoder];
     
-    self.stationID = [coder decodeIntegerForKey:StationIDKey];
-    self.latitude = [coder decodeDoubleForKey:LatitudeKey];
-    self.longitude = [coder decodeDoubleForKey:LongitudeKey];
-    self.installed = [coder decodeBoolForKey:InstalledKey];
-    self.locked = [coder decodeBoolForKey:LockedKey];
-    self.publiclyViewable = [coder decodeBoolForKey:PubliclyViewableKey];
-    self.nbBikes = [coder decodeIntegerForKey:NbBikesKey];
-    self.nbEmptyDocks = [coder decodeIntegerForKey:NbEmptyDocksKey];
-    self.lastStationUpdate = [coder decodeObjectForKey:LastStationUpdateKey];
-    self.distanceFromDestination = [coder decodeDoubleForKey:DistanceFromDestinationKey];
+    if (self)
+    {
+        self.stationID = [aDecoder decodeIntegerForKey:StationIDKey];
+        self.latitude = [aDecoder decodeDoubleForKey:LatitudeKey];
+        self.longitude = [aDecoder decodeDoubleForKey:LongitudeKey];
+        self.installed = [aDecoder decodeBoolForKey:InstalledKey];
+        self.locked = [aDecoder decodeBoolForKey:LockedKey];
+        self.publiclyViewable = [aDecoder decodeBoolForKey:PubliclyViewableKey];
+        self.nbBikes = [aDecoder decodeIntegerForKey:NbBikesKey];
+        self.nbEmptyDocks = [aDecoder decodeIntegerForKey:NbEmptyDocksKey];
+        self.lastStationUpdate = [aDecoder decodeObjectForKey:LastStationUpdateKey];
+        self.distanceFromDestination = [aDecoder decodeDoubleForKey:DistanceFromDestinationKey];
+        
+        return self;
+    }
+    return nil;
 }
 
 @end

@@ -44,18 +44,27 @@
 
 static NSString *PlacemarkKey = @"PlacemarkKey";
 
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+- (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [super encodeRestorableStateWithCoder:coder];
+//    [super encodeRestorableStateWithCoder:coder];
+    [super encodeWithCoder:aCoder];
     
-    [coder encodeObject:_placemark forKey:PlacemarkKey];
+    [aCoder encodeObject:_placemark forKey:PlacemarkKey];
 }
 
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    [super decodeRestorableStateWithCoder:coder];
+//    [super decodeRestorableStateWithCoder:coder];
+    self = [super initWithCoder:aDecoder];
     
-    _placemark = [coder decodeObjectForKey:PlacemarkKey];
+    if (self)
+    {
+        _placemark = [aDecoder decodeObjectForKey:PlacemarkKey];
+        return self;
+    }
+    return nil;
 }
 
 @end
