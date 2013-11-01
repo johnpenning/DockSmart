@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "DockSmartSettingsViewController.h"
 
 // Reuse identifiers for MyLocation annotations in the MapView
 extern NSString *kSourceStation;
@@ -24,6 +25,9 @@ extern NSString *kStation;
 //@property (nonatomic) CLLocationDegrees longitude;
 @property (nonatomic) CLLocationDistance distanceFromUser;
 @property (nonatomic, copy) NSString *annotationIdentifier;
+//State restoration:
+@property (strong, nonatomic) Class<UIObjectRestoration> objectRestorationClass;
+@property (strong, nonatomic) id<UIStateRestoring> restorationParent;
 
 - (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude distanceFromUser:(CLLocationDistance)distance;
 - (id)initWithName:(NSString *)name coordinate:(CLLocationCoordinate2D)coordinate distanceFromUser:(CLLocationDistance)distance;

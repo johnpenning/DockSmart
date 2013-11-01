@@ -12,7 +12,7 @@
 
 @class Station, DockSmartMapViewController;
 
-@interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, NSXMLParserDelegate>
+@interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, NSXMLParserDelegate, UIStateRestoring>
 
 @property (strong, nonatomic) UIWindow *window;
 //@property (strong, nonatomic) IBOutlet DockSmartMapViewController *mapViewController;

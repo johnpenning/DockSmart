@@ -35,6 +35,11 @@
 
 @implementation DockSmartAppDelegate
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    return YES;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
@@ -310,7 +315,7 @@
 }
 #endif
 
-- (void)loadXMLData //TODO: do this multiple times without adding duplicate stations
+- (void)loadXMLData //TODO: do this multiple times without adding duplicate stations (done, test)
 {
     //log the new parse operation
     NSString* logText = [NSString stringWithFormat:@"XML parse operation started"];

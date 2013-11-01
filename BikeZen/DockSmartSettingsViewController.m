@@ -78,4 +78,13 @@ NSString *kLogTextKey = @"LogTextKey";
     }
 }
 
+#pragma mark - State Restoration
+
+- (void)applicationFinishedRestoringState
+{
+    //Called on restored view controllers after other object decoding is complete.
+    
+    
+}
+
 @end

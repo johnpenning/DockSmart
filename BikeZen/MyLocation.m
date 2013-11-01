@@ -29,6 +29,9 @@ NSString *kStation = @"Station";
 //        _latitude = latitude;
 //        _longitude = longitude;
         _distanceFromUser = distance;
+        
+//        [UIApplication registerObjectForStateRestoration:self restorationIdentifier:@"MyLocationID"];
+        
         return self;
     }
     return nil;
@@ -44,6 +47,9 @@ NSString *kStation = @"Station";
         _name = name;
         _coordinate = coordinate;
         _distanceFromUser = distance;
+
+//        [UIApplication registerObjectForStateRestoration:self restorationIdentifier:@"MyLocationID"];
+
         return self;
     }
     return nil;
@@ -83,5 +89,17 @@ static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
     self.distanceFromUser = [coder decodeDoubleForKey:DistanceFromUserKey];
     self.annotationIdentifier = [coder decodeObjectForKey:AnnotationIdentifierKey];
 }
+
+- (void)applicationFinishedRestoringState
+{
+    //Called on restored view controllers after other object decoding is complete.
+    NSString* logText = [NSString stringWithFormat:@"finished restoring MyLocation"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+}
+
 
 @end
