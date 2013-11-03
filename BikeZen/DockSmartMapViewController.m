@@ -240,6 +240,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 #pragma mark - State Restoration
 
 static NSString *BikesDocksControlKey = @"BikesDocksControlKey";
+static NSString *BikesDocksControlHiddenKey = @"BikesDocksControlHiddenKey";
 static NSString *BikingStateKey = @"BikingStateKey";
 static NSString *UpdateLocationStateKey = @"UpdateLocationStateKey";
 //TODO: [mapView region]? mapCenterAddress?
@@ -281,6 +282,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     
     //Encode objects:
     [coder encodeInteger:self.bikesDocksControl.selectedSegmentIndex forKey:BikesDocksControlKey];
+    [coder encodeBool:self.bikesDocksControl.hidden forKey:BikesDocksControlHiddenKey];
     [coder encodeInteger:self.bikingState forKey:BikingStateKey];
     [coder encodeInteger:self.updateLocationState forKey:UpdateLocationStateKey];
     
@@ -365,6 +367,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     //    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
     
     self.bikesDocksControl.selectedSegmentIndex = [coder decodeIntegerForKey:BikesDocksControlKey];
+    self.bikesDocksControl.hidden = [coder decodeBoolForKey:BikesDocksControlHiddenKey];
     self.bikingState = [coder decodeIntegerForKey:BikingStateKey];
     self.updateLocationState = [coder decodeIntegerForKey:UpdateLocationStateKey];
     //    self.dataController = [coder decodeObjectForKey:DataControllerKey];

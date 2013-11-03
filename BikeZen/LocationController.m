@@ -188,7 +188,8 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
 {
-    NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ %f, %f withError: %@", region.identifier, region.center.latitude, region.center.longitude, [error localizedDescription]];
+//    NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ %f, %f withError: %@", region.identifier, region.center.latitude, region.center.longitude, [error localizedDescription]];
+    NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ withError: %@", region.identifier, [error localizedDescription]];
     NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
@@ -199,7 +200,8 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
-    NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+//    NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+    NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@", region.identifier];
     NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
@@ -218,7 +220,8 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
-    NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+//    NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
+    NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@", region.identifier];
     NSLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
@@ -250,9 +253,9 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (BOOL)registerRegionWithCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius identifier:(NSString*)identifier accuracy:(CLLocationAccuracy)accuracy
 {
-    // Do not create regions if support is unavailable or disabled
-    if ( ![CLLocationManager regionMonitoringAvailable])
-        return NO;
+    // Do not create regions if support is unavailable or disabled (deprecated)
+//    if ( ![CLLocationManager regionMonitoringAvailable])
+//        return NO;
     
     // Check the authorization status
     if (([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) &&
@@ -272,9 +275,9 @@ NSString *kNewRegionKey = @"NewRegionKey";
     }
     
     // Create the region to be monitored.
-    CLRegion* region = [[CLRegion alloc] initCircularRegionWithCenter:coordinate
-                                                               radius:radius identifier:identifier];
-    [self.locationManager startMonitoringForRegion:region];// desiredAccuracy:accuracy];
+    CLCircularRegion* circularRegion = [[CLCircularRegion alloc] initWithCenter:coordinate radius:radius identifier:identifier];
+
+    [self.locationManager startMonitoringForRegion:circularRegion];
     return YES;
 }
 
