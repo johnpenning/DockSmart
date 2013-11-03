@@ -62,9 +62,20 @@ static NSString *PlacemarkKey = @"PlacemarkKey";
     if (self)
     {
         _placemark = [aDecoder decodeObjectForKey:PlacemarkKey];
-        return self;
     }
-    return nil;
+    return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+//    Address *other = (Address *)[super copyWithZone:zone];
+
+    Address *other = [[Address alloc] initWithPlacemark:[_placemark copyWithZone:zone] distanceFromUser:self.distanceFromUser];
+    other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
+//    other.coordinate = self.coordinate;
+//    other.distanceFromUser = self.distanceFromUser;
+
+    return other;
 }
 
 @end

@@ -62,7 +62,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 //keep track of the station we're getting the bike from:
 @property (nonatomic) Station* sourceStation;
 //keep track of where we're going:
-@property (nonatomic) MyLocation* finalDestination;
+@property (nonatomic, copy) MyLocation* finalDestination;
 @property (nonatomic) Station* currentDestinationStation;
 @property (nonatomic) Station* idealDestinationStation;
 @property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
@@ -113,33 +113,33 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     
     self.dataController = [[LocationDataController alloc] init];
     
-    self.mapCenterAddress = [[self class] makeAddressWithRestorationIdentifier:MapCenterAddressID];// [[Address alloc] init];
+    self.mapCenterAddress = [[Address alloc] init];// [[self class] makeAddressWithRestorationIdentifier:MapCenterAddressID];// [[Address alloc] init];
 //    [UIApplication registerObjectForStateRestoration:self.mapCenterAddress restorationIdentifier:MapCenterAddressID];
 //    self.mapCenterAddress.objectRestorationClass = [self class];
     
     self.closestStationsToDestination = [[NSMutableArray alloc] initWithCapacity:3];
-    NSUInteger idx = 0;
-    for (Station *station in self.closestStationsToDestination)
-    {
-        [UIApplication registerObjectForStateRestoration:station restorationIdentifier:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationID, idx]];
-//        station.objectRestorationClass = [self class];
-
-        idx++;
-    }
+//    NSUInteger idx = 0;
+//    for (Station *station in self.closestStationsToDestination)
+//    {
+//        [UIApplication registerObjectForStateRestoration:station restorationIdentifier:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationID, idx]];
+////        station.objectRestorationClass = [self class];
+//
+//        idx++;
+//    }
     
-    self.sourceStation = [[self class] makeStationWithRestorationIdentifier:SourceStationID]; //[[Station alloc] init];
+    self.sourceStation = [[Station alloc] init]; //[[self class] makeStationWithRestorationIdentifier:SourceStationID]; //[[Station alloc] init];
 //    [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
 //    self.sourceStation.objectRestorationClass = [self class];
     
-    self.finalDestination = [[self class] makeMyLocationWithRestorationIdentifier:FinalDestinationID];// [[MyLocation alloc] init];
+    self.finalDestination = [[MyLocation alloc] init]; // [[self class] makeMyLocationWithRestorationIdentifier:FinalDestinationID];// [[MyLocation alloc] init];
 //    [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
 //    self.finalDestination.objectRestorationClass = [self class];
     
-    self.currentDestinationStation =  [[self class] makeStationWithRestorationIdentifier:CurrentDestinationStationID]; //[[Station alloc] init];
+    self.currentDestinationStation = [[Station alloc] init]; // [[self class] makeStationWithRestorationIdentifier:CurrentDestinationStationID]; //[[Station alloc] init];
 //    [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
 //    self.currentDestinationStation.objectRestorationClass = [self class];
     
-    self.idealDestinationStation = [[self class] makeStationWithRestorationIdentifier:IdealDestinationStationID]; //[[Station alloc] init];
+    self.idealDestinationStation = [[Station alloc] init];// [[self class] makeStationWithRestorationIdentifier:IdealDestinationStationID]; //[[Station alloc] init];
 //    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
 //    self.idealDestinationStation.objectRestorationClass = [self class];
     
@@ -243,7 +243,7 @@ static NSString *BikesDocksControlKey = @"BikesDocksControlKey";
 static NSString *BikingStateKey = @"BikingStateKey";
 static NSString *UpdateLocationStateKey = @"UpdateLocationStateKey";
 //TODO: [mapView region]? mapCenterAddress?
-//static NSString *DataControllerKey = @"DataControllerKey";
+static NSString *DataControllerKey = @"DataControllerKey";
 static NSString *SourceStationKey = @"SourceStationKey";
 static NSString *FinalDestinationKey = @"FinalDestinationKey";
 static NSString *CurrentDestinationStationKey = @"CurrentDestinationStationKey";
@@ -283,18 +283,21 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     [coder encodeInteger:self.bikesDocksControl.selectedSegmentIndex forKey:BikesDocksControlKey];
     [coder encodeInteger:self.bikingState forKey:BikingStateKey];
     [coder encodeInteger:self.updateLocationState forKey:UpdateLocationStateKey];
-    //    [coder encodeObject:self.dataController forKey:DataControllerKey];
-    [coder encodeObject:self.sourceStation forKey:SourceStationKey];
-    [coder encodeObject:self.finalDestination forKey:FinalDestinationKey];
-    [coder encodeObject:self.currentDestinationStation forKey:CurrentDestinationStationKey];
-    [coder encodeObject:self.idealDestinationStation forKey:IdealDestinationStationKey];
-    //    [coder encodeObject:self.closestStationsToDestination forKey:ClosestStationsToDestinationKey];
-    NSUInteger idx = 0;
-    for (Station *station in self.closestStationsToDestination)
-    {
-        [coder encodeObject:station forKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx]];
-        idx++;
-    }
+    
+//    //    [coder encodeObject:self.dataController forKey:DataControllerKey];
+//    [coder encodeObject:self.sourceStation forKey:SourceStationKey];
+//    [coder encodeObject:self.finalDestination forKey:FinalDestinationKey];
+//    [coder encodeObject:self.currentDestinationStation forKey:CurrentDestinationStationKey];
+//    [coder encodeObject:self.idealDestinationStation forKey:IdealDestinationStationKey];
+//    //    [coder encodeObject:self.closestStationsToDestination forKey:ClosestStationsToDestinationKey];
+//    NSUInteger idx = 0;
+//    for (Station *station in self.closestStationsToDestination)
+//    {
+//        [coder encodeObject:station forKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx]];
+//        idx++;
+//    }
+//    [coder encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
+
     [coder encodeBool:self.minuteTimer.isValid forKey:MinuteTimerValidKey];
     [coder encodeObject:self.startStopButton.title forKey:StartStopButtonTitleKey];
     [coder encodeObject:self.startStopButton.tintColor forKey:StartStopButtonTintColorKey];
@@ -302,12 +305,10 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     [coder encodeObject:self.destinationDetailLabel.text forKey:DestinationDetailLabelKey];
     [coder encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
     [coder encodeBool:self.cancelButton.enabled forKey:CancelButtonKey];
-    [coder encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
     [coder encodeDouble:[self.mapView region].center.latitude forKey:RegionCenterLatKey];
     [coder encodeDouble:[self.mapView region].center.longitude forKey:RegionCenterLongKey];
     [coder encodeDouble:[self.mapView region].span.latitudeDelta forKey:RegionSpanLatKey];
     [coder encodeDouble:[self.mapView region].span.longitudeDelta forKey:RegionSpanLongKey];
-    
 //    
 //    NSString *error;
 //    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -323,7 +324,33 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //        NSLog(@"Error : %@",error);
 //        [error release];
 //    }
+    
+    NSMutableData *data = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
+    [archiver encodeObject:self.dataController.stationList forKey:DataControllerKey];
+    [archiver encodeObject:self.sourceStation forKey:SourceStationKey];
+    [archiver encodeObject:self.finalDestination forKey:FinalDestinationKey];
+    [archiver encodeObject:self.currentDestinationStation forKey:CurrentDestinationStationKey];
+    [archiver encodeObject:self.idealDestinationStation forKey:IdealDestinationStationKey];
+    [archiver encodeObject:self.closestStationsToDestination forKey:ClosestStationsToDestinationKey];
+//    NSUInteger idx = 0;
+//    for (Station *station in self.closestStationsToDestination)
+//    {
+//        [archiver encodeObject:station forKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx]];
+//        idx++;
+//    }
+    [archiver encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
+    [archiver finishEncoding];
+    
+//    NSString *filename = @"stationData.txt";
+    NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"stationData.txt"];
+    
+    NSError *error;
+    BOOL result = [data writeToFile:path options:NSDataWritingAtomic error:&error];
+    NSLog(@"Archive result = %d, %@", result, error);
+    
 }
 
 
@@ -352,6 +379,8 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //        //        [coder encodeObject:station forKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx]];
 //        [self.closestStationsToDestination setObject:[coder decodeObjectForKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx] ] atIndexedSubscript:idx];
 //    }
+    //    self.mapCenterAddress = [coder decodeObjectForKey:MapCenterAddressKey];
+
     
     if ([coder decodeBoolForKey:MinuteTimerValidKey])
     {
@@ -363,75 +392,93 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     self.destinationDetailLabel.text = [coder decodeObjectForKey:DestinationDetailLabelKey];
     self.bikeCrosshairImage.hidden = [coder decodeBoolForKey:BikeCrosshairImageKey];
     self.cancelButton.enabled = [coder decodeBoolForKey:CancelButtonKey];
-//    self.mapCenterAddress = [coder decodeObjectForKey:MapCenterAddressKey];
     [self.mapView setRegion:MKCoordinateRegionMake(
                                                    CLLocationCoordinate2DMake([coder decodeDoubleForKey:RegionCenterLatKey], [coder decodeDoubleForKey:RegionCenterLongKey]),
                                                    MKCoordinateSpanMake([coder decodeDoubleForKey:RegionSpanLatKey], [coder decodeDoubleForKey:RegionSpanLongKey])
                                                    ) animated:YES];
     
-}
+    NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"stationData.txt"];
 
-+ (Station *)makeStationWithRestorationIdentifier:(NSString *)identifier
-{
-    Station* station = [Station new];
-    [UIApplication registerObjectForStateRestoration:station restorationIdentifier:identifier];
-//    station.objectRestorationClass = self;
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     
-    return station;
-}
-
-+ (Address *)makeAddressWithRestorationIdentifier:(NSString *)identifier
-{
-    Address* address = [Address new];
-    [UIApplication registerObjectForStateRestoration:address restorationIdentifier:identifier];
-//    address.objectRestorationClass = self;
-    
-    return address;
-}
-
-+ (MyLocation *)makeMyLocationWithRestorationIdentifier:(NSString *)identifier
-{
-    MyLocation* myLocation = [MyLocation new];
-    [UIApplication registerObjectForStateRestoration:myLocation restorationIdentifier:identifier];
-//    myLocation.objectRestorationClass = self;
-    
-    return myLocation;
-}
-
-+ (id<UIStateRestoring>) objectWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
-{
-    NSString *lastIdentifier = [identifierComponents lastObject];
-    
-//    if ([[identifierComponents lastObject] isEqualToString:SourceStationID])
+    self.dataController.stationList = [unarchiver decodeObjectForKey:DataControllerKey];
+    self.sourceStation = [unarchiver decodeObjectForKey:SourceStationKey];
+    self.finalDestination = [unarchiver decodeObjectForKey:FinalDestinationKey];
+    self.currentDestinationStation = [unarchiver decodeObjectForKey:CurrentDestinationStationKey];
+    self.idealDestinationStation = [unarchiver decodeObjectForKey:IdealDestinationStationKey];
+    self.closestStationsToDestination = [unarchiver decodeObjectForKey:ClosestStationsToDestinationKey];
+//    NSUInteger idx = 0;
+//    for (idx = 0; idx < [self.closestStationsToDestination count]; idx++)
 //    {
-////        return [[UIApplication sharedApplication] delegate] ;
+//        [self.closestStationsToDestination setObject:[unarchiver decodeObjectForKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx] ] atIndexedSubscript:idx];
 //    }
-    if ([lastIdentifier isEqualToString:FinalDestinationID])
-        return [self makeMyLocationWithRestorationIdentifier:lastIdentifier];
-//    else if ([[identifierComponents lastObject] isEqualToString:CurrentDestinationStationID])
-//    {
-//        
-//    }
-//    else if ([[identifierComponents lastObject] isEqualToString:IdealDestinationStationID])
-//    {
-//        
-//    }
-    else if ([lastIdentifier isEqualToString:MapCenterAddressID])
-        return [self makeAddressWithRestorationIdentifier:lastIdentifier];
+    self.mapCenterAddress = [unarchiver decodeObjectForKey:MapCenterAddressKey];
+    [unarchiver finishDecoding];
+}
+
+//+ (Station *)makeStationWithRestorationIdentifier:(NSString *)identifier
+//{
+//    Station* station = [Station new];
+//    [UIApplication registerObjectForStateRestoration:station restorationIdentifier:identifier];
+////    station.objectRestorationClass = self;
+//    
+//    return station;
+//}
+//
+//+ (Address *)makeAddressWithRestorationIdentifier:(NSString *)identifier
+//{
+//    Address* address = [Address new];
+//    [UIApplication registerObjectForStateRestoration:address restorationIdentifier:identifier];
+////    address.objectRestorationClass = self;
+//    
+//    return address;
+//}
+//
+//+ (MyLocation *)makeMyLocationWithRestorationIdentifier:(NSString *)identifier
+//{
+//    MyLocation* myLocation = [MyLocation new];
+//    [UIApplication registerObjectForStateRestoration:myLocation restorationIdentifier:identifier];
+////    myLocation.objectRestorationClass = self;
+//    
+//    return myLocation;
+//}
+//
+//+ (id<UIStateRestoring>) objectWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+//{
+//    NSString *lastIdentifier = [identifierComponents lastObject];
+//    
+////    if ([[identifierComponents lastObject] isEqualToString:SourceStationID])
+////    {
+//////        return [[UIApplication sharedApplication] delegate] ;
+////    }
+//    if ([lastIdentifier isEqualToString:FinalDestinationID])
+//        return [self makeMyLocationWithRestorationIdentifier:lastIdentifier];
+////    else if ([[identifierComponents lastObject] isEqualToString:CurrentDestinationStationID])
+////    {
+////        
+////    }
+////    else if ([[identifierComponents lastObject] isEqualToString:IdealDestinationStationID])
+////    {
+////        
+////    }
+//    else if ([lastIdentifier isEqualToString:MapCenterAddressID])
+//        return [self makeAddressWithRestorationIdentifier:lastIdentifier];
+////    else
+////    {
+////        NSUInteger idx = 0;
+////        for (idx = 0; idx < [self.closestStationsToDestination count]; idx++)
+////        {
+////            if ([[identifierComponents lastObject] isEqualToString:SourceStationID])
+////            {
+////                
+////            }
+////        }
+////    }
 //    else
-//    {
-//        NSUInteger idx = 0;
-//        for (idx = 0; idx < [self.closestStationsToDestination count]; idx++)
-//        {
-//            if ([[identifierComponents lastObject] isEqualToString:SourceStationID])
-//            {
-//                
-//            }
-//        }
-//    }
-    else
-        return [self makeStationWithRestorationIdentifier:lastIdentifier];
-}
+//        return [self makeStationWithRestorationIdentifier:lastIdentifier];
+//}
 
 - (void)applicationFinishedRestoringState
 {
@@ -717,7 +764,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     
     //Get ready to bike, set the new state and the final destination location
     self.bikingState = BikingStatePreparingToBike;
-    self.finalDestination = [[notif userInfo] valueForKey:kBikeDestinationKey];
+    self.finalDestination = [[[notif userInfo] valueForKey:kBikeDestinationKey] copy];
     
     //Disable the bikes/docks toggle:
     [self.bikesDocksControl setHidden:YES];
@@ -851,7 +898,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
             pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
             zoomRect = MKMapRectUnion(zoomRect, pointRect);
         }
-        [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(44, 5, 5, 5) animated:YES];
+        [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(44, 5, 44, 5) animated:YES];
     }
     
     //Change the annotation identifiers for the Station/MyLocation objects we want to view as annotations on the map:

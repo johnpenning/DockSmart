@@ -11,7 +11,7 @@
 
 @class MyLocation;
 
-@interface Address : MyLocation
+@interface Address : MyLocation <NSCoding, NSCopying>
 
 //geolocation properties/methods to be declared here
 @property (nonatomic, readonly) CLPlacemark *placemark;

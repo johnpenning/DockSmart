@@ -132,10 +132,30 @@ static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
         self.nbEmptyDocks = [aDecoder decodeIntegerForKey:NbEmptyDocksKey];
         self.lastStationUpdate = [aDecoder decodeObjectForKey:LastStationUpdateKey];
         self.distanceFromDestination = [aDecoder decodeDoubleForKey:DistanceFromDestinationKey];
-        
-        return self;
     }
-    return nil;
+    return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+//    Station *other = [[Station alloc] init];
+    Station *other = (Station *)[super copyWithZone:zone];
+    
+    other.stationID = self.stationID;
+    other.latitude = self.latitude;
+    other.longitude = self.longitude;
+    other.installed = self.installed;
+    other.locked = self.locked;
+    other.publiclyViewable = self.publiclyViewable;
+    other.nbBikes = self.nbBikes;
+    other.nbEmptyDocks = self.nbEmptyDocks;
+    other.lastStationUpdate = [self.lastStationUpdate copyWithZone:zone];
+    other.distanceFromDestination = self.distanceFromDestination;
+//    other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
+//    [other initCoordinateWithLatitude:self.latitude longitude:self.longitude];
+//    other.distanceFromUser = self.distanceFromUser;
+    
+    return other;
 }
 
 @end

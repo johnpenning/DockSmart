@@ -588,8 +588,9 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
 
     //Create a hint region around the user's current location for the geocoder
-    CLRegion *region = [[CLRegion alloc]
-                        initCircularRegionWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
+//    CLRegion *region = [[CLRegion alloc]
+//                        initCircularRegionWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
+    CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
     
     //Perform the geocode
     [geocoder geocodeAddressString:string inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {

@@ -34,7 +34,7 @@
  The data we care about is declared in the Station object and parsed appropriately.
  */
 /* TODO: make this a subclass of MyLocation?*/
-@interface Station : MyLocation <MKAnnotation>
+@interface Station : MyLocation <MKAnnotation, NSCoding, NSCopying>
 
 //{
 //@private

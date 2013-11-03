@@ -86,11 +86,15 @@ static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 //- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self.name = [aDecoder decodeObjectForKey:NameKey];
-    _coordinate = CLLocationCoordinate2DMake([aDecoder decodeDoubleForKey:CoordinateLatitudeKey], [aDecoder decodeDoubleForKey:CoordinateLongitudeKey]);
-    self.distanceFromUser = [aDecoder decodeDoubleForKey:DistanceFromUserKey];
-    self.annotationIdentifier = [aDecoder decodeObjectForKey:AnnotationIdentifierKey];
+    self = [super init];
     
+    if (self)
+    {
+        self.name = [aDecoder decodeObjectForKey:NameKey];
+        _coordinate = CLLocationCoordinate2DMake([aDecoder decodeDoubleForKey:CoordinateLatitudeKey], [aDecoder decodeDoubleForKey:CoordinateLongitudeKey]);
+        self.distanceFromUser = [aDecoder decodeDoubleForKey:DistanceFromUserKey];
+        self.annotationIdentifier = [aDecoder decodeObjectForKey:AnnotationIdentifierKey];
+    }
     return self;
 }
 
@@ -103,6 +107,14 @@ static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLocation *other = [[MyLocation alloc] initWithName:[self.name copyWithZone:zone] coordinate:self.coordinate distanceFromUser:self.distanceFromUser];
+    other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
+    
+    return other;
 }
 
 
