@@ -374,30 +374,9 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8R-L6-wV5">
-                                <rect key="frame" x="20" y="472" width="280" height="30"/>
-                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
-                                <state key="normal" title="Set Destination">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="center" image="bikepointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="rhK-Ye-sEA">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                             </imageView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1IL-EO-eSi">
-                                <rect key="frame" x="256" y="459" width="44" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="29E-kF-jPT"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" image="close.png">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ess-m6-m8a" userLabel="Bottom Toolbar">
                                 <rect key="frame" x="0.0" y="475" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -421,7 +400,7 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kj4-f2-tGQ">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="Kj4-f2-tGQ" userLabel="Address Label">
                                 <rect key="frame" x="0.0" y="431" width="320" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="NxG-kw-rpD"/>
@@ -433,17 +412,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="trailing" secondItem="1IL-EO-eSi" secondAttribute="trailing" constant="20" id="3Rg-qQ-jhT"/>
                             <constraint firstItem="nB1-ES-hGh" firstAttribute="top" secondItem="ess-m6-m8a" secondAttribute="bottom" id="3lu-aJ-F8S"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="trailing" secondItem="rhK-Ye-sEA" secondAttribute="trailing" id="49R-DN-BqS"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="trailing" secondItem="lTq-OJ-asp" secondAttribute="trailing" id="5Cg-yW-OXI"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="leading" secondItem="17" secondAttribute="leading" id="7XW-Xt-Rai"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="leading" secondItem="rhK-Ye-sEA" secondAttribute="leading" id="DEM-jN-Xe8"/>
                             <constraint firstAttribute="trailing" secondItem="ess-m6-m8a" secondAttribute="trailing" id="DzJ-HE-1DW"/>
-                            <constraint firstItem="nB1-ES-hGh" firstAttribute="top" secondItem="1IL-EO-eSi" secondAttribute="bottom" constant="18" id="E4A-6o-RpY"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="top" secondItem="rhK-Ye-sEA" secondAttribute="top" id="FNc-Si-XZ7"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="top" secondItem="17" secondAttribute="top" id="Iab-kS-VUd"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="height" secondItem="rhK-Ye-sEA" secondAttribute="height" id="Kgb-og-pTU"/>
+                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="bottom" secondItem="ess-m6-m8a" secondAttribute="top" id="R0o-CV-50a"/>
                             <constraint firstAttribute="trailing" secondItem="lTq-OJ-asp" secondAttribute="trailing" id="S3Y-Ml-R0P"/>
                             <constraint firstItem="Kj4-f2-tGQ" firstAttribute="leading" secondItem="17" secondAttribute="leading" id="WtA-oN-Str"/>
                             <constraint firstItem="Kj4-f2-tGQ" firstAttribute="centerX" secondItem="ess-m6-m8a" secondAttribute="centerX" id="XMx-Jo-q0U"/>
@@ -452,10 +430,6 @@
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="leading" secondItem="lTq-OJ-asp" secondAttribute="leading" id="gcR-Iw-KQS"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="bottom" secondItem="rhK-Ye-sEA" secondAttribute="bottom" id="iJc-15-sOX"/>
                             <constraint firstItem="bko-ft-Kfm" firstAttribute="width" secondItem="rhK-Ye-sEA" secondAttribute="width" id="kBa-Mz-mCt"/>
-                            <constraint firstItem="1IL-EO-eSi" firstAttribute="trailing" secondItem="j8R-L6-wV5" secondAttribute="trailing" id="kQb-dV-W9H"/>
-                            <constraint firstItem="nB1-ES-hGh" firstAttribute="top" secondItem="j8R-L6-wV5" secondAttribute="bottom" constant="17" id="pIy-qU-p3a"/>
-                            <constraint firstItem="j8R-L6-wV5" firstAttribute="top" secondItem="Kj4-f2-tGQ" secondAttribute="bottom" constant="-3" id="q1U-HC-uJu"/>
-                            <constraint firstItem="Kj4-f2-tGQ" firstAttribute="leading" secondItem="j8R-L6-wV5" secondAttribute="leading" constant="-20" id="qaI-bG-k9x"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="leading" secondItem="17" secondAttribute="leading" id="rYe-iq-oV3"/>
                             <constraint firstItem="Kj4-f2-tGQ" firstAttribute="centerX" secondItem="lTq-OJ-asp" secondAttribute="centerX" id="uuM-m9-UQj"/>
                             <constraint firstItem="lTq-OJ-asp" firstAttribute="top" secondItem="tnN-51-lCb" secondAttribute="bottom" id="yHY-XM-QZc"/>
@@ -640,7 +614,6 @@
     </scenes>
     <resources>
         <image name="bikepointer.png" width="25" height="50"/>
-        <image name="close.png" width="42" height="42"/>
         <image name="first" width="16" height="16"/>
         <image name="second" width="16" height="16"/>
     </resources>

@@ -138,9 +138,10 @@ static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
 
 - (id)copyWithZone:(NSZone *)zone
 {
-//    Station *other = [[Station alloc] init];
-    Station *other = (Station *)[super copyWithZone:zone];
-    
+    Station *other = [[Station alloc] init];
+//    other = (Station *)[super copyWithZone:zone];
+    other = [other initWithName:[self.name copyWithZone:zone] coordinate:self.coordinate distanceFromUser:self.distanceFromUser];
+
     other.stationID = self.stationID;
     other.latitude = self.latitude;
     other.longitude = self.longitude;
@@ -151,7 +152,7 @@ static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
     other.nbEmptyDocks = self.nbEmptyDocks;
     other.lastStationUpdate = [self.lastStationUpdate copyWithZone:zone];
     other.distanceFromDestination = self.distanceFromDestination;
-//    other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
+    other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
 //    [other initCoordinateWithLatitude:self.latitude longitude:self.longitude];
 //    other.distanceFromUser = self.distanceFromUser;
     

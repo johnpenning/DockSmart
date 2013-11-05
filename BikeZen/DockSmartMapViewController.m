@@ -62,7 +62,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 //keep track of the station we're getting the bike from:
 @property (nonatomic) Station* sourceStation;
 //keep track of where we're going:
-@property (nonatomic, copy) MyLocation* finalDestination;
+@property (nonatomic) MyLocation* finalDestination;
 @property (nonatomic) Station* currentDestinationStation;
 @property (nonatomic) Station* idealDestinationStation;
 @property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
@@ -243,7 +243,6 @@ static NSString *BikesDocksControlKey = @"BikesDocksControlKey";
 static NSString *BikesDocksControlHiddenKey = @"BikesDocksControlHiddenKey";
 static NSString *BikingStateKey = @"BikingStateKey";
 static NSString *UpdateLocationStateKey = @"UpdateLocationStateKey";
-//TODO: [mapView region]? mapCenterAddress?
 static NSString *DataControllerKey = @"DataControllerKey";
 static NSString *SourceStationKey = @"SourceStationKey";
 static NSString *FinalDestinationKey = @"FinalDestinationKey";
@@ -262,9 +261,6 @@ static NSString *RegionCenterLatKey = @"RegionCenterLatKey";
 static NSString *RegionCenterLongKey = @"RegionCenterLongKey";
 static NSString *RegionSpanLatKey = @"RegionSpanLatKey";
 static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
-
-//TODO: startStopButton state & text, destinationDetailLabel, cancelButton enabled state
-
 
 - (void) encodeRestorableStateWithCoder:(NSCoder *)coder
 {
