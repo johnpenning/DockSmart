@@ -125,6 +125,87 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - State Restoration
+
+static NSString *SearchLocationKey = @"SearchLocationKey";
+static NSString *SelectedLocationKey = @"SelectedLocationKey";
+static NSString *FilterResultsKey = @"FilterResultsKey";
+static NSString *GeocodeSearchResultsKey = @"GeocodeSearchResultsKey";
+static NSString *UserCoordinateLatitudeKey = @"UserCoordinateLatitudeKey";
+static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
+
+- (void) encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super encodeRestorableStateWithCoder:coder];
+    
+    //Encode objects:
+//    [coder encodeInteger:self.userCoordinate.latitude forKey:UserCoordinateLatitudeKey];
+//    [coder encodeInteger:self.userCoordinate.longitude forKey:UserCoordinateLongitudeKey];
+    
+    NSMutableData *data = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    
+//    [archiver encodeObject:self.dataController.stationList forKey:DataControllerKey];
+    [archiver encodeObject:self.searchLocation forKey:SearchLocationKey];
+    [archiver encodeObject:self.selectedLocation forKey:SelectedLocationKey];
+    [archiver encodeObject:self.filterResults forKey:FilterResultsKey];
+    [archiver encodeObject:self.geocodeSearchResults forKey:GeocodeSearchResultsKey];
+    [archiver finishEncoding];
+    
+    //    NSString *filename = @"stationData.txt";
+    NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
+    
+    NSError *error;
+    BOOL result = [data writeToFile:path options:NSDataWritingAtomic error:&error];
+    NSLog(@"Table view archive result = %d, %@", result, error);
+    
+}
+
+
+- (void) decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super decodeRestorableStateWithCoder:coder];
+    
+    //    //Register custom objects for state restoration:
+    //    [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
+    //    [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
+    //    [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
+    //    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
+    
+//    self.userCoordinate.latitude = [coder decodeIntegerForKey:UserCoordinateLatitudeKey];
+//    self.userCoordinate.longitude = [coder decodeIntegerForKey:UserCoordinateLongitudeKey];
+
+    NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
+    
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    
+//    self.dataController.stationList = [unarchiver decodeObjectForKey:DataControllerKey];
+    self.searchLocation = [unarchiver decodeObjectForKey:SearchLocationKey];
+    self.selectedLocation = [unarchiver decodeObjectForKey:SelectedLocationKey];
+    self.filterResults = [unarchiver decodeObjectForKey:FilterResultsKey];
+    self.geocodeSearchResults = [unarchiver decodeObjectForKey:GeocodeSearchResultsKey];
+    [unarchiver finishDecoding];
+}
+
+- (void)applicationFinishedRestoringState
+{
+    //Called on restored view controllers after other object decoding is complete.
+    NSString* logText = [NSString stringWithFormat:@"finished restoring DestinationsMasterViewController"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+    
+    //TODO: the following line is perhaps not so super dangerous and dumb as implemented?  Keeps us from having to store twice as many lists...
+    self.dataController = [self.tabBarController.childViewControllers[0] dataController];
+    [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
+
+}
+
 #pragma mark - LocationControllerDelegate
 
 //- (void)locationUpdate:(CLLocation *)location
@@ -681,15 +762,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     self.navSheet = nil;
-}
-
-#pragma mark - State Restoration
-
-- (void)applicationFinishedRestoringState
-{
-    //Called on restored view controllers after other object decoding is complete.
-    
-    
 }
 
 @end
