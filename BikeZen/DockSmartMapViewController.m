@@ -663,7 +663,10 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 {
     if (animated == YES)
     {
-        [self.destinationDetailLabel setText:nil];
+        if (self.bikingState == BikingStateInactive)
+        {
+            [self.destinationDetailLabel setText:nil];
+        }
 //        [self.destinationDetailLabel setAlpha:0.5];
         [self.startStopButton setEnabled:NO];
     }
@@ -1234,6 +1237,15 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 }
 
 - (IBAction)cancelTapped:(id)sender {
+    
+    //log it for debugging
+    NSString* logText = [NSString stringWithFormat:@"cancelTapped"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     //reset to inactive
     [self clearBikeRoute];
 }
