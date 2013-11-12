@@ -105,58 +105,21 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     
     //iOS7 compatibility: allow us to programmatically attach the toolbar to the status bar
     [self.topMapToolbar setDelegate:self];
-    //NOTE:moving the toolbar down 20px was done in Interface Builder by lining it up with the topLayoutGuide
-//    CGRect frame = self.topMapToolbar.frame;
-//    frame.origin.y = 20;
-//    [self.topMapToolbar setFrame:frame];
-//    [self.view addSubview:self.topMapToolbar];
     
     self.dataController = [[LocationDataController alloc] init];
-    
-    self.mapCenterAddress = [[Address alloc] init];// [[self class] makeAddressWithRestorationIdentifier:MapCenterAddressID];// [[Address alloc] init];
-//    [UIApplication registerObjectForStateRestoration:self.mapCenterAddress restorationIdentifier:MapCenterAddressID];
-//    self.mapCenterAddress.objectRestorationClass = [self class];
-    
+    self.mapCenterAddress = [[Address alloc] init];
     self.closestStationsToDestination = [[NSMutableArray alloc] initWithCapacity:3];
-//    NSUInteger idx = 0;
-//    for (Station *station in self.closestStationsToDestination)
-//    {
-//        [UIApplication registerObjectForStateRestoration:station restorationIdentifier:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationID, idx]];
-////        station.objectRestorationClass = [self class];
-//
-//        idx++;
-//    }
+    self.sourceStation = [[Station alloc] init];
+    self.finalDestination = [[MyLocation alloc] init];
+    self.currentDestinationStation = [[Station alloc] init];
+    self.idealDestinationStation = [[Station alloc] init];
     
-    self.sourceStation = [[Station alloc] init]; //[[self class] makeStationWithRestorationIdentifier:SourceStationID]; //[[Station alloc] init];
-//    [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
-//    self.sourceStation.objectRestorationClass = [self class];
-    
-    self.finalDestination = [[MyLocation alloc] init]; // [[self class] makeMyLocationWithRestorationIdentifier:FinalDestinationID];// [[MyLocation alloc] init];
-//    [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
-//    self.finalDestination.objectRestorationClass = [self class];
-    
-    self.currentDestinationStation = [[Station alloc] init]; // [[self class] makeStationWithRestorationIdentifier:CurrentDestinationStationID]; //[[Station alloc] init];
-//    [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
-//    self.currentDestinationStation.objectRestorationClass = [self class];
-    
-    self.idealDestinationStation = [[Station alloc] init];// [[self class] makeStationWithRestorationIdentifier:IdealDestinationStationID]; //[[Station alloc] init];
-//    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
-//    self.idealDestinationStation.objectRestorationClass = [self class];
-    
-    
-    
-//    // KVO: listen for changes to our station data source for map view updates
+    // KVO: listen for changes to our station data source for map view updates
     [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(addStations:)
 //                                                 name:kAddStationsNotif
 //                                               object:nil];
-    
-    //Register custom objects for state restoration:
-//    [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
-//    [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
-//    [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
-//    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
     
     //initialize states
     [self setBikingState:BikingStateInactive];
@@ -279,7 +242,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     //Encode objects:
     [coder encodeInteger:self.bikesDocksControl.selectedSegmentIndex forKey:BikesDocksControlKey];
     [coder encodeBool:self.bikesDocksControl.hidden forKey:BikesDocksControlHiddenKey];
-    [coder encodeInteger:self.bikingState forKey:BikingStateKey];
+//    [coder encodeInteger:self.bikingState forKey:BikingStateKey];
     [coder encodeInteger:self.updateLocationState forKey:UpdateLocationStateKey];
     
 //    //    [coder encodeObject:self.dataController forKey:DataControllerKey];
@@ -326,6 +289,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     NSMutableData *data = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
+    [archiver encodeInteger:self.bikingState forKey:BikingStateKey];
     [archiver encodeObject:self.dataController.stationList forKey:DataControllerKey];
     [archiver encodeObject:self.sourceStation forKey:SourceStationKey];
     [archiver encodeObject:self.finalDestination forKey:FinalDestinationKey];
@@ -354,6 +318,13 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 
 - (void) decodeRestorableStateWithCoder:(NSCoder *)coder
 {
+    NSString* logText = [NSString stringWithFormat:@"mapViewController decodeRestorableStateWithCoder called"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     [super decodeRestorableStateWithCoder:coder];
     
     //    //Register custom objects for state restoration:
@@ -364,7 +335,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     
     self.bikesDocksControl.selectedSegmentIndex = [coder decodeIntegerForKey:BikesDocksControlKey];
     self.bikesDocksControl.hidden = [coder decodeBoolForKey:BikesDocksControlHiddenKey];
-    self.bikingState = [coder decodeIntegerForKey:BikingStateKey];
+//    self.bikingState = [coder decodeIntegerForKey:BikingStateKey];
     self.updateLocationState = [coder decodeIntegerForKey:UpdateLocationStateKey];
     //    self.dataController = [coder decodeObjectForKey:DataControllerKey];
 //    self.sourceStation = [coder decodeObjectForKey:SourceStationKey];
@@ -402,6 +373,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     
+    self.bikingState = [unarchiver decodeIntegerForKey:BikingStateKey];
     self.dataController.stationList = [unarchiver decodeObjectForKey:DataControllerKey];
     self.sourceStation = [unarchiver decodeObjectForKey:SourceStationKey];
     self.finalDestination = [unarchiver decodeObjectForKey:FinalDestinationKey];
@@ -1231,9 +1203,10 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 }
 
 - (IBAction)refeshTapped:(id)sender {
-    [self performSelectorOnMainThread:@selector(refreshWasTapped)
-                           withObject:nil
-                        waitUntilDone:NO];
+//    [self performSelectorOnMainThread:@selector(refreshWasTapped)
+//                           withObject:nil
+//                        waitUntilDone:NO];
+    [self refreshWasTapped];
 }
 
 - (IBAction)cancelTapped:(id)sender {

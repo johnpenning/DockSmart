@@ -165,6 +165,13 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 
 - (void) decodeRestorableStateWithCoder:(NSCoder *)coder
 {
+    NSString* logText = [NSString stringWithFormat:@"destinationsMasterViewController decodeRestorableStateWithCoder called"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     [super decodeRestorableStateWithCoder:coder];
     
     //    //Register custom objects for state restoration:

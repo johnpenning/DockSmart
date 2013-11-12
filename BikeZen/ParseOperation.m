@@ -132,6 +132,7 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
         [self performSelectorOnMainThread:@selector(addStationsToList:)
                                withObject:self.currentParseBatch
                             waitUntilDone:NO];
+//        [self addStationsToList:self.currentParseBatch];
     }
     
     //Stop spinning the network activity indicator:
@@ -229,6 +230,7 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
             [self performSelectorOnMainThread:@selector(addStationsToList:)
                                    withObject:self.currentParseBatch
                                 waitUntilDone:NO];
+//            [self addStationsToList:self.currentParseBatch];
             self.currentParseBatch = [NSMutableArray array];
         }
     }
@@ -370,6 +372,7 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
         [self performSelectorOnMainThread:@selector(handleStationsError:)
                                withObject:parseError
                             waitUntilDone:NO];
+//        [self handleStationsError:parseError];
     }
 }
 
