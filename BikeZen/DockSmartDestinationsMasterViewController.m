@@ -213,13 +213,6 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 
 }
 
-#pragma mark - LocationControllerDelegate
-
-//- (void)locationUpdate:(CLLocation *)location
-//{
-//    self.userCoordinate = [location coordinate];
-//}
-
 #pragma mark - KVO compliance
 
 - (void)updateLocation:(NSNotification *)notif {

@@ -129,8 +129,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
                                                             object:self
                                                           userInfo:[NSDictionary dictionaryWithObject:location forKey:kNewLocationKey]];
         
-//        [self.delegate locationUpdate:location];
-        
         //If we're not actively biking, stop updating location to save battery
 //        DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
 //        if (controller.bikingState != BikingStateActive)
@@ -211,11 +209,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
     [[NSNotificationCenter defaultCenter] postNotificationName:kRegionUpdateNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
-
-//    if([self.delegate respondsToSelector: @selector(regionUpdate:)])
-//    {
-//        [self.delegate regionUpdate:region];
-//    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
@@ -231,11 +224,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
     [[NSNotificationCenter defaultCenter] postNotificationName:kRegionUpdateNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
-
-//    if([self.delegate respondsToSelector: @selector(regionUpdate:)])
-//    {
-//        [self.delegate regionUpdate:region];
-//    }
 }
 
 #pragma mark - Singleton implementation in ARC

@@ -264,7 +264,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     [coder encodeObject:self.startStopButton.tintColor forKey:StartStopButtonTintColorKey];
     [coder encodeBool:self.startStopButton.enabled forKey:StartStopButtonEnabledKey];
     [coder encodeObject:self.destinationDetailLabel.text forKey:DestinationDetailLabelKey];
-    [coder encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
+//    [coder encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
     [coder encodeBool:self.cancelButton.enabled forKey:CancelButtonKey];
     [coder encodeDouble:[self.mapView region].center.latitude forKey:RegionCenterLatKey];
     [coder encodeDouble:[self.mapView region].center.longitude forKey:RegionCenterLongKey];
@@ -303,6 +303,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //        idx++;
 //    }
     [archiver encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
+    [archiver encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
     [archiver finishEncoding];
     
 //    NSString *filename = @"stationData.txt";
@@ -360,7 +361,8 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     self.startStopButton.tintColor = [coder decodeObjectForKey:StartStopButtonTintColorKey];
     self.startStopButton.enabled = [coder decodeBoolForKey:StartStopButtonEnabledKey];
     self.destinationDetailLabel.text = [coder decodeObjectForKey:DestinationDetailLabelKey];
-    self.bikeCrosshairImage.hidden = [coder decodeBoolForKey:BikeCrosshairImageKey];
+    //set hidden state in archiver? is not hidden when app launches in background
+//    self.bikeCrosshairImage.hidden = [coder decodeBoolForKey:BikeCrosshairImageKey];
     self.cancelButton.enabled = [coder decodeBoolForKey:CancelButtonKey];
     [self.mapView setRegion:MKCoordinateRegionMake(
                                                    CLLocationCoordinate2DMake([coder decodeDoubleForKey:RegionCenterLatKey], [coder decodeDoubleForKey:RegionCenterLongKey]),
@@ -386,6 +388,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //        [self.closestStationsToDestination setObject:[unarchiver decodeObjectForKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx] ] atIndexedSubscript:idx];
 //    }
     self.mapCenterAddress = [unarchiver decodeObjectForKey:MapCenterAddressKey];
+    self.bikeCrosshairImage.hidden = [unarchiver decodeBoolForKey:BikeCrosshairImageKey];
     [unarchiver finishDecoding];
 }
 
@@ -732,9 +735,6 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 - (void)prepareBikeRoute:(NSNotification *)notif
 {
 //    assert([NSThread isMainThread]);
-
-    //Make sure this view is showing (TODO: let the tableViewController handle this?)
-//    [[self view] bringSubviewToFront:[self view]];
     
     //Get ready to bike, set the new state and the final destination location
     self.bikingState = BikingStatePreparingToBike;
@@ -1080,7 +1080,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                     {
 //                      NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
                         
-                        //TODO: alert the user to bike to the idealDestinationStation instead!
+                        //Alert the user to bike to the idealDestinationStation instead!
                         self.currentDestinationStation.annotationIdentifier = kAlternateStation;
                         self.currentDestinationStation = station;
                         self.currentDestinationStation.annotationIdentifier = kDestinationStation;
@@ -1127,48 +1127,6 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                     }
                 }
                 
-//                if (self.currentDestinationStation.stationID != self.idealDestinationStation.stationID && station.stationID == self.idealDestinationStation.stationID && station.nbEmptyDocks > 0 && self.idealDestinationStation.nbEmptyDocks == 0)
-//                {
-////                    NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
-//
-//                    //TODO: alert the user to bike to the idealDestinationStation instead!
-//                    self.currentDestinationStation.annotationIdentifier = kAlternateStation;
-//                    self.currentDestinationStation = self.idealDestinationStation;
-//                    self.currentDestinationStation.annotationIdentifier = kDestinationStation;
-//
-//                    UILocalNotification *bikeToIdealStationNotification = [[UILocalNotification alloc] init];
-//                    [bikeToIdealStationNotification setAlertBody:[NSString stringWithFormat:@"A dock has opened up at %@! Bike there instead!", self.currentDestinationStation.name]];
-//                    [bikeToIdealStationNotification setFireDate:[NSDate date]];
-//                    [[UIApplication sharedApplication] scheduleLocalNotification:bikeToIdealStationNotification];
-//                    //TODO: Reload mapView w/ new icon colors
-//
-//                    break;
-//                }
-//                //if we didn't have any luck there, check if the currentDestinationStation filled up:
-//                else if (station.stationID == self.currentDestinationStation.stationID && self.currentDestinationStation.nbEmptyDocks > 0 && station.nbEmptyDocks == 0)
-//                {
-//                    //it filled up... alert the user to go to the next non-empty station
-//                    //re-sort station list with the distance from the destination
-//                    [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByDistanceFromDestination]];
-//                    for (Station *newStation in self.dataController.sortedStationList)
-//                    {
-//                        if (newStation.nbEmptyDocks > 0)
-//                        {
-//                            self.currentDestinationStation.annotationIdentifier = kAlternateStation;
-//                            self.currentDestinationStation = newStation;
-//                            self.currentDestinationStation.annotationIdentifier = kDestinationStation;
-//                            
-//                            UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
-//                            [bikeToNextBestStationNotification setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.", station.name, self.currentDestinationStation.name]];
-//                            [bikeToNextBestStationNotification setFireDate:[NSDate date]];
-//                            [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
-//                            //TODO: Reload mapView w/ new icon colors
-//
-//                            break;
-//                        }
-//                    }
-//                    break;
-//                }
                 //else, the user should just keep biking to the currentDestinationStation...
                 
                 //reload annotations
@@ -1281,16 +1239,6 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //    };
 //}
 
-#pragma mark - LocationControllerDelegate
-
-//- (void)locationUpdate:(CLLocation *)location
-//{
-//    if (self.bikingState != BikingStateActive)
-//    {
-//        [[LocationController sharedInstance] stopUpdatingCurrentLocation];
-//    }
-//}
-
 - (void)updateLocation:(NSNotification *)notif
 {
     if (self.bikingState != BikingStateActive)
@@ -1306,14 +1254,6 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
         [self setUpdateLocationState:UpdateLocationStateInactive];
     }
 }
-
-//- (void)regionUpdate:(CLRegion *)region
-//{
-//    [self refreshWasTapped];
-//    
-//    //TODO: stop tracking if we've reached either the ideal or current destination station?
-//    //TODO: if the user is at current and ideal is open, notify them?
-//}
 
 - (void)updateRegion:(NSNotification *)notif
 {
