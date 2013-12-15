@@ -25,6 +25,7 @@
 //- (void)addStationsToList:(NSArray *)stations;
 - (void)handleError:(NSError *)error;
 - (void)loadXMLData;
+- (void)loadJSONData;
 - (void)refreshStationData:(NSNotification *)notif;
 - (void)stationError:(NSNotification *)notif;
 @end
@@ -87,7 +88,8 @@
 //    // so we no longer need a reference to it in the main thread.
 //    self.stationXMLData = nil;
     
-    [self loadXMLData];
+//    [self loadXMLData];
+    [self loadJSONData];
     
     NSNumber *startLocation = [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey];
     UILocalNotification *triggeredNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -202,7 +204,9 @@
 //    }
     
 //    // TODO: Reload the station data?
-    [self loadXMLData];
+//    [self loadXMLData];
+    [self loadJSONData];
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -335,11 +339,49 @@
     self.stationXMLData = nil;
 }
 
+- (void)loadJSONData
+{
+    //Start spinning the network activity indicator:
+    [self setNetworkActivityIndicatorVisible:YES];
+
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[NSString stringWithFormat:@"http://api.citybik.es/capitalbikeshare.json"]
+      parameters:nil
+         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//             self.weather = (NSDictionary *)responseObject;
+//             self.title = @"JSON Retrieved";
+//             [self.tableView reloadData];
+
+             //Stop spinning the network activity indicator:
+             [self setNetworkActivityIndicatorVisible:NO];
+
+             NSDictionary *liveData = (NSDictionary *)responseObject;
+             [self parseLiveData:liveData];
+             
+             [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
+                                                                 object:self
+                                                               userInfo:[NSDictionary dictionaryWithObject:stations
+                                                                                                    forKey:kStationResultsKey]];
+
+         }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+
+             //Stop spinning the network activity indicator:
+             [self setNetworkActivityIndicatorVisible:NO];
+
+             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+             [av show];
+         }];
+}
+
 - (void)refreshStationData:(NSNotification *)notif
 {
 //    assert([NSThread isMainThread]);
     
-    [self loadXMLData];
+//    [self loadXMLData];
+    [self loadJSONData];
+
 }
 
 //Manage the network activity indicator (from http://oleb.net/blog/2009/09/managing-the-network-activity-indicator/ )
@@ -359,6 +401,10 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(NumberOfCallsToSetVisible > 0)];
 }
 
+- (void)parseLiveData:(NSDictionary*)data
+{
+    
+}
 
 #pragma mark - CLLocationManagerDelegate
 #if 0
