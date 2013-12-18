@@ -12,6 +12,7 @@
 #import "DockSmartMapViewController.h"
 #import "LocationDataController.h"
 #import "DockSmartSettingsViewController.h"
+#import "NSDictionary+CityBikesAPI.h"
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -359,10 +360,10 @@
              NSDictionary *liveData = (NSDictionary *)responseObject;
              [self parseLiveData:liveData];
              
-             [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
-                                                                 object:self
-                                                               userInfo:[NSDictionary dictionaryWithObject:stations
-                                                                                                    forKey:kStationResultsKey]];
+//             [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
+//                                                                 object:self
+//                                                               userInfo:[NSDictionary dictionaryWithObject:stations
+//                                                                                                    forKey:kStationResultsKey]];
 
          }
          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -403,7 +404,35 @@
 
 - (void)parseLiveData:(NSDictionary*)data
 {
+    NSMutableArray *stations = [NSMutableArray array];
     
+    for (id item in data)
+    {
+        Station *tempStation = [[Station alloc] init];
+        
+        tempStation.stationID = [item stationID];
+//        NSLog(@"StationID: %d", tempStation.stationID);
+        tempStation.name = [item name];
+        tempStation.latitude = [item lat];
+        tempStation.longitude = [item lng];
+        tempStation.nbBikes = [item bikes];
+        tempStation.nbEmptyDocks = [item free];
+        tempStation.lastStationUpdate = [(NSDictionary*)item timestamp];
+//        NSLog(@"lastStationUpdate: %@", tempStation.lastStationUpdate);
+        tempStation.installed = [item installed];
+        tempStation.locked = [item locked];
+        
+        [tempStation initCoordinateWithLatitude:tempStation.latitude longitude:tempStation.longitude];
+        
+        //add the Station object to the array
+        [stations addObject:tempStation];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:stations
+                                                                                           forKey:kStationResultsKey]];
+
 }
 
 #pragma mark - CLLocationManagerDelegate
