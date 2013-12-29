@@ -11,7 +11,7 @@
 #import "ParseOperation.h"
 #import "DockSmartMapViewController.h"
 #import "LocationDataController.h"
-#import "DockSmartSettingsViewController.h"
+#import "DockSmartLogViewController.h"
 #import "NSDictionary+CityBikesAPI.h"
 
 NSString const *kCurrentCityUrl = @"currentCityUrl";

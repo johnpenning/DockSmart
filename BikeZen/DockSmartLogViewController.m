@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
 
-#import "DockSmartSettingsViewController.h"
+#import "DockSmartLogViewController.h"
 
 // NSNotification name for sending a log to the text view
 NSString *kLogToTextViewNotif = @"LogToTextViewNotif";
@@ -14,7 +14,7 @@ NSString *kLogToTextViewNotif = @"LogToTextViewNotif";
 // NSNotification userInfo key for obtaining the log text
 NSString *kLogTextKey = @"LogTextKey";
 
-@interface DockSmartSettingsViewController ()
+@interface DockSmartLogViewController ()
 
 @property (nonatomic, copy) NSString* preloadText;
 
@@ -22,7 +22,7 @@ NSString *kLogTextKey = @"LogTextKey";
 
 @end
 
-@implementation DockSmartSettingsViewController
+@implementation DockSmartLogViewController
 
 //- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 //{

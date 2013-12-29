@@ -11,7 +11,7 @@
 extern NSString *kLogToTextViewNotif;
 extern NSString *kLogTextKey;
 
-@interface DockSmartSettingsViewController : UIViewController
+@interface DockSmartLogViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITextView *settingsTextView;
 

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "DockSmartSettingsViewController.h"
+#import "DockSmartLogViewController.h"
 
 // Reuse identifiers for MyLocation annotations in the MapView
 extern NSString *kSourceStation;

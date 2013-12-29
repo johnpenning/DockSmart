@@ -15,7 +15,7 @@
 #import "Address.h"
 #import "LocationDataController.h"
 #import "ParseOperation.h"
-#import "DockSmartSettingsViewController.h"
+#import "DockSmartLogViewController.h"
 #import "DockSmartAppDelegate.h"
 
 // NSNotification name for reporting that refresh was tapped

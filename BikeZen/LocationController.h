@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "LocationDataController.h"
-#import "DockSmartSettingsViewController.h"
+#import "DockSmartLogViewController.h"
 
 extern NSString *kLocationUpdateNotif;
 extern NSString *kNewLocationKey;
