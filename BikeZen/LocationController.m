@@ -121,10 +121,11 @@ NSString *kNewRegionKey = @"NewRegionKey";
     {
         // If the event is recent, do something with it.
         
-//        _userCoordinate = [location coordinate];
+        //store it in the singleton's location property
+        self.location = location;
         
         NSLog(@"New location: %@", location);
-        
+        //post notification
         [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
                                                             object:self
                                                           userInfo:[NSDictionary dictionaryWithObject:location forKey:kNewLocationKey]];

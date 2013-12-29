@@ -21,6 +21,8 @@
 //@property (strong, nonatomic) CLLocationManager *locationManager;
 //@property (readonly) CLLocationCoordinate2D userCoordinate;
 
+@property (nonatomic) NSString *currentCityUrl;
+
 - (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible;
 
 @end

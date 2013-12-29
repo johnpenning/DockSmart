@@ -12,3 +12,5 @@ BikeZen/Images/bikepointer.xcf
 DockSmart.xcodeproj/xcuserdata/jpenning.xcuserdatad/xcschemes/xcschememanagement.plist
 
 *.xccheckout
+
+*.xcexplist

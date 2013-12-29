@@ -7,6 +7,8 @@
 //
 
 #import "NSDictionary+CityBikesAPI.h"
+#import "DockSmartAppDelegate.h"
+#import "define.h"
 
 @implementation NSDictionary (CityBikesAPI)
 
@@ -20,7 +22,14 @@
 {
     NSString *str = [self objectForKey:@"name"];
     //Take the first 8 characters out of the name, where the ID number is (for DC only... current API does not standardize this, so might have to make it city-specific for now)
-    return [str stringByReplacingCharactersInRange:NSMakeRange(0, 8) withString:@""];
+    if ([[(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] currentCityUrl] isEqualToString:CITY_URL_DC])
+    {
+        return [str stringByReplacingCharactersInRange:NSMakeRange(0, 8) withString:@""];
+    }
+    else
+    {
+        return str;
+    }
 }
 
 -(CLLocationDegrees)lat
@@ -69,6 +78,12 @@
 {
     bool n = [[self objectForKey:@"locked"] boolValue];
     return n;
+}
+
+-(NSString *)url
+{
+    NSString *str = [self objectForKey:@"url"];
+    return str;
 }
 
 @end

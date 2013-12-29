@@ -11,14 +11,20 @@
 
 @interface NSDictionary (CityBikesAPI)
 
+//Used in <system>.json
 -(NSInteger)stationID;
 -(NSString *)name;
--(CLLocationDegrees)lat;
--(CLLocationDegrees)lng;
 -(NSInteger)bikes;
 -(NSInteger)free;
 -(NSDate *)timestamp;
 -(bool)installed;
 -(bool)locked;
+
+//Used in networks.json
+-(NSString *)url;
+
+//Used in both networks.json and <system>.json
+-(CLLocationDegrees)lat;
+-(CLLocationDegrees)lng;
 
 @end

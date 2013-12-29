@@ -14,6 +14,8 @@
 #import "DockSmartSettingsViewController.h"
 #import "NSDictionary+CityBikesAPI.h"
 
+NSString const *kCurrentCityUrl = @"currentCityUrl";
+
 #pragma mark DockSmartAppDelegate ()
 
 // forward declarations
@@ -26,7 +28,11 @@
 //- (void)addStationsToList:(NSArray *)stations;
 - (void)handleError:(NSError *)error;
 - (void)loadXMLData;
-- (void)loadJSONData;
+- (void)loadJSONCityData;
+- (NSString *)closestBikeshareNetworkToLocation:(CLLocation*)location withData:(NSDictionary*)networkData;
+- (void)loadJSONBikeDataForCityWithUrl:(NSString *)url;
+- (void)parseLiveData:(NSDictionary*)data;
+//- (void)loadJSONData;
 - (void)refreshStationData:(NSNotification *)notif;
 - (void)stationError:(NSNotification *)notif;
 @end
@@ -77,6 +83,9 @@
                                                  name:kTrackingStoppedNotif
                                                object:nil];
     
+    // Recall current city URL from NSUserDefaults:
+    self.currentCityUrl = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentCityUrl];
+    
     // Spawn an NSOperation to parse the earthquake data so that the UI is not blocked while the
     // application parses the XML data.
     //
@@ -90,7 +99,7 @@
 //    self.stationXMLData = nil;
     
 //    [self loadXMLData];
-    [self loadJSONData];
+//    [self loadJSONData]; //taken care of in ApplicationDidBecomeActive:
     
     NSNumber *startLocation = [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey];
     UILocalNotification *triggeredNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -206,7 +215,8 @@
     
 //    // TODO: Reload the station data?
 //    [self loadXMLData];
-    [self loadJSONData];
+//    [self loadJSONData];
+    [self loadJSONCityData];
 
 }
 
@@ -340,31 +350,92 @@
     self.stationXMLData = nil;
 }
 
-- (void)loadJSONData
+- (void)loadJSONCityData
+{
+    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+    if (controller.bikingState != BikingStateInactive)
+    {
+        [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
+        return;
+    }
+    
+    //Start spinning the network activity indicator:
+    [self setNetworkActivityIndicatorVisible:YES];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[NSString stringWithFormat:@"http://api.citybik.es/networks.json"]
+      parameters:nil
+         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+             
+             //Stop spinning the network activity indicator:
+             [self setNetworkActivityIndicatorVisible:NO];
+             
+             NSDictionary *networkData = (NSDictionary *)responseObject;
+             
+             //Find the closest network to the current user location:
+             self.currentCityUrl = [self closestBikeshareNetworkToLocation:[[LocationController sharedInstance] location] withData:networkData];
+             
+             //Save the URL for the current city in NSUserDefaults:
+             [[NSUserDefaults standardUserDefaults] setObject:self.currentCityUrl forKey:kCurrentCityUrl];
+             [[NSUserDefaults standardUserDefaults] synchronize];
+             
+             //Load this city's bike data:
+             [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
+         }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+             
+             //Stop spinning the network activity indicator:
+             [self setNetworkActivityIndicatorVisible:NO];
+             
+             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+             [av show];
+         }];
+}
+
+//Returns the URL pointing towards the data for the closest network to a location, using the location of all the networks as listed in the networkData NSDictionary.
+- (NSString *)closestBikeshareNetworkToLocation:(CLLocation*)location withData:(NSDictionary*)networkData
+{
+    //Find the distance from location to each network center and add that distance to new key-value pair in NSDictionary
+//    NSMutableArray /*NSDictionary*/ *newNetworkDict = [(NSArray*)networkData mutableCopy];
+    NSMutableArray *newCityData = [[NSMutableArray alloc] init];//[[NSMutableArray alloc] initWithCapacity:[networkData count]];
+    CLLocationDistance distanceToUser;
+    
+    for (id item in networkData)
+    {
+        distanceToUser = MKMetersBetweenMapPoints(MKMapPointForCoordinate([location coordinate]), MKMapPointForCoordinate(CLLocationCoordinate2DMake([item lat], [item lng])));
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:[item url] forKey:@"url"];
+        [dict setObject:[NSNumber numberWithDouble:distanceToUser] forKey:@"distance"];
+        [newCityData addObject:dict];
+    }
+    
+    //Sort newCityData using new key-value pair
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"distance" ascending:YES];
+    
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray = [newCityData sortedArrayUsingDescriptors:sortDescriptors];
+    
+    //Grab the top one and return the URL pointing towards the data for that network.
+    return [[sortedArray objectAtIndex:0] valueForKey:@"url"];
+}
+
+- (void)loadJSONBikeDataForCityWithUrl:(NSString *)url
 {
     //Start spinning the network activity indicator:
     [self setNetworkActivityIndicatorVisible:YES];
 
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"http://api.citybik.es/capitalbikeshare.json"]
+    [manager GET:url /*[NSString stringWithFormat:@"http://api.citybik.es/capitalbikeshare.json"]*/
       parameters:nil
          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//             self.weather = (NSDictionary *)responseObject;
-//             self.title = @"JSON Retrieved";
-//             [self.tableView reloadData];
 
              //Stop spinning the network activity indicator:
              [self setNetworkActivityIndicatorVisible:NO];
 
              NSDictionary *liveData = (NSDictionary *)responseObject;
+             //Parse the new data:
              [self parseLiveData:liveData];
-             
-//             [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
-//                                                                 object:self
-//                                                               userInfo:[NSDictionary dictionaryWithObject:stations
-//                                                                                                    forKey:kStationResultsKey]];
-
          }
          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
@@ -381,7 +452,8 @@
 //    assert([NSThread isMainThread]);
     
 //    [self loadXMLData];
-    [self loadJSONData];
+//    [self loadJSONData];
+    [self loadJSONCityData];
 
 }
 

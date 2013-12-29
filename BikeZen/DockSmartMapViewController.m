@@ -1249,7 +1249,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     if (self.updateLocationState == UpdateLocationStateActive)
     {
         MKCoordinateRegion region = [self.mapView region];
-        region.center = [self.dataController userCoordinate];
+        region.center = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
         [self.mapView setRegion:region animated:YES];
         [self setUpdateLocationState:UpdateLocationStateInactive];
     }
