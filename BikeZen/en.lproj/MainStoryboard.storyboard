@@ -77,7 +77,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" restorationIdentifier="SearchBar" placeholder="Address or Station Name" translucent="NO" id="WjL-JQ-SzA">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -86,7 +86,7 @@
                         </searchBar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StationCell" textLabel="ImL-GD-LDD" detailTextLabel="ARn-oP-k8n" style="IBUITableViewCellStyleSubtitle" id="Jw7-YQ-26e">
-                                <rect key="frame" x="0.0" y="66" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="130" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jw7-YQ-26e" id="C0X-9J-7zu">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -108,7 +108,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AddressCell" textLabel="oRY-Gd-yyA" detailTextLabel="7zt-DT-Dkd" style="IBUITableViewCellStyleSubtitle" id="1Mx-Pq-XDB">
-                                <rect key="frame" x="0.0" y="110" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="174" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1Mx-Pq-XDB" id="oa5-Ng-4oZ">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -131,7 +131,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SearchCell" textLabel="Nxb-Zk-K8t" style="IBUITableViewCellStyleDefault" id="Jwe-j3-LRW">
-                                <rect key="frame" x="0.0" y="154" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="218" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jwe-j3-LRW" id="KVb-dJ-jKQ">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -451,10 +451,10 @@
             </objects>
             <point key="canvasLocation" x="653" y="498"/>
         </scene>
-        <!--Dock Smart Log View Controller - Settings-->
+        <!--Dock Smart Log View Controller - Log-->
         <scene sceneID="x7W-iZ-B5L">
             <objects>
-                <viewController storyboardIdentifier="DockSmartSettingsViewController" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kVJ-pD-cm1" customClass="DockSmartLogViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DockSmartLogViewController" title="Log" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kVJ-pD-cm1" customClass="DockSmartLogViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oJb-xJ-gdl"/>
                         <viewControllerLayoutGuide type="bottom" id="HoK-Cg-Srd"/>
@@ -475,10 +475,10 @@
                             <constraint firstItem="TUe-CF-5nA" firstAttribute="top" secondItem="oJb-xJ-gdl" secondAttribute="bottom" id="Jnq-Ux-mFK"/>
                             <constraint firstItem="TUe-CF-5nA" firstAttribute="leading" secondItem="dFJ-WA-vmv" secondAttribute="leading" id="bsx-iN-BZZ"/>
                             <constraint firstItem="TUe-CF-5nA" firstAttribute="trailing" secondItem="dFJ-WA-vmv" secondAttribute="trailing" id="cAF-jS-uDQ"/>
-                            <constraint firstItem="HoK-Cg-Srd" firstAttribute="top" secondItem="TUe-CF-5nA" secondAttribute="bottom" id="kdt-hK-xpX"/>
+                            <constraint firstItem="HoK-Cg-Srd" firstAttribute="top" secondItem="TUe-CF-5nA" secondAttribute="bottom" constant="49" id="kdt-hK-xpX"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" image="first" id="AMz-4A-r2M"/>
+                    <tabBarItem key="tabBarItem" title="Log" image="first" id="AMz-4A-r2M"/>
                     <connections>
                         <outlet property="settingsTextView" destination="TUe-CF-5nA" id="aSa-6H-FnC"/>
                     </connections>
@@ -486,6 +486,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jce-o9-lTb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="653" y="1151"/>
+        </scene>
+        <!--Dock Smart Settings View Controller - Settings-->
+        <scene sceneID="kFs-65-LVL">
+            <objects>
+                <viewController storyboardIdentifier="DockSmartSettingsViewController" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oJm-bx-PjN" customClass="DockSmartSettingsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4FY-cY-4xL"/>
+                        <viewControllerLayoutGuide type="bottom" id="hm3-ea-vUF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6PG-In-uGZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Settings" image="first" id="5Oe-uw-35K"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pjs-8c-wQp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1201" y="1153"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="15">
@@ -500,7 +519,7 @@
                     <connections>
                         <segue destination="3" kind="relationship" relationship="viewControllers" id="27"/>
                         <segue destination="c4R-mj-eZh" kind="relationship" relationship="viewControllers" id="rvS-S7-3lV"/>
-                        <segue destination="kVJ-pD-cm1" kind="relationship" relationship="viewControllers" id="XQR-0R-4n9"/>
+                        <segue destination="oJm-bx-PjN" kind="relationship" relationship="viewControllers" id="D8n-6K-BDb"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="14" sceneMemberID="firstResponder"/>

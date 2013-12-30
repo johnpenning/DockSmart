@@ -7,6 +7,7 @@
 //
 
 #import "DockSmartAppDelegate.h"
+#import "define.h"
 #import "Station.h"
 #import "ParseOperation.h"
 #import "DockSmartMapViewController.h"
@@ -14,7 +15,7 @@
 #import "DockSmartLogViewController.h"
 #import "NSDictionary+CityBikesAPI.h"
 
-NSString const *kCurrentCityUrl = @"currentCityUrl";
+NSString *kCurrentCityUrl = @"currentCityUrl";
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -85,6 +86,10 @@ NSString const *kCurrentCityUrl = @"currentCityUrl";
     
     // Recall current city URL from NSUserDefaults:
     self.currentCityUrl = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentCityUrl];
+    if (!self.currentCityUrl)
+    {
+        self.currentCityUrl = CITY_URL_DC;
+    }
     
     // Spawn an NSOperation to parse the earthquake data so that the UI is not blocked while the
     // application parses the XML data.

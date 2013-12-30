@@ -269,6 +269,8 @@
 		CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */; };
 		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
+		CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */; };
+		CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CDC5C7C21870F63A0036BF18 /* Settings.bundle */; };
 		CDDD4CE217B0904F00E45B21 /* bikepointer.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDD4CE117B0904F00E45B21 /* bikepointer.png */; };
 /* End PBXBuildFile section */
 
@@ -571,6 +573,9 @@
 		CDC453FC1736D5DA008E2966 /* ParseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ParseOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Station.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CDC453FF1736D7BF008E2966 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Station.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartSettingsViewController.h; sourceTree = "<group>"; };
+		CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartSettingsViewController.m; sourceTree = "<group>"; };
+		CDC5C7C21870F63A0036BF18 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		CDDD4CE117B0904F00E45B21 /* bikepointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bikepointer.png; sourceTree = "<group>"; };
 		CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultsDetailViewController.h; sourceTree = "<group>"; };
 		CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultsDetailViewController.m; sourceTree = "<group>"; };
@@ -606,6 +611,7 @@
 		CD529EAE1730B77F005420D6 = {
 			isa = PBXGroup;
 			children = (
+				CDC5C7C21870F63A0036BF18 /* Settings.bundle */,
 				CD4C1BDE17DBBDE2008B0900 /* DupontTo14thBiking.gpx */,
 				CD4C1BDC17DBBA29008B0900 /* DupontTo14RIDriving2.gpx */,
 				CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */,
@@ -685,6 +691,8 @@
 				CD39AD381778C11100446A9A /* Address.m */,
 				CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */,
 				CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */,
+				CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */,
+				CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */,
 			);
 			name = DockSmart;
 			path = BikeZen;
@@ -1074,6 +1082,7 @@
 				CD89124117AD91FF00F32D53 /* black21.png in Resources */,
 				CD89124217AD91FF00F32D53 /* black22.png in Resources */,
 				CD89124317AD91FF00F32D53 /* black23.png in Resources */,
+				CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */,
 				CD89124417AD91FF00F32D53 /* black24.png in Resources */,
 				CD89124517AD91FF00F32D53 /* black25.png in Resources */,
 				CD89124617AD91FF00F32D53 /* black26.png in Resources */,
@@ -1355,6 +1364,7 @@
 				CD39AD391778C11100446A9A /* Address.m in Sources */,
 				CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */,
 				CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */,
+				CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

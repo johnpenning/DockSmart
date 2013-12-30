@@ -21,7 +21,23 @@
 -(NSString *)name
 {
     NSString *str = [self objectForKey:@"name"];
-    //Take the first 8 characters out of the name, where the ID number is (for DC only... current API does not standardize this, so might have to make it city-specific for now)
+
+    //Match the "<integer> - " pattern at the beginning of a station name, in case the name is prefixed with a station ID (we don't want to show these):
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9]+ - " options:NSRegularExpressionCaseInsensitive error:nil];
+
+    NSRange matchRange = [regex rangeOfFirstMatchInString:str options:0 range:NSMakeRange(0, [str length])];
+    
+    if (!NSEqualRanges(matchRange, NSMakeRange(NSNotFound, 0)))
+    {
+        return [str substringFromIndex:matchRange.length];
+    }
+    else
+    {
+        return str;
+    }
+    
+#if 0
+    //Take the first 8 characters out of the name, where the ID number is (for DC only... current API does not standardize this, so might have to make it city-specific for now):
     if ([[(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] currentCityUrl] isEqualToString:CITY_URL_DC])
     {
         return [str stringByReplacingCharactersInRange:NSMakeRange(0, 8) withString:@""];
@@ -30,6 +46,7 @@
     {
         return str;
     }
+#endif
 }
 
 -(CLLocationDegrees)lat
