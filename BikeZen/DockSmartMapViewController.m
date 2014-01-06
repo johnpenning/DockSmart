@@ -85,6 +85,10 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
                                                  name:kAddStationsNotif
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(stationError:)
+                                                 name:kStationErrorNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(prepareBikeRoute:)
                                                  name:kStartBikingNotif
                                                object:nil];
@@ -569,15 +573,15 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
             
             //            if ([location.annotationIdentifier isEqualToString:kSourceStation])
 //            if ([station isEqual:self.sourceStation])
-            if (station.stationID == self.sourceStation.stationID)
+            if (self.sourceStation && (station.stationID == self.sourceStation.stationID))
             {
                 //Use green icons to denote a starting point, and show the number of bikes in the start station:
-                //TODO create green icons for numbers above 20
+                //TODO: create green icons for numbers above 20
                 annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"green%02d.png", (station.nbBikes <= 20 ? station.nbBikes : 20)]];
             }
             //            else if ([location.annotationIdentifier isEqualToString:kDestinationStation])
 //            else if ([station isEqual:self.currentDestinationStation])
-            else if (station.stationID == self.currentDestinationStation.stationID)
+            else if (self.currentDestinationStation && (station.stationID == self.currentDestinationStation.stationID))
             {
                 //Use red icons to denote destinations, and show the number of empty docks:
                 annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"red%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
@@ -718,17 +722,28 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     [self insertStations:[[notif userInfo] valueForKey:kStationResultsKey]];
 }
 
+- (void)stationError:(NSNotification*)notif
+{
+    //Reset the bikingState to inactive if we were trying to prepare a route before getting a station error:
+    if (self.bikingState == BikingStatePreparingToBike)
+    {
+//        self.bikingState = BikingStateInactive;
+        [self clearBikeRouteWithRefresh:NO];
+    }
+}
+
 - (void)insertStations:(NSArray *)stations
 {
     // this will allow us as an observer to notified (see observeValueForKeyPath)
     // so we can update our MapView
     //
     [self willChangeValueForKey:kStationList];
-//    [self.stationList addObjectsFromArray:stations];
+
     //Clear out current stations:
     [self.dataController.stationList removeAllObjects];
     //Add new stations:
     [self.dataController addLocationObjectsFromArray:stations toList:self.dataController.stationList];
+
     [self didChangeValueForKey:kStationList];
 }
 
@@ -742,6 +757,8 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     
     //Disable the bikes/docks toggle:
     [self.bikesDocksControl setHidden:YES];
+    //Disable the start/stop button until the data is refreshed:
+    [self.startStopButton setEnabled:NO];
     
     //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
     //Equivalent to hitting Refresh:
@@ -768,13 +785,17 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     
 }
 
-- (void)clearBikeRoute
+- (void)clearBikeRouteWithRefresh:(BOOL)refresh
 {
-    //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
-    //Equivalent to hitting Refresh:
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
-                                                        object:self
-                                                      userInfo:nil];
+    if (refresh)
+    {
+        //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
+        //Equivalent to hitting Refresh:
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
+                                                            object:self
+                                                          userInfo:nil];
+    }
+    
     //re-center map on previous final destination
     [self.mapView setCenterCoordinate:self.finalDestination.coordinate animated:YES];
     
@@ -791,6 +812,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //    [self.startStopButton setTitleColor:[UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0] forState:UIControlStateNormal];
 //    [self.startStopButton setTitle:@"Set Destination" forState:UIControlStateNormal];
     /* iOS7 : with toolbar */
+    [self.startStopButton setEnabled:YES];
     [self.startStopButton setTintColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
     [self.startStopButton setTitle:@"Set Destination"];
     
@@ -921,6 +943,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
         /* iOS7 : with toolbar */
         [self.startStopButton setTintColor:[UIColor greenColor]];
         [self.startStopButton setTitle:@"Start Station Tracking"];
+        [self.startStopButton setEnabled:YES];
         [self.cancelButton setEnabled:YES];
     }
     
@@ -1178,7 +1201,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                                                                                            forKey:kLogTextKey]];
 
     //reset to inactive
-    [self clearBikeRoute];
+    [self clearBikeRouteWithRefresh:YES];
 }
 
 - (IBAction)startStopTapped:(UIButton *)sender {

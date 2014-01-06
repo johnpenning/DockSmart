@@ -15,7 +15,8 @@
 #import "DockSmartLogViewController.h"
 #import "NSDictionary+CityBikesAPI.h"
 
-NSString *kCurrentCityUrl = @"currentCityUrl";
+NSString *kAutoCityPreference = @"auto_city_preference";
+NSString *kCityPreference = @"city_preference";
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -67,10 +68,10 @@ NSString *kCurrentCityUrl = @"currentCityUrl";
 //                                             selector:@selector(addStations:)
 //                                                 name:kAddStationsNotif
 //                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(stationError:)
-                                                 name:kStationErrorNotif
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(stationError:)
+//                                                 name:kStationErrorNotif
+//                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshStationData:)
                                                  name:kRefreshTappedNotif
@@ -84,12 +85,14 @@ NSString *kCurrentCityUrl = @"currentCityUrl";
                                                  name:kTrackingStoppedNotif
                                                object:nil];
     
+    // Register default NSUserDefaults:
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *defaultDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kAutoCityPreference, CITY_URL_DC, kCityPreference, nil];
+    [defaults registerDefaults:defaultDictionary];
+    [defaults synchronize];
+    
     // Recall current city URL from NSUserDefaults:
-    self.currentCityUrl = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentCityUrl];
-    if (!self.currentCityUrl)
-    {
-        self.currentCityUrl = CITY_URL_DC;
-    }
+    self.currentCityUrl = [defaults stringForKey:kCityPreference];
     
     // Spawn an NSOperation to parse the earthquake data so that the UI is not blocked while the
     // application parses the XML data.
@@ -217,10 +220,13 @@ NSString *kCurrentCityUrl = @"currentCityUrl";
 //        // Start standard location service
 //        [self.locationManager startUpdatingLocation];
 //    }
-    
-//    // TODO: Reload the station data?
+    // Recall current city URL from NSUserDefaults:
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults synchronize];
+    self.currentCityUrl = [defaults stringForKey:kCityPreference];
+
+//    // Reload the station data
 //    [self loadXMLData];
-//    [self loadJSONData];
     [self loadJSONCityData];
 
 }
@@ -358,7 +364,11 @@ NSString *kCurrentCityUrl = @"currentCityUrl";
 - (void)loadJSONCityData
 {
     DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-    if (controller.bikingState != BikingStateInactive)
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSLog(@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]);
+    
+    if ((controller.bikingState != BikingStateInactive) || ([defaults boolForKey:kAutoCityPreference] == NO))
     {
         [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
         return;
@@ -381,8 +391,8 @@ NSString *kCurrentCityUrl = @"currentCityUrl";
              self.currentCityUrl = [self closestBikeshareNetworkToLocation:[[LocationController sharedInstance] location] withData:networkData];
              
              //Save the URL for the current city in NSUserDefaults:
-             [[NSUserDefaults standardUserDefaults] setObject:self.currentCityUrl forKey:kCurrentCityUrl];
-             [[NSUserDefaults standardUserDefaults] synchronize];
+             [defaults setObject:self.currentCityUrl forKey:kCityPreference];
+             [defaults synchronize];
              
              //Load this city's bike data:
              [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
@@ -391,6 +401,11 @@ NSString *kCurrentCityUrl = @"currentCityUrl";
              
              //Stop spinning the network activity indicator:
              [self setNetworkActivityIndicatorVisible:NO];
+             
+             [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
+                                                                 object:self
+                                                               userInfo:[NSDictionary dictionaryWithObject:error
+                                                                                                    forKey:kStationsMsgErrorKey]];
              
              UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
              [av show];
@@ -446,9 +461,15 @@ NSString *kCurrentCityUrl = @"currentCityUrl";
 
              //Stop spinning the network activity indicator:
              [self setNetworkActivityIndicatorVisible:NO];
+             
+             [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
+                                                                 object:self
+                                                               userInfo:[NSDictionary dictionaryWithObject:error
+                                                                                                    forKey:kStationsMsgErrorKey]];
 
              UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
              [av show];
+             
          }];
 }
 

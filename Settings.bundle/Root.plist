@@ -5,64 +5,70 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
-			<key>Type</key>
-			<string>PSMultiValueSpecifier</string>
 			<key>Title</key>
-			<string></string>
-			<key>Key</key>
-			<string>city</string>
-			<key>DefaultValue</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>Title</key>
-			<string>Group</string>
+			<string>Cities</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>AutocapitalizationType</key>
-			<string>None</string>
-			<key>AutocorrectionType</key>
-			<string>No</string>
-			<key>DefaultValue</key>
-			<string></string>
-			<key>IsSecure</key>
-			<false/>
-			<key>Key</key>
-			<string>name_preference</string>
-			<key>KeyboardType</key>
-			<string>Alphabet</string>
-			<key>Title</key>
-			<string>Name</string>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
 			<true/>
 			<key>Key</key>
-			<string>enabled_preference</string>
+			<string>auto_city_preference</string>
 			<key>Title</key>
-			<string>Enabled</string>
+			<string>Detect City Automatically</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 		<dict>
-			<key>DefaultValue</key>
-			<real>0.5</real>
-			<key>Key</key>
-			<string>slider_preference</string>
-			<key>MaximumValue</key>
-			<integer>1</integer>
-			<key>MaximumValueImage</key>
-			<string></string>
-			<key>MinimumValue</key>
-			<integer>0</integer>
-			<key>MinimumValueImage</key>
-			<string></string>
 			<key>Type</key>
 			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>City</string>
+			<key>Key</key>
+			<string>city_preference</string>
+			<key>DefaultValue</key>
+			<string>0</string>
+			<key>Titles</key>
+			<array>
+				<string>Barcelona, Spain</string>
+				<string>Brussels, Belgium</string>
+				<string>Chicago, IL</string>
+				<string>Dublin, Ireland</string>
+				<string>Gothenburg, Sweden</string>
+				<string>London, England</string>
+				<string>Mexico City, Mexico</string>
+				<string>Miami Beach, FL</string>
+				<string>Minneapolis/St. Paul, MN</string>
+				<string>Montreal, QC</string>
+				<string>New York, NY</string>
+				<string>Ottawa, ON</string>
+				<string>Paris, France</string>
+				<string>San Francisco Bay Area, CA</string>
+				<string>Toronto, ON</string>
+				<string>Valencia, Spain</string>
+				<string>Washington, DC</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>http://api.citybik.es/bicing.html</string>
+				<string>http://api.citybik.es/villo.json</string>
+				<string>http://api.citybik.es/divvybikes.json</string>
+				<string>http://api.citybik.es/dublin.json</string>
+				<string>http://api.citybik.es/goteborg.html</string>
+				<string>http://api.citybik.es/barclays.json</string>
+				<string>http://api.citybik.es/ecobici.json</string>
+				<string>http://api2.citybik.es/decobike.json</string>
+				<string>http://api.citybik.es/niceride.json</string>
+				<string>http://api.citybik.es/bixi.json</string>
+				<string>http://api.citybik.es/citibikenyc.json</string>
+				<string>http://api.citybik.es/ottawa.json</string>
+				<string>http://api.citybik.es/velib.json</string>
+				<string>http://staging.citybik.es/v1/bay-area-bike-share.json</string>
+				<string>http://api2.citybik.es/toronto.json</string>
+				<string>http://api.citybik.es/valenbisi.json</string>
+				<string>http://api.citybik.es/capitalbikeshare.json</string>
+			</array>
 		</dict>
 	</array>
 	<key>StringsTable</key>
