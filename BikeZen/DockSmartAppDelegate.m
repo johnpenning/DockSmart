@@ -17,6 +17,7 @@
 
 NSString *kAutoCityPreference = @"auto_city_preference";
 NSString *kCityPreference = @"city_preference";
+NSString *kDisplayedVersion = @"displayed_version";
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -86,9 +87,14 @@ NSString *kCityPreference = @"city_preference";
                                                object:nil];
     
     // Register default NSUserDefaults:
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *defaultDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kAutoCityPreference, CITY_URL_DC, kCityPreference, nil];
+    NSDictionary *defaultDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kAutoCityPreference, CITY_URL_DC, kCityPreference, version, kDisplayedVersion, nil];
     [defaults registerDefaults:defaultDictionary];
+    
+    //Automatically update the value for displayed_version with the bundle version instead of doing it by manually updating a string here
+    [defaults setObject:version forKey:kDisplayedVersion];
+    
     [defaults synchronize];
     
     // Recall current city URL from NSUserDefaults:
