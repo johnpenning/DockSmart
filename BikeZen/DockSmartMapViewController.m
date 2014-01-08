@@ -24,6 +24,9 @@ NSString *kTrackingStartedNotif = @"TrackingStartedNotif";
 NSString *kTrackingStoppedNotif = @"TrackingStoppedNotif";
 NSString *kStationList = @"stationList";
 
+// Key noting if user has seen the intro screen/alert
+NSString *kHasSeenIntro = @"has_seen_intro";
+
 // Region monitoring identifiers:
 NSString *kRegionMonitor2km = @"RegionMonitor2km";
 NSString *kRegionMonitor1km = @"RegionMonitor1km";
@@ -140,6 +143,21 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE);
     
     [self.mapView setRegion:viewRegion animated:YES];
+    
+    //Show the license agreement alert if this is the first time the app has been opened:
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (![defaults boolForKey:kHasSeenIntro])
+    {
+        [defaults setBool:YES forKey:kHasSeenIntro];
+        [defaults synchronize];
+        
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Welcome to DockSmart!"
+                                                     message:@"By using this app, you agree to be legally bound by all the terms of the License Agreement located by exiting the app and selecting Settings -> DockSmart -> License Agreement.\n\nDon't use the app while biking, and ride safely!"
+                                                    delegate:nil
+                                           cancelButtonTitle:@"OK"
+                                           otherButtonTitles:nil];
+        [av show];
+    }
 
 }
 
