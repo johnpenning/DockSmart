@@ -12,6 +12,12 @@
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
 		CD0FF5F21880F02A00D349D5 /* bikepointer2.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F01880F02A00D349D5 /* bikepointer2.png */; };
 		CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */; };
+		CD0FF5F61881D75A00D349D5 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F41881D75A00D349D5 /* map.png */; };
+		CD0FF5F71881D75A00D349D5 /* map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F51881D75A00D349D5 /* map@2x.png */; };
+		CD0FF5FA1881DA0500D349D5 /* ios7-world-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */; };
+		CD0FF5FB1881DA0500D349D5 /* ios7-world-outline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */; };
+		CD0FF5FE1881DAFB00D349D5 /* navigate.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5FC1881DAFB00D349D5 /* navigate.png */; };
+		CD0FF5FF1881DAFB00D349D5 /* navigate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */; };
 		CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1E6E4217E51052004C3C8D /* LocationController.m */; };
 		CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD351778BA9B00446A9A /* LocationDataController.m */; };
 		CD39AD391778C11100446A9A /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD381778C11100446A9A /* Address.m */; };
@@ -294,6 +300,12 @@
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		CD0FF5F01880F02A00D349D5 /* bikepointer2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bikepointer2.png; sourceTree = "<group>"; };
 		CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bikepointer2@2x.png"; sourceTree = "<group>"; };
+		CD0FF5F41881D75A00D349D5 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
+		CD0FF5F51881D75A00D349D5 /* map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map@2x.png"; sourceTree = "<group>"; };
+		CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-world-outline.png"; sourceTree = "<group>"; };
+		CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-world-outline@2x.png"; sourceTree = "<group>"; };
+		CD0FF5FC1881DAFB00D349D5 /* navigate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigate.png; sourceTree = "<group>"; };
+		CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigate@2x.png"; sourceTree = "<group>"; };
 		CD1E6E4117E51052004C3C8D /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
 		CD1E6E4217E51052004C3C8D /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
 		CD39AD341778BA9B00446A9A /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
@@ -750,6 +762,12 @@
 		CD89114D17AD91FE00F32D53 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD0FF5FC1881DAFB00D349D5 /* navigate.png */,
+				CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */,
+				CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */,
+				CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */,
+				CD0FF5F41881D75A00D349D5 /* map.png */,
+				CD0FF5F51881D75A00D349D5 /* map@2x.png */,
 				CD0FF5F01880F02A00D349D5 /* bikepointer2.png */,
 				CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */,
 				CDB13C1417B1EAA500DD86C1 /* close.png */,
@@ -1068,6 +1086,7 @@
 				CD89122D17AD91FF00F32D53 /* black01.png in Resources */,
 				CD89122E17AD91FF00F32D53 /* black02.png in Resources */,
 				CD89122F17AD91FF00F32D53 /* black03.png in Resources */,
+				CD0FF5FB1881DA0500D349D5 /* ios7-world-outline@2x.png in Resources */,
 				CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */,
 				CD89123017AD91FF00F32D53 /* black04.png in Resources */,
 				CD89123117AD91FF00F32D53 /* black05.png in Resources */,
@@ -1112,6 +1131,7 @@
 				CD89125717AD91FF00F32D53 /* black43.png in Resources */,
 				CD89125817AD91FF00F32D53 /* black44.png in Resources */,
 				CD89125917AD91FF00F32D53 /* black45.png in Resources */,
+				CD0FF5FE1881DAFB00D349D5 /* navigate.png in Resources */,
 				CD89125A17AD91FF00F32D53 /* black46.png in Resources */,
 				CD89125B17AD91FF00F32D53 /* black47.png in Resources */,
 				CD89125C17AD91FF00F32D53 /* black48.png in Resources */,
@@ -1130,6 +1150,7 @@
 				CD89126917AD91FF00F32D53 /* black61.png in Resources */,
 				CD89126A17AD91FF00F32D53 /* black62.png in Resources */,
 				CD89126B17AD91FF00F32D53 /* black63.png in Resources */,
+				CD0FF5F61881D75A00D349D5 /* map.png in Resources */,
 				CD89126C17AD91FF00F32D53 /* black64.png in Resources */,
 				CD89126D17AD91FF00F32D53 /* black65.png in Resources */,
 				CD89126E17AD91FF00F32D53 /* black66.png in Resources */,
@@ -1216,6 +1237,7 @@
 				CD8912BE17AD91FF00F32D53 /* red24.png in Resources */,
 				CD8912BF17AD91FF00F32D53 /* red25.png in Resources */,
 				CD8912C017AD91FF00F32D53 /* red26.png in Resources */,
+				CD0FF5F71881D75A00D349D5 /* map@2x.png in Resources */,
 				CD8912C117AD91FF00F32D53 /* red27.png in Resources */,
 				CD8912C217AD91FF00F32D53 /* red28.png in Resources */,
 				CD8912C317AD91FF00F32D53 /* red29.png in Resources */,
@@ -1270,6 +1292,7 @@
 				CD8912F417AD91FF00F32D53 /* red78.png in Resources */,
 				CD8912F517AD91FF00F32D53 /* red79.png in Resources */,
 				CD8912F617AD91FF00F32D53 /* red80.png in Resources */,
+				CD0FF5FA1881DA0500D349D5 /* ios7-world-outline.png in Resources */,
 				CD8912F717AD91FF00F32D53 /* red81.png in Resources */,
 				CD8912F817AD91FF00F32D53 /* red82.png in Resources */,
 				CD8912F917AD91FF00F32D53 /* red83.png in Resources */,
@@ -1278,6 +1301,7 @@
 				CD8912FC17AD91FF00F32D53 /* red86.png in Resources */,
 				CD8912FD17AD91FF00F32D53 /* red87.png in Resources */,
 				CD8912FE17AD91FF00F32D53 /* red88.png in Resources */,
+				CD0FF5FF1881DAFB00D349D5 /* navigate@2x.png in Resources */,
 				CD8912FF17AD91FF00F32D53 /* red89.png in Resources */,
 				CD89130017AD91FF00F32D53 /* red90.png in Resources */,
 				CD89130117AD91FF00F32D53 /* red91.png in Resources */,

@@ -914,6 +914,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
             pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
             zoomRect = MKMapRectUnion(zoomRect, pointRect);
         }
+        //TODO: increase edge padding
         [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(44, 5, 44, 5) animated:YES];
     }
     

@@ -312,7 +312,7 @@
         <scene sceneID="P3O-Tb-iIG">
             <objects>
                 <navigationController storyboardIdentifier="NavigationController" title="Favorites" definesPresentationContext="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="c4R-mj-eZh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Destinations" image="second" id="5Xr-lL-0T1"/>
+                    <tabBarItem key="tabBarItem" title="Destinations" image="ios7-world-outline.png" id="5Xr-lL-0T1"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="jjn-fD-Wpu">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -381,7 +381,7 @@
                                 <rect key="frame" x="0.0" y="475" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
-                                    <barButtonItem title="Loc" id="dVs-pM-MfS">
+                                    <barButtonItem image="navigate.png" id="dVs-pM-MfS">
                                         <connections>
                                             <action selector="updateLocationTapped:" destination="3" id="uzN-LT-rkK"/>
                                         </connections>
@@ -438,7 +438,7 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <tabBarItem key="tabBarItem" title="Map" image="second" id="6"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map.png" id="6"/>
                     <connections>
                         <outlet property="bikeCrosshairImage" destination="rhK-Ye-sEA" id="85n-59-Qqf"/>
                         <outlet property="bikesDocksControl" destination="tCo-CB-c4v" id="xpc-lP-Lbc"/>
@@ -636,7 +636,9 @@
     <resources>
         <image name="bikepointer2.png" width="25" height="50"/>
         <image name="first" width="16" height="16"/>
-        <image name="second" width="16" height="16"/>
+        <image name="ios7-world-outline.png" width="25" height="25"/>
+        <image name="map.png" width="25" height="25"/>
+        <image name="navigate.png" width="22" height="22"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
