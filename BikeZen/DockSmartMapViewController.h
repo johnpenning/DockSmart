@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "LocationController.h"
 
 extern NSString *kRefreshTappedNotif;
+extern NSString *kTrackingStartedNotif;
+extern NSString *kTrackingStoppedNotif;
 extern NSString *kStationList;
 
 //extern NSString *kInsertStations
@@ -20,9 +23,14 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
     BikingStateActive,
 };
 
+typedef NS_ENUM(NSInteger, UpdateLocationStateType) {
+    UpdateLocationStateInactive = 0,
+    UpdateLocationStateActive,
+};
+
 @class LocationDataController;
 
-@interface DockSmartMapViewController : UIViewController <MKMapViewDelegate>
+@interface DockSmartMapViewController : UIViewController <MKMapViewDelegate, UIToolbarDelegate>//, UIObjectRestoration>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 //@property NSDate *lastDataUpdate;
@@ -36,5 +44,7 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
 
 @property (strong, nonatomic) LocationDataController *dataController;
 @property BikingStateType bikingState;
+@property UpdateLocationStateType updateLocationState;
+@property (weak, nonatomic) IBOutlet UIToolbar *topMapToolbar;
 
 @end

@@ -7,10 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		44D5914B240349EBA5C27A30 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47E2CC56A7754EEA88180D42 /* libPods.a */; };
 		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
+		CD0FF5F21880F02A00D349D5 /* bikepointer2.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F01880F02A00D349D5 /* bikepointer2.png */; };
+		CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */; };
+		CD0FF5F61881D75A00D349D5 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F41881D75A00D349D5 /* map.png */; };
+		CD0FF5F71881D75A00D349D5 /* map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F51881D75A00D349D5 /* map@2x.png */; };
+		CD0FF5FA1881DA0500D349D5 /* ios7-world-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */; };
+		CD0FF5FB1881DA0500D349D5 /* ios7-world-outline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */; };
+		CD0FF5FE1881DAFB00D349D5 /* navigate.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5FC1881DAFB00D349D5 /* navigate.png */; };
+		CD0FF5FF1881DAFB00D349D5 /* navigate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */; };
+		CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1E6E4217E51052004C3C8D /* LocationController.m */; };
 		CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD351778BA9B00446A9A /* LocationDataController.m */; };
 		CD39AD391778C11100446A9A /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD381778C11100446A9A /* Address.m */; };
+		CD4C1BDB17DBAE87008B0900 /* DupontTo14RIDriving.gpx in Resources */ = {isa = PBXBuildFile; fileRef = CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */; };
+		CD4C1BDD17DBBA29008B0900 /* DupontTo14RIDriving2.gpx in Resources */ = {isa = PBXBuildFile; fileRef = CD4C1BDC17DBBA29008B0900 /* DupontTo14RIDriving2.gpx */; };
+		CD4C1BDF17DBBDE2008B0900 /* DupontTo14thBiking.gpx in Resources */ = {isa = PBXBuildFile; fileRef = CD4C1BDE17DBBDE2008B0900 /* DupontTo14thBiking.gpx */; };
 		CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBA1730B77F005420D6 /* UIKit.framework */; };
 		CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBC1730B77F005420D6 /* Foundation.framework */; };
 		CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EBE1730B77F005420D6 /* CoreGraphics.framework */; };
@@ -32,11 +45,10 @@
 		CD529EF41730B77F005420D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD529EF21730B77F005420D6 /* InfoPlist.strings */; };
 		CD529EF71730B77F005420D6 /* DockSmartTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EF61730B77F005420D6 /* DockSmartTests.m */; };
 		CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529F001730BFF0005420D6 /* MapKit.framework */; };
-		CD548C09174C69F10062F61A /* arrest.png in Resources */ = {isa = PBXBuildFile; fileRef = CD548C08174C69F10062F61A /* arrest.png */; };
 		CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5541E3177F997D00167D87 /* MBProgressHUD.m */; };
 		CD5541E5177F997D00167D87 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5541E3177F997D00167D87 /* MBProgressHUD.m */; };
 		CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */; };
-		CD76273117516B7000E22617 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */; };
+		CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartLogViewController.m */; };
 		CD89122C17AD91FF00F32D53 /* black00.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89114E17AD91FE00F32D53 /* black00.png */; };
 		CD89122D17AD91FF00F32D53 /* black01.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89114F17AD91FE00F32D53 /* black01.png */; };
 		CD89122E17AD91FF00F32D53 /* black02.png in Resources */ = {isa = PBXBuildFile; fileRef = CD89115017AD91FE00F32D53 /* black02.png */; };
@@ -262,8 +274,11 @@
 		CDA9550D176CC765003C49DF /* stationData.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDA9550C176CC765003C49DF /* stationData.plist */; };
 		CDA95510176CCE47003C49DF /* StationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA9550F176CCE47003C49DF /* StationDataController.m */; };
 		CDB13C1517B1EAA500DD86C1 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = CDB13C1417B1EAA500DD86C1 /* close.png */; };
+		CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */; };
 		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
+		CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */; };
+		CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CDC5C7C21870F63A0036BF18 /* Settings.bundle */; };
 		CDDD4CE217B0904F00E45B21 /* bikepointer.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDD4CE117B0904F00E45B21 /* bikepointer.png */; };
 /* End PBXBuildFile section */
 
@@ -278,13 +293,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		47E2CC56A7754EEA88180D42 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLocation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CD0FF5F01880F02A00D349D5 /* bikepointer2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bikepointer2.png; sourceTree = "<group>"; };
+		CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bikepointer2@2x.png"; sourceTree = "<group>"; };
+		CD0FF5F41881D75A00D349D5 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
+		CD0FF5F51881D75A00D349D5 /* map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map@2x.png"; sourceTree = "<group>"; };
+		CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-world-outline.png"; sourceTree = "<group>"; };
+		CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-world-outline@2x.png"; sourceTree = "<group>"; };
+		CD0FF5FC1881DAFB00D349D5 /* navigate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigate.png; sourceTree = "<group>"; };
+		CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigate@2x.png"; sourceTree = "<group>"; };
+		CD1E6E4117E51052004C3C8D /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
+		CD1E6E4217E51052004C3C8D /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
 		CD39AD341778BA9B00446A9A /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
 		CD39AD351778BA9B00446A9A /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
 		CD39AD371778C11100446A9A /* Address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Address.h; sourceTree = "<group>"; };
 		CD39AD381778C11100446A9A /* Address.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Address.m; sourceTree = "<group>"; };
+		CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DupontTo14RIDriving.gpx; path = ../../../Documents/DupontTo14RIDriving.gpx; sourceTree = "<group>"; };
+		CD4C1BDC17DBBA29008B0900 /* DupontTo14RIDriving2.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DupontTo14RIDriving2.gpx; path = ../../../Documents/DupontTo14RIDriving2.gpx; sourceTree = "<group>"; };
+		CD4C1BDE17DBBDE2008B0900 /* DupontTo14thBiking.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DupontTo14thBiking.gpx; path = ../../../Documents/DupontTo14thBiking.gpx; sourceTree = "<group>"; };
 		CD529EB71730B77F005420D6 /* DockSmart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockSmart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD529EBA1730B77F005420D6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CD529EBC1730B77F005420D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -315,16 +345,14 @@
 		CD529EF61730B77F005420D6 /* DockSmartTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD529F001730BFF0005420D6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		CD529F041730C209005420D6 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
-		CD548C08174C69F10062F61A /* arrest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrest.png; sourceTree = "<group>"; };
-		CD5541DF177E9BE100167D87 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		CD5541E2177F997D00167D87 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = ../MBProgressHUD/MBProgressHUD.h; sourceTree = "<group>"; };
 		CD5541E3177F997D00167D87 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = ../MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		CD6DCB26176AB54100133762 /* DockSmartDestinationsMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartDestinationsMasterViewController.h; sourceTree = "<group>"; };
 		CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartDestinationsMasterViewController.m; sourceTree = "<group>"; };
 		CD6DCB29176AB7BA00133762 /* DockSmartDestinationsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartDestinationsDetailViewController.h; sourceTree = "<group>"; };
 		CD6DCB2A176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartDestinationsDetailViewController.m; sourceTree = "<group>"; };
-		CD76272F17516B6F00E22617 /* DockSmartSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartSettingsViewController.h; sourceTree = "<group>"; };
-		CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartSettingsViewController.m; sourceTree = "<group>"; };
+		CD76272F17516B6F00E22617 /* DockSmartLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartLogViewController.h; sourceTree = "<group>"; };
+		CD76273017516B7000E22617 /* DockSmartLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartLogViewController.m; sourceTree = "<group>"; };
 		CD89114E17AD91FE00F32D53 /* black00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black00.png; sourceTree = "<group>"; };
 		CD89114F17AD91FE00F32D53 /* black01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black01.png; sourceTree = "<group>"; };
 		CD89115017AD91FE00F32D53 /* black02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black02.png; sourceTree = "<group>"; };
@@ -555,10 +583,15 @@
 		CDA95514176E72C4003C49DF /* DockSmartAddressDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartAddressDetailViewController.h; sourceTree = "<group>"; };
 		CDA95515176E72C4003C49DF /* DockSmartAddressDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartAddressDetailViewController.m; sourceTree = "<group>"; };
 		CDB13C1417B1EAA500DD86C1 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		CDC3BC82185D1C67007C73BF /* NSDictionary+CityBikesAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+CityBikesAPI.h"; sourceTree = "<group>"; };
+		CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+CityBikesAPI.m"; sourceTree = "<group>"; };
 		CDC453FB1736D5DA008E2966 /* ParseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ParseOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CDC453FC1736D5DA008E2966 /* ParseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ParseOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Station.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CDC453FF1736D7BF008E2966 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Station.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartSettingsViewController.h; sourceTree = "<group>"; };
+		CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartSettingsViewController.m; sourceTree = "<group>"; };
+		CDC5C7C21870F63A0036BF18 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		CDDD4CE117B0904F00E45B21 /* bikepointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bikepointer.png; sourceTree = "<group>"; };
 		CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultsDetailViewController.h; sourceTree = "<group>"; };
 		CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultsDetailViewController.m; sourceTree = "<group>"; };
@@ -574,6 +607,7 @@
 				CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */,
 				CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */,
 				CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */,
+				44D5914B240349EBA5C27A30 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,14 +627,18 @@
 		CD529EAE1730B77F005420D6 = {
 			isa = PBXGroup;
 			children = (
+				CDC5C7C21870F63A0036BF18 /* Settings.bundle */,
+				CD4C1BDE17DBBDE2008B0900 /* DupontTo14thBiking.gpx */,
+				CD4C1BDC17DBBA29008B0900 /* DupontTo14RIDriving2.gpx */,
+				CD4C1BDA17DBAE87008B0900 /* DupontTo14RIDriving.gpx */,
 				CD5541E1177F98D600167D87 /* MBProgressHUD */,
-				CD5541DF177E9BE100167D87 /* AddressBookUI.framework */,
 				CD0344341730DC9D00682A78 /* CoreLocation.framework */,
 				CD529F001730BFF0005420D6 /* MapKit.framework */,
 				CD529EC01730B77F005420D6 /* DockSmart */,
 				CD529EEF1730B77F005420D6 /* DockSmartTests */,
 				CD529EB91730B77F005420D6 /* Frameworks */,
 				CD529EB81730B77F005420D6 /* Products */,
+				30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -620,6 +658,7 @@
 				CD529EBC1730B77F005420D6 /* Foundation.framework */,
 				CD529EBE1730B77F005420D6 /* CoreGraphics.framework */,
 				CD529EE91730B77F005420D6 /* SenTestingKit.framework */,
+				47E2CC56A7754EEA88180D42 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -638,6 +677,8 @@
 				CD529EDA1730B77F005420D6 /* first@2x.png */,
 				CD529EDC1730B77F005420D6 /* DockSmartMapViewController.h */,
 				CD529EDD1730B77F005420D6 /* DockSmartMapViewController.m */,
+				CD1E6E4117E51052004C3C8D /* LocationController.h */,
+				CD1E6E4217E51052004C3C8D /* LocationController.m */,
 				CD529EDF1730B77F005420D6 /* second.png */,
 				CD529EE11730B77F005420D6 /* second@2x.png */,
 				CD529EC11730B77F005420D6 /* Supporting Files */,
@@ -646,10 +687,12 @@
 				CD0344321730D01400682A78 /* MyLocation.m */,
 				CDC453FB1736D5DA008E2966 /* ParseOperation.h */,
 				CDC453FC1736D5DA008E2966 /* ParseOperation.m */,
+				CDC3BC82185D1C67007C73BF /* NSDictionary+CityBikesAPI.h */,
+				CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */,
 				CDC453FE1736D7BF008E2966 /* Station.h */,
 				CDC453FF1736D7BF008E2966 /* Station.m */,
-				CD76272F17516B6F00E22617 /* DockSmartSettingsViewController.h */,
-				CD76273017516B7000E22617 /* DockSmartSettingsViewController.m */,
+				CD76272F17516B6F00E22617 /* DockSmartLogViewController.h */,
+				CD76273017516B7000E22617 /* DockSmartLogViewController.m */,
 				CD6DCB26176AB54100133762 /* DockSmartDestinationsMasterViewController.h */,
 				CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */,
 				CDA9550E176CCE47003C49DF /* StationDataController.h */,
@@ -664,6 +707,8 @@
 				CD39AD381778C11100446A9A /* Address.m */,
 				CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */,
 				CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */,
+				CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */,
+				CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */,
 			);
 			name = DockSmart;
 			path = BikeZen;
@@ -673,7 +718,6 @@
 			isa = PBXGroup;
 			children = (
 				CD89114D17AD91FE00F32D53 /* Images */,
-				CD548C08174C69F10062F61A /* arrest.png */,
 				CD529EC21730B77F005420D6 /* DockSmart-Info.plist */,
 				CD529EC31730B77F005420D6 /* InfoPlist.strings */,
 				CD529EC61730B77F005420D6 /* main.m */,
@@ -718,6 +762,14 @@
 		CD89114D17AD91FE00F32D53 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD0FF5FC1881DAFB00D349D5 /* navigate.png */,
+				CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */,
+				CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */,
+				CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */,
+				CD0FF5F41881D75A00D349D5 /* map.png */,
+				CD0FF5F51881D75A00D349D5 /* map@2x.png */,
+				CD0FF5F01880F02A00D349D5 /* bikepointer2.png */,
+				CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */,
 				CDB13C1417B1EAA500DD86C1 /* close.png */,
 				CDDD4CE117B0904F00E45B21 /* bikepointer.png */,
 				CD89114E17AD91FE00F32D53 /* black00.png */,
@@ -953,9 +1005,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD529EFA1730B77F005420D6 /* Build configuration list for PBXNativeTarget "DockSmart" */;
 			buildPhases = (
+				4F1EEA741D7844B0897F9982 /* Check Pods Manifest.lock */,
 				CD529EB31730B77F005420D6 /* Sources */,
 				CD529EB41730B77F005420D6 /* Frameworks */,
 				CD529EB51730B77F005420D6 /* Resources */,
+				B2140967C2AF49E493AB8AD2 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1027,12 +1081,13 @@
 				CD529EDB1730B77F005420D6 /* first@2x.png in Resources */,
 				CD529EE01730B77F005420D6 /* second.png in Resources */,
 				CD529EE21730B77F005420D6 /* second@2x.png in Resources */,
-				CD548C09174C69F10062F61A /* arrest.png in Resources */,
 				CDA9550D176CC765003C49DF /* stationData.plist in Resources */,
 				CD89122C17AD91FF00F32D53 /* black00.png in Resources */,
 				CD89122D17AD91FF00F32D53 /* black01.png in Resources */,
 				CD89122E17AD91FF00F32D53 /* black02.png in Resources */,
 				CD89122F17AD91FF00F32D53 /* black03.png in Resources */,
+				CD0FF5FB1881DA0500D349D5 /* ios7-world-outline@2x.png in Resources */,
+				CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */,
 				CD89123017AD91FF00F32D53 /* black04.png in Resources */,
 				CD89123117AD91FF00F32D53 /* black05.png in Resources */,
 				CD89123217AD91FF00F32D53 /* black06.png in Resources */,
@@ -1053,6 +1108,7 @@
 				CD89124117AD91FF00F32D53 /* black21.png in Resources */,
 				CD89124217AD91FF00F32D53 /* black22.png in Resources */,
 				CD89124317AD91FF00F32D53 /* black23.png in Resources */,
+				CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */,
 				CD89124417AD91FF00F32D53 /* black24.png in Resources */,
 				CD89124517AD91FF00F32D53 /* black25.png in Resources */,
 				CD89124617AD91FF00F32D53 /* black26.png in Resources */,
@@ -1075,6 +1131,7 @@
 				CD89125717AD91FF00F32D53 /* black43.png in Resources */,
 				CD89125817AD91FF00F32D53 /* black44.png in Resources */,
 				CD89125917AD91FF00F32D53 /* black45.png in Resources */,
+				CD0FF5FE1881DAFB00D349D5 /* navigate.png in Resources */,
 				CD89125A17AD91FF00F32D53 /* black46.png in Resources */,
 				CD89125B17AD91FF00F32D53 /* black47.png in Resources */,
 				CD89125C17AD91FF00F32D53 /* black48.png in Resources */,
@@ -1093,6 +1150,7 @@
 				CD89126917AD91FF00F32D53 /* black61.png in Resources */,
 				CD89126A17AD91FF00F32D53 /* black62.png in Resources */,
 				CD89126B17AD91FF00F32D53 /* black63.png in Resources */,
+				CD0FF5F61881D75A00D349D5 /* map.png in Resources */,
 				CD89126C17AD91FF00F32D53 /* black64.png in Resources */,
 				CD89126D17AD91FF00F32D53 /* black65.png in Resources */,
 				CD89126E17AD91FF00F32D53 /* black66.png in Resources */,
@@ -1108,6 +1166,7 @@
 				CD89127817AD91FF00F32D53 /* black76.png in Resources */,
 				CD89127917AD91FF00F32D53 /* black77.png in Resources */,
 				CD89127A17AD91FF00F32D53 /* black78.png in Resources */,
+				CD0FF5F21880F02A00D349D5 /* bikepointer2.png in Resources */,
 				CD89127B17AD91FF00F32D53 /* black79.png in Resources */,
 				CD89127C17AD91FF00F32D53 /* black80.png in Resources */,
 				CD89127D17AD91FF00F32D53 /* black81.png in Resources */,
@@ -1178,6 +1237,7 @@
 				CD8912BE17AD91FF00F32D53 /* red24.png in Resources */,
 				CD8912BF17AD91FF00F32D53 /* red25.png in Resources */,
 				CD8912C017AD91FF00F32D53 /* red26.png in Resources */,
+				CD0FF5F71881D75A00D349D5 /* map@2x.png in Resources */,
 				CD8912C117AD91FF00F32D53 /* red27.png in Resources */,
 				CD8912C217AD91FF00F32D53 /* red28.png in Resources */,
 				CD8912C317AD91FF00F32D53 /* red29.png in Resources */,
@@ -1232,6 +1292,7 @@
 				CD8912F417AD91FF00F32D53 /* red78.png in Resources */,
 				CD8912F517AD91FF00F32D53 /* red79.png in Resources */,
 				CD8912F617AD91FF00F32D53 /* red80.png in Resources */,
+				CD0FF5FA1881DA0500D349D5 /* ios7-world-outline.png in Resources */,
 				CD8912F717AD91FF00F32D53 /* red81.png in Resources */,
 				CD8912F817AD91FF00F32D53 /* red82.png in Resources */,
 				CD8912F917AD91FF00F32D53 /* red83.png in Resources */,
@@ -1240,6 +1301,7 @@
 				CD8912FC17AD91FF00F32D53 /* red86.png in Resources */,
 				CD8912FD17AD91FF00F32D53 /* red87.png in Resources */,
 				CD8912FE17AD91FF00F32D53 /* red88.png in Resources */,
+				CD0FF5FF1881DAFB00D349D5 /* navigate@2x.png in Resources */,
 				CD8912FF17AD91FF00F32D53 /* red89.png in Resources */,
 				CD89130017AD91FF00F32D53 /* red90.png in Resources */,
 				CD89130117AD91FF00F32D53 /* red91.png in Resources */,
@@ -1253,6 +1315,9 @@
 				CD89130917AD91FF00F32D53 /* red99.png in Resources */,
 				CDDD4CE217B0904F00E45B21 /* bikepointer.png in Resources */,
 				CDB13C1517B1EAA500DD86C1 /* close.png in Resources */,
+				CD4C1BDB17DBAE87008B0900 /* DupontTo14RIDriving.gpx in Resources */,
+				CD4C1BDD17DBBA29008B0900 /* DupontTo14RIDriving2.gpx in Resources */,
+				CD4C1BDF17DBBDE2008B0900 /* DupontTo14thBiking.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1267,6 +1332,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4F1EEA741D7844B0897F9982 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B2140967C2AF49E493AB8AD2 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CD529EE61730B77F005420D6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1293,12 +1388,15 @@
 				CD0344331730D01400682A78 /* MyLocation.m in Sources */,
 				CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */,
 				CDC454001736D7BF008E2966 /* Station.m in Sources */,
-				CD76273117516B7000E22617 /* DockSmartSettingsViewController.m in Sources */,
+				CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */,
 				CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */,
 				CDA95510176CCE47003C49DF /* StationDataController.m in Sources */,
+				CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */,
 				CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */,
 				CD39AD391778C11100446A9A /* Address.m in Sources */,
 				CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */,
+				CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */,
+				CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1375,7 +1473,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -1401,7 +1499,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -1411,24 +1509,28 @@
 		};
 		CD529EFB1730B77F005420D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = DockSmart;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		CD529EFC1730B77F005420D6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = DockSmart;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

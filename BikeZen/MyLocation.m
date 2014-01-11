@@ -29,6 +29,9 @@ NSString *kStation = @"Station";
 //        _latitude = latitude;
 //        _longitude = longitude;
         _distanceFromUser = distance;
+        
+//        [UIApplication registerObjectForStateRestoration:self restorationIdentifier:@"MyLocationID"];
+        
         return self;
     }
     return nil;
@@ -44,6 +47,9 @@ NSString *kStation = @"Station";
         _name = name;
         _coordinate = coordinate;
         _distanceFromUser = distance;
+
+//        [UIApplication registerObjectForStateRestoration:self restorationIdentifier:@"MyLocationID"];
+
         return self;
     }
     return nil;
@@ -58,5 +64,58 @@ NSString *kStation = @"Station";
 {
     return _name;
 }
+
+#pragma mark - State Restoration
+
+static NSString *NameKey = @"NameKey";
+static NSString *CoordinateLatitudeKey = @"CoordinateLatitudeKey";
+static NSString *CoordinateLongitudeKey = @"CoordinateLongitudeKey";
+static NSString *DistanceFromUserKey = @"DistanceFromUserKey";
+static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
+
+//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.name forKey:NameKey];
+    [aCoder encodeDouble:self.coordinate.latitude forKey:CoordinateLatitudeKey];
+    [aCoder encodeDouble:self.coordinate.longitude forKey:CoordinateLongitudeKey];
+    [aCoder encodeDouble:self.distanceFromUser forKey:DistanceFromUserKey];
+    [aCoder encodeObject:self.annotationIdentifier forKey:AnnotationIdentifierKey];
+}
+
+//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.name = [aDecoder decodeObjectForKey:NameKey];
+        _coordinate = CLLocationCoordinate2DMake([aDecoder decodeDoubleForKey:CoordinateLatitudeKey], [aDecoder decodeDoubleForKey:CoordinateLongitudeKey]);
+        self.distanceFromUser = [aDecoder decodeDoubleForKey:DistanceFromUserKey];
+        self.annotationIdentifier = [aDecoder decodeObjectForKey:AnnotationIdentifierKey];
+    }
+    return self;
+}
+
+- (void)applicationFinishedRestoringState
+{
+    //Called on restored view controllers after other object decoding is complete.
+    NSString* logText = [NSString stringWithFormat:@"finished restoring MyLocation"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MyLocation *other = [[MyLocation alloc] initWithName:[self.name copyWithZone:zone] coordinate:self.coordinate distanceFromUser:self.distanceFromUser];
+    other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
+    
+    return other;
+}
+
 
 @end

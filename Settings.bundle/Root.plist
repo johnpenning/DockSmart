@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Title</key>
+			<string>Cities</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<true/>
+			<key>Key</key>
+			<string>auto_city_preference</string>
+			<key>Title</key>
+			<string>Detect City Automatically</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>City</string>
+			<key>Key</key>
+			<string>city_preference</string>
+			<key>DefaultValue</key>
+			<string>0</string>
+			<key>Titles</key>
+			<array>
+				<string>Barcelona, Spain</string>
+				<string>Brussels, Belgium</string>
+				<string>Chicago, IL</string>
+				<string>Dublin, Ireland</string>
+				<string>Gothenburg, Sweden</string>
+				<string>London, England</string>
+				<string>Mexico City, Mexico</string>
+				<string>Miami Beach, FL</string>
+				<string>Minneapolis/St. Paul, MN</string>
+				<string>Montreal, QC</string>
+				<string>New York, NY</string>
+				<string>Ottawa, ON</string>
+				<string>Paris, France</string>
+				<string>San Francisco Bay Area, CA</string>
+				<string>Toronto, ON</string>
+				<string>Valencia, Spain</string>
+				<string>Washington, DC</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>http://api.citybik.es/bicing.html</string>
+				<string>http://api.citybik.es/villo.json</string>
+				<string>http://api.citybik.es/divvybikes.json</string>
+				<string>http://api.citybik.es/dublin.json</string>
+				<string>http://api.citybik.es/goteborg.html</string>
+				<string>http://api.citybik.es/barclays.json</string>
+				<string>http://api.citybik.es/ecobici.json</string>
+				<string>http://api2.citybik.es/decobike.json</string>
+				<string>http://api.citybik.es/niceride.json</string>
+				<string>http://api.citybik.es/bixi.json</string>
+				<string>http://api.citybik.es/citibikenyc.json</string>
+				<string>http://api.citybik.es/ottawa.json</string>
+				<string>http://api.citybik.es/velib.json</string>
+				<string>http://staging.citybik.es/v1/bay-area-bike-share.json</string>
+				<string>http://api2.citybik.es/toronto.json</string>
+				<string>http://api.citybik.es/valenbisi.json</string>
+				<string>http://api.citybik.es/capitalbikeshare.json</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>About</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Version</string>
+			<key>Key</key>
+			<string>displayed_version</string>
+			<key>DefaultValue</key>
+			<string>-</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>License Agreement</string>
+			<key>File</key>
+			<string>LicenseAgreement</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>Acknowledgements</string>
+			<key>File</key>
+			<string>Acknowledgements</string>
+		</dict>
+	</array>
+	<key>StringsTable</key>
+	<string>Root</string>
+</dict>
+</plist>

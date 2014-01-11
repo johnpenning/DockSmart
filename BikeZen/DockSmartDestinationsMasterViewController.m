@@ -18,6 +18,7 @@
 #import "ParseOperation.h"
 #import "MBProgressHUD.h"
 #import "define.h"
+#import "DockSmartAppDelegate.h"
 
 
 // NSNotification name for informing the map view that we want to bike to a destination
@@ -77,11 +78,16 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                                              selector:@selector(updateLocation:)
                                                  name:kLocationUpdateNotif
                                                object:nil];
+    
+//    [LocationController sharedInstance].delegate = self;
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+//    [LocationController sharedInstance].delegate = self;
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -106,8 +112,8 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     //TODO: the following line is perhaps not so super dangerous and dumb as implemented?  Keeps us from having to store twice as many lists...
     self.dataController = [self.tabBarController.childViewControllers[0] dataController];
     [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
-
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
     //deselect the last row selected
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -119,17 +125,105 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - State Restoration
+
+static NSString *SearchLocationKey = @"SearchLocationKey";
+static NSString *SelectedLocationKey = @"SelectedLocationKey";
+static NSString *FilterResultsKey = @"FilterResultsKey";
+static NSString *GeocodeSearchResultsKey = @"GeocodeSearchResultsKey";
+static NSString *UserCoordinateLatitudeKey = @"UserCoordinateLatitudeKey";
+static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
+
+- (void) encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [super encodeRestorableStateWithCoder:coder];
+    
+    //Encode objects:
+//    [coder encodeInteger:self.userCoordinate.latitude forKey:UserCoordinateLatitudeKey];
+//    [coder encodeInteger:self.userCoordinate.longitude forKey:UserCoordinateLongitudeKey];
+    
+    NSMutableData *data = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    
+//    [archiver encodeObject:self.dataController.stationList forKey:DataControllerKey];
+    [archiver encodeObject:self.searchLocation forKey:SearchLocationKey];
+    [archiver encodeObject:self.selectedLocation forKey:SelectedLocationKey];
+    [archiver encodeObject:self.filterResults forKey:FilterResultsKey];
+    [archiver encodeObject:self.geocodeSearchResults forKey:GeocodeSearchResultsKey];
+    [archiver finishEncoding];
+    
+    //    NSString *filename = @"stationData.txt";
+    NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
+    
+    NSError *error;
+    BOOL result = [data writeToFile:path options:NSDataWritingAtomic error:&error];
+    NSLog(@"Table view archive result = %d, %@", result, error);
+    
+}
+
+
+- (void) decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    NSString* logText = [NSString stringWithFormat:@"destinationsMasterViewController decodeRestorableStateWithCoder called"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+    [super decodeRestorableStateWithCoder:coder];
+    
+    //    //Register custom objects for state restoration:
+    //    [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
+    //    [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
+    //    [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
+    //    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
+    
+//    self.userCoordinate.latitude = [coder decodeIntegerForKey:UserCoordinateLatitudeKey];
+//    self.userCoordinate.longitude = [coder decodeIntegerForKey:UserCoordinateLongitudeKey];
+
+    NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
+    
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    
+//    self.dataController.stationList = [unarchiver decodeObjectForKey:DataControllerKey];
+    self.searchLocation = [unarchiver decodeObjectForKey:SearchLocationKey];
+    self.selectedLocation = [unarchiver decodeObjectForKey:SelectedLocationKey];
+    self.filterResults = [unarchiver decodeObjectForKey:FilterResultsKey];
+    self.geocodeSearchResults = [unarchiver decodeObjectForKey:GeocodeSearchResultsKey];
+    [unarchiver finishDecoding];
+}
+
+- (void)applicationFinishedRestoringState
+{
+    //Called on restored view controllers after other object decoding is complete.
+    NSString* logText = [NSString stringWithFormat:@"finished restoring DestinationsMasterViewController"];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+    
+    //TODO: the following line is perhaps not so super dangerous and dumb as implemented?  Keeps us from having to store twice as many lists...
+    self.dataController = [self.tabBarController.childViewControllers[0] dataController];
+    [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
+
+}
+
 #pragma mark - KVO compliance
 
 - (void)updateLocation:(NSNotification *)notif {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
 //    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
 }
 
 - (void)addStations:(NSNotification *)notif {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     //This notification came from the parse operation telling us that a new station list has been posted.
     //Use KVO to tell this view controller to resort the list and update the tableView.
@@ -571,12 +665,20 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     //Start HUD:
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Loading addresses...";
-    
+    //Start spinning the network activity indicator:
+    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+
     //Create a hint region around the user's current location for the geocoder
-    CLRegion *region = [[CLRegion alloc]
-                        initCircularRegionWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
+//    CLRegion *region = [[CLRegion alloc]
+//                        initCircularRegionWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
+    CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
+    
     //Perform the geocode
     [geocoder geocodeAddressString:string inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {
+        
+        //Stop spinning the network activity indicator:
+        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
+
         if (error)
         {
             NSLog(@"Geocode failed with error: %@", error);
@@ -661,6 +763,5 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     }
     self.navSheet = nil;
 }
-
 
 @end

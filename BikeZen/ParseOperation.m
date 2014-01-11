@@ -56,6 +56,7 @@
 
 #import "ParseOperation.h"
 #import "Station.h"
+#import "DockSmartAppDelegate.h"
 
 // NSNotification name for sending station data to the map view
 NSString *kAddStationsNotif = @"AddStationsNotif";
@@ -96,7 +97,7 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
 }
 
 - (void)addStationsToList:(NSArray *)stations {
-    assert([NSThread isMainThread]);
+//    assert([NSThread isMainThread]);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
                                                         object:self
@@ -108,6 +109,9 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
 - (void)main {
     self.currentParseBatch = [NSMutableArray array];
     self.currentParsedCharacterData = [NSMutableString string];
+    
+    //Start spinning the network activity indicator:
+    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
     
     // It's also possible to have NSXMLParser download the data, by passing it a URL, but this is
     // not desirable because it gives less control over the network, particularly in responding to
@@ -128,7 +132,11 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
         [self performSelectorOnMainThread:@selector(addStationsToList:)
                                withObject:self.currentParseBatch
                             waitUntilDone:NO];
+//        [self addStationsToList:self.currentParseBatch];
     }
+    
+    //Stop spinning the network activity indicator:
+    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
     
     self.currentParseBatch = nil;
     self.currentStationObject = nil;
@@ -222,6 +230,7 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
             [self performSelectorOnMainThread:@selector(addStationsToList:)
                                    withObject:self.currentParseBatch
                                 waitUntilDone:NO];
+//            [self addStationsToList:self.currentParseBatch];
             self.currentParseBatch = [NSMutableArray array];
         }
     }
@@ -363,6 +372,7 @@ static NSString * const kLastStationUpdateElementName = @"latestUpdateTime";
         [self performSelectorOnMainThread:@selector(handleStationsError:)
                                withObject:parseError
                             waitUntilDone:NO];
+//        [self handleStationsError:parseError];
     }
 }
 

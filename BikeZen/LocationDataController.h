@@ -8,11 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "LocationController.h"
 
 @class MyLocation, Station, Address;
-
-extern NSString *kLocationUpdateNotif;
-extern NSString *kNewLocationKey;
 
 typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
     LocationDataSortByName          = 0,

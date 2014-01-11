@@ -14,4 +14,7 @@
 #define DUPONT_LONG     -77.0434
 
 
+//city URLs
+#define CITY_URL_DC @"http://api.citybik.es/capitalbikeshare.json"
+
 #endif

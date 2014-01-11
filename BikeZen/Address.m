@@ -40,4 +40,42 @@
     return addressSummary;
 }
 
+#pragma mark - State Restoration
+
+static NSString *PlacemarkKey = @"PlacemarkKey";
+
+//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+//    [super encodeRestorableStateWithCoder:coder];
+    [super encodeWithCoder:aCoder];
+    
+    [aCoder encodeObject:_placemark forKey:PlacemarkKey];
+}
+
+//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+//    [super decodeRestorableStateWithCoder:coder];
+    self = [super initWithCoder:aDecoder];
+    
+    if (self)
+    {
+        _placemark = [aDecoder decodeObjectForKey:PlacemarkKey];
+    }
+    return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+//    Address *other = (Address *)[super copyWithZone:zone];
+
+    Address *other = [[Address alloc] initWithPlacemark:[_placemark copyWithZone:zone] distanceFromUser:self.distanceFromUser];
+    other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
+//    other.coordinate = self.coordinate;
+//    other.distanceFromUser = self.distanceFromUser;
+
+    return other;
+}
+
 @end

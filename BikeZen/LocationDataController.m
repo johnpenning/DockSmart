@@ -8,13 +8,11 @@
 
 #import "LocationDataController.h"
 #import "DockSmartMapViewController.h"
+#import "LocationController.h"
 #import "MyLocation.h"
 #import "Station.h"
 #import "Address.h"
 #import "define.h"
-
-NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
-NSString *kNewLocationKey = @"NewLocationKey";
 
 @interface LocationDataController ()
 - (void)initializeDefaultDataList;
@@ -32,6 +30,8 @@ NSString *kNewLocationKey = @"NewLocationKey";
     self.favoritesList = theFavoritesList;
     
     self.userCoordinate = kCLLocationCoordinate2DInvalid;
+    
+//    [LocationController sharedInstance].delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateLocation:)
@@ -64,8 +64,12 @@ NSString *kNewLocationKey = @"NewLocationKey";
     }
 }
 
-- (id)init {
-    if (self == [super init]) {
+- (id)init
+{
+    self = [super init];
+    
+    if (self)
+    {
         [self initializeDefaultDataList];
         return self;
     }
@@ -144,8 +148,7 @@ NSString *kNewLocationKey = @"NewLocationKey";
     return sortedArray;
 }
 
-#pragma mark -
-#pragma mark KVO compliance
+#pragma mark - KVO compliance
 
 - (void)updateLocation:(NSNotification *)notif {
 //    assert([NSThread isMainThread]);
@@ -167,5 +170,17 @@ NSString *kNewLocationKey = @"NewLocationKey";
     //TODO: Set distances for recents and favorites lists
 
 }
+
+#pragma mark - State Restoration
+
+//- (void) encodeRestorableStateWithCoder:(NSCoder *)coder
+//{
+//    
+//}
+//
+//- (void) decodeRestorableStateWithCoder:(NSCoder *)coder
+//{
+//    
+//}
 
 @end
