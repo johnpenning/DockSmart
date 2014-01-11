@@ -521,30 +521,11 @@
                     <connections>
                         <segue destination="3" kind="relationship" relationship="viewControllers" id="27"/>
                         <segue destination="c4R-mj-eZh" kind="relationship" relationship="viewControllers" id="rvS-S7-3lV"/>
-                        <segue destination="oJm-bx-PjN" kind="relationship" relationship="viewControllers" id="D8n-6K-BDb"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="14" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="132" y="180"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="tFW-rh-VCD">
-            <objects>
-                <viewController id="vuL-pM-yc2" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="zBK-i9-4NF"/>
-                        <viewControllerLayoutGuide type="bottom" id="0sE-TD-E0H"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="gEg-hF-XSP">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vTa-UW-yDE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1166" y="-138"/>
         </scene>
         <!--Dock Smart Address Detail View Controller-->
         <scene sceneID="nLy-cd-BvU">
