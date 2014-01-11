@@ -10,6 +10,8 @@
 		44D5914B240349EBA5C27A30 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47E2CC56A7754EEA88180D42 /* libPods.a */; };
 		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
+		CD0FF5F21880F02A00D349D5 /* bikepointer2.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F01880F02A00D349D5 /* bikepointer2.png */; };
+		CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */; };
 		CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1E6E4217E51052004C3C8D /* LocationController.m */; };
 		CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD351778BA9B00446A9A /* LocationDataController.m */; };
 		CD39AD391778C11100446A9A /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD381778C11100446A9A /* Address.m */; };
@@ -290,6 +292,8 @@
 		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLocation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CD0FF5F01880F02A00D349D5 /* bikepointer2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bikepointer2.png; sourceTree = "<group>"; };
+		CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bikepointer2@2x.png"; sourceTree = "<group>"; };
 		CD1E6E4117E51052004C3C8D /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
 		CD1E6E4217E51052004C3C8D /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
 		CD39AD341778BA9B00446A9A /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
@@ -746,6 +750,8 @@
 		CD89114D17AD91FE00F32D53 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD0FF5F01880F02A00D349D5 /* bikepointer2.png */,
+				CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */,
 				CDB13C1417B1EAA500DD86C1 /* close.png */,
 				CDDD4CE117B0904F00E45B21 /* bikepointer.png */,
 				CD89114E17AD91FE00F32D53 /* black00.png */,
@@ -1062,6 +1068,7 @@
 				CD89122D17AD91FF00F32D53 /* black01.png in Resources */,
 				CD89122E17AD91FF00F32D53 /* black02.png in Resources */,
 				CD89122F17AD91FF00F32D53 /* black03.png in Resources */,
+				CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */,
 				CD89123017AD91FF00F32D53 /* black04.png in Resources */,
 				CD89123117AD91FF00F32D53 /* black05.png in Resources */,
 				CD89123217AD91FF00F32D53 /* black06.png in Resources */,
@@ -1138,6 +1145,7 @@
 				CD89127817AD91FF00F32D53 /* black76.png in Resources */,
 				CD89127917AD91FF00F32D53 /* black77.png in Resources */,
 				CD89127A17AD91FF00F32D53 /* black78.png in Resources */,
+				CD0FF5F21880F02A00D349D5 /* bikepointer2.png in Resources */,
 				CD89127B17AD91FF00F32D53 /* black79.png in Resources */,
 				CD89127C17AD91FF00F32D53 /* black80.png in Resources */,
 				CD89127D17AD91FF00F32D53 /* black81.png in Resources */,

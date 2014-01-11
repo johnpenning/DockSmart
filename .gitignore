@@ -17,3 +17,6 @@ xcuserdata
 *.xcexplist
 
 licenses
+
+#GIMP files for creating icons
+*.xcf

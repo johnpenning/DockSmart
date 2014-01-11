@@ -644,7 +644,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 {
                     return nil;
                 }
-                annotationView.image = [UIImage imageNamed:@"bikepointer.png"];
+                annotationView.image = [UIImage imageNamed:@"bikepointer2.png"];
                 annotationView.centerOffset = CGPointMake(0, 0);
             }
         }
@@ -724,6 +724,8 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     
     //Use this location as our final destination, same as selecting it from the Destinations tableView
     //TODO: add action sheet later for adding this location to favorites
+    
+    //TODO: make the user confirm the new destination in an action sheet
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kStartBikingNotif
                                                         object:self
