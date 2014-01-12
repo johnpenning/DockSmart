@@ -594,15 +594,14 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
             if (self.sourceStation && (station.stationID == self.sourceStation.stationID))
             {
                 //Use green icons to denote a starting point, and show the number of bikes in the start station:
-                //TODO: create green icons for numbers above 20
-                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"green%02d.png", (station.nbBikes <= 20 ? station.nbBikes : 20)]];
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_green_%02d.png", (station.nbBikes <= 99 ? station.nbBikes : 99)]];
             }
             //            else if ([location.annotationIdentifier isEqualToString:kDestinationStation])
 //            else if ([station isEqual:self.currentDestinationStation])
             else if (self.currentDestinationStation && (station.stationID == self.currentDestinationStation.stationID))
             {
                 //Use red icons to denote destinations, and show the number of empty docks:
-                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"red%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_red_%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
             }
             //            else if ([location.annotationIdentifier isEqualToString:kAlternateStation])
             else
@@ -614,7 +613,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                     if (station.stationID == closeStation.stationID)
                     {
                         //Use black icons to denote alternate stations:
-                        annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+                        annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
                         isClosestStation = YES;
                         break;
                     }
@@ -626,12 +625,14 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 {
                     //Use black icons for generic stations in Inactive state as well, but switch between showing the number of bikes or docks based on the toggle control:
                     NSInteger numberToShow = ([self.bikesDocksControl selectedSegmentIndex] == 0) ? station.nbBikes : station.nbEmptyDocks;
-                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (numberToShow <= 99 ? numberToShow : 99)]];
+//                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (numberToShow <= 99 ? numberToShow : 99)]];
+                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02d.png", (numberToShow <= 99 ? numberToShow : 99)]];
+                    //                    annotationView.image = [UIImage imageNamed:@"station_pin_blue_0.png"];
                 }
                 
             }
-                //move the centerOffset up so the "point" of the image is pointed at the station location, instead of the image being centered directly over it:
-                annotationView.centerOffset = CGPointMake(0, -13);
+            //move the centerOffset up so the "point" of the image is pointed at the station location, instead of the image being centered directly over it:
+            annotationView.centerOffset = CGPointMake(1, -16);
         }
         else if ([annotation isKindOfClass:[Address class]])
         {
