@@ -20,3 +20,6 @@ licenses
 
 #GIMP files for creating icons
 *.xcf
+#Old files, icons, etc
+OldResources/*
+
