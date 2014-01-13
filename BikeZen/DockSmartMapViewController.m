@@ -915,8 +915,8 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
             pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
             zoomRect = MKMapRectUnion(zoomRect, pointRect);
         }
-        //TODO: increase edge padding
-        [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(44, 5, 44, 5) animated:YES];
+        //increased edge padding so all relevant markers are visible
+        [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(104, 15, 104, 15) animated:YES];
     }
     
     //Change the annotation identifiers for the Station/MyLocation objects we want to view as annotations on the map:
