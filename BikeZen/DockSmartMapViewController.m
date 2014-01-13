@@ -28,8 +28,8 @@ NSString *kStationList = @"stationList";
 NSString *kHasSeenIntro = @"has_seen_intro";
 
 // Region monitoring identifiers:
-NSString *kRegionMonitor2km = @"RegionMonitor2km";
-NSString *kRegionMonitor1km = @"RegionMonitor1km";
+NSString *kRegionMonitorTwoThirdsToGo = @"RegionMonitorTwoThirdsToGo";
+NSString *kRegionMonitorOneThirdToGo = @"RegionMonitorOneThirdToGo";
 NSString *kRegionMonitorStation1 = @"RegionMonitorStation1";
 NSString *kRegionMonitorStation2 = @"RegionMonitorStation2";
 NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
@@ -970,12 +970,12 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     }
     
     //Add new annotations.
-    //TODO: if final destination and current destination station are the same object, only show the station object
     //TODO: update distanceFromUser, etc (other properties) in local MyLocation objects (finalDestination, etc) here? instead of in startStationTracking for example?
     [self.mapView addAnnotation:self.sourceStation];
-    //    if (![self.finalDestination isEqual:self.currentDestinationStation])
+    
     if (self.finalDestination.coordinate.latitude != self.currentDestinationStation.coordinate.latitude && self.finalDestination.coordinate.longitude != self.currentDestinationStation.coordinate.longitude)
         [self.mapView addAnnotation:self.finalDestination];
+    
     for (Station* station in self.closestStationsToDestination)
     {
         [self.mapView addAnnotation:station];
@@ -986,20 +986,18 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 {
 
     //Create regions to monitor via geofencing app wakeups:
-    //Two concentric circles, getting closer to the final destination:
-    //TODO: change the distance dynamically based on total trip distance? For example, halfway there and 3/4 of the way there, or 1/3 and 2/3?
+    //Concentric circles, getting closer to the final destination:
     
     [self.finalDestination setDistanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(self.dataController.userCoordinate  ), MKMapPointForCoordinate(self.finalDestination.coordinate))];
     
     
-    
     [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate 
                                                                radius:(self.finalDestination.distanceFromUser*0.67f)
-                                                           identifier:kRegionMonitor2km 
+                                                           identifier:kRegionMonitorTwoThirdsToGo
                                                              accuracy:kCLLocationAccuracyNearestTenMeters];
     [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate 
                                                                radius:(self.finalDestination.distanceFromUser*0.33f)
-                                                           identifier:kRegionMonitor1km 
+                                                           identifier:kRegionMonitorOneThirdToGo
                                                              accuracy:kCLLocationAccuracyNearestTenMeters];
     
     //One more region for each of the three closest stations to the final destination:
