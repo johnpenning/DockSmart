@@ -449,10 +449,10 @@ NSString *kDisplayedVersion = @"displayed_version";
 {
     //Start spinning the network activity indicator:
     [self setNetworkActivityIndicatorVisible:YES];
-
+    //TODO: use built-in activity indicator in AFNetworking?
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:url /*[NSString stringWithFormat:@"http://api.citybik.es/capitalbikeshare.json"]*/
+    [manager GET:url
       parameters:nil
          success:^(AFHTTPRequestOperation *operation, id responseObject) {
 

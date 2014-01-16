@@ -645,7 +645,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 {
                     return nil;
                 }
-                annotationView.image = [UIImage imageNamed:@"bikepointer2.png"];
+                annotationView.image = [UIImage imageNamed:@"bikepointer3.png"];
                 annotationView.centerOffset = CGPointMake(0, 0);
             }
         }

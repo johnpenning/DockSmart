@@ -14,6 +14,9 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
+				<string>DockSmartSettingsIcon3</string>
+				<string>DockSmartSpotlightIcon3</string>
+				<string>DockSmartAppIcon3</string>
 				<string>DockSmartAppIcon2</string>
 				<string>DockSmartSettingsIcon</string>
 				<string>DockSmartSpotlightIcon</string>

@@ -374,7 +374,7 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <imageView userInteractionEnabled="NO" contentMode="center" image="bikepointer2.png" translatesAutoresizingMaskIntoConstraints="NO" id="rhK-Ye-sEA">
+                            <imageView userInteractionEnabled="NO" contentMode="center" image="bikepointer3.png" translatesAutoresizingMaskIntoConstraints="NO" id="rhK-Ye-sEA">
                                 <rect key="frame" x="0.0" y="20" width="320" height="499"/>
                             </imageView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ess-m6-m8a" userLabel="Bottom Toolbar">
@@ -615,7 +615,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bikepointer2.png" width="25" height="50"/>
+        <image name="bikepointer3.png" width="25" height="50"/>
         <image name="first" width="16" height="16"/>
         <image name="ios7-world-outline.png" width="25" height="25"/>
         <image name="map.png" width="25" height="25"/>
