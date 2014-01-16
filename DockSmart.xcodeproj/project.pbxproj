@@ -10,26 +10,14 @@
 		44D5914B240349EBA5C27A30 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47E2CC56A7754EEA88180D42 /* libPods.a */; };
 		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
-		CD0FF5F21880F02A00D349D5 /* bikepointer2.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F01880F02A00D349D5 /* bikepointer2.png */; };
-		CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */; };
-		CD0FF5F61881D75A00D349D5 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F41881D75A00D349D5 /* map.png */; };
 		CD0FF5F71881D75A00D349D5 /* map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F51881D75A00D349D5 /* map@2x.png */; };
-		CD0FF5FA1881DA0500D349D5 /* ios7-world-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */; };
 		CD0FF5FB1881DA0500D349D5 /* ios7-world-outline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */; };
-		CD0FF5FE1881DAFB00D349D5 /* navigate.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5FC1881DAFB00D349D5 /* navigate.png */; };
 		CD0FF5FF1881DAFB00D349D5 /* navigate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */; };
 		CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1E6E4217E51052004C3C8D /* LocationController.m */; };
 		CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD351778BA9B00446A9A /* LocationDataController.m */; };
 		CD39AD391778C11100446A9A /* Address.m in Sources */ = {isa = PBXBuildFile; fileRef = CD39AD381778C11100446A9A /* Address.m */; };
-		CD3C5C691883BA47001292F7 /* DockSmartAppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C611883BA46001292F7 /* DockSmartAppIcon.png */; };
-		CD3C5C6A1883BA47001292F7 /* DockSmartAppIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C621883BA46001292F7 /* DockSmartAppIcon@2x.png */; };
-		CD3C5C6B1883BA47001292F7 /* DockSmartSettingsIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C631883BA46001292F7 /* DockSmartSettingsIcon.png */; };
-		CD3C5C6C1883BA47001292F7 /* DockSmartSettingsIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C641883BA46001292F7 /* DockSmartSettingsIcon@2x.png */; };
-		CD3C5C6D1883BA47001292F7 /* DockSmartSpotlightIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C651883BA46001292F7 /* DockSmartSpotlightIcon.png */; };
-		CD3C5C6E1883BA47001292F7 /* DockSmartSpotlightIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C661883BA46001292F7 /* DockSmartSpotlightIcon@2x.png */; };
 		CD3C5C6F1883BA47001292F7 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C671883BA46001292F7 /* iTunesArtwork.png */; };
 		CD3C5C701883BA47001292F7 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C681883BA46001292F7 /* iTunesArtwork@2x.png */; };
-		CD3C5C721883BF62001292F7 /* DockSmartAppIcon2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD3C5C711883BF62001292F7 /* DockSmartAppIcon2@2x.png */; };
 		CD4449E11887851400719C9B /* DockSmartAppIcon3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD4448A01887851300719C9B /* DockSmartAppIcon3@2x.png */; };
 		CD4449F01887851400719C9B /* station_pin_blue_00@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD4448B01887851300719C9B /* station_pin_blue_00@2x.png */; };
 		CD4449F11887851400719C9B /* station_pin_blue_01@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD4448B11887851300719C9B /* station_pin_blue_01@2x.png */; };
@@ -383,13 +371,8 @@
 		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLocation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		CD0FF5F01880F02A00D349D5 /* bikepointer2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bikepointer2.png; sourceTree = "<group>"; };
-		CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bikepointer2@2x.png"; sourceTree = "<group>"; };
-		CD0FF5F41881D75A00D349D5 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
 		CD0FF5F51881D75A00D349D5 /* map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map@2x.png"; sourceTree = "<group>"; };
-		CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-world-outline.png"; sourceTree = "<group>"; };
 		CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ios7-world-outline@2x.png"; sourceTree = "<group>"; };
-		CD0FF5FC1881DAFB00D349D5 /* navigate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigate.png; sourceTree = "<group>"; };
 		CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigate@2x.png"; sourceTree = "<group>"; };
 		CD1E6E4117E51052004C3C8D /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
 		CD1E6E4217E51052004C3C8D /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
@@ -397,15 +380,8 @@
 		CD39AD351778BA9B00446A9A /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
 		CD39AD371778C11100446A9A /* Address.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Address.h; sourceTree = "<group>"; };
 		CD39AD381778C11100446A9A /* Address.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Address.m; sourceTree = "<group>"; };
-		CD3C5C611883BA46001292F7 /* DockSmartAppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DockSmartAppIcon.png; sourceTree = "<group>"; };
-		CD3C5C621883BA46001292F7 /* DockSmartAppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DockSmartAppIcon@2x.png"; sourceTree = "<group>"; };
-		CD3C5C631883BA46001292F7 /* DockSmartSettingsIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DockSmartSettingsIcon.png; sourceTree = "<group>"; };
-		CD3C5C641883BA46001292F7 /* DockSmartSettingsIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DockSmartSettingsIcon@2x.png"; sourceTree = "<group>"; };
-		CD3C5C651883BA46001292F7 /* DockSmartSpotlightIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DockSmartSpotlightIcon.png; sourceTree = "<group>"; };
-		CD3C5C661883BA46001292F7 /* DockSmartSpotlightIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DockSmartSpotlightIcon@2x.png"; sourceTree = "<group>"; };
 		CD3C5C671883BA46001292F7 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		CD3C5C681883BA46001292F7 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
-		CD3C5C711883BF62001292F7 /* DockSmartAppIcon2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DockSmartAppIcon2@2x.png"; sourceTree = "<group>"; };
 		CD4448A01887851300719C9B /* DockSmartAppIcon3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DockSmartAppIcon3@2x.png"; sourceTree = "<group>"; };
 		CD4448B01887851300719C9B /* station_pin_blue_00@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "station_pin_blue_00@2x.png"; sourceTree = "<group>"; };
 		CD4448B11887851300719C9B /* station_pin_blue_01@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "station_pin_blue_01@2x.png"; sourceTree = "<group>"; };
@@ -723,9 +699,9 @@
 		CD529EC81730B77F005420D6 /* DockSmart-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "DockSmart-Prefix.pch"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD529EC91730B77F005420D6 /* DockSmartAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD529ECA1730B77F005420D6 /* DockSmartAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		CD529ECC1730B77F005420D6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		CD529ECE1730B77F005420D6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		CD529ED01730B77F005420D6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		CD529ECC1730B77F005420D6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
+		CD529ECE1730B77F005420D6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
+		CD529ED01730B77F005420D6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		CD529ED31730B77F005420D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		CD529ED51730B77F005420D6 /* DockSmartFavoritesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartFavoritesViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD529ED61730B77F005420D6 /* DockSmartFavoritesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartFavoritesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -1195,9 +1171,6 @@
 				CD529EC31730B77F005420D6 /* InfoPlist.strings */,
 				CD529EC61730B77F005420D6 /* main.m */,
 				CD529EC81730B77F005420D6 /* DockSmart-Prefix.pch */,
-				CD529ECC1730B77F005420D6 /* Default.png */,
-				CD529ECE1730B77F005420D6 /* Default@2x.png */,
-				CD529ED01730B77F005420D6 /* Default-568h@2x.png */,
 				CDA9550C176CC765003C49DF /* stationData.plist */,
 			);
 			name = "Supporting Files";
@@ -1235,28 +1208,19 @@
 		CD89114D17AD91FE00F32D53 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD529ECC1730B77F005420D6 /* Default.png */,
+				CD529ECE1730B77F005420D6 /* Default@2x.png */,
+				CD529ED01730B77F005420D6 /* Default-568h@2x.png */,
 				CD4448AF1887851300719C9B /* New Station Icons */,
 				CD444B211887A12300719C9B /* bikepointer3@2x.png */,
 				CD4448A01887851300719C9B /* DockSmartAppIcon3@2x.png */,
 				CD444B1D18879C4600719C9B /* DockSmartSettingsIcon3@2x.png */,
 				CD444B1E18879C4600719C9B /* DockSmartSpotlightIcon3@2x.png */,
-				CD3C5C711883BF62001292F7 /* DockSmartAppIcon2@2x.png */,
-				CD3C5C611883BA46001292F7 /* DockSmartAppIcon.png */,
-				CD3C5C621883BA46001292F7 /* DockSmartAppIcon@2x.png */,
-				CD3C5C631883BA46001292F7 /* DockSmartSettingsIcon.png */,
-				CD3C5C641883BA46001292F7 /* DockSmartSettingsIcon@2x.png */,
-				CD3C5C651883BA46001292F7 /* DockSmartSpotlightIcon.png */,
-				CD3C5C661883BA46001292F7 /* DockSmartSpotlightIcon@2x.png */,
 				CD3C5C671883BA46001292F7 /* iTunesArtwork.png */,
 				CD3C5C681883BA46001292F7 /* iTunesArtwork@2x.png */,
-				CD0FF5FC1881DAFB00D349D5 /* navigate.png */,
 				CD0FF5FD1881DAFB00D349D5 /* navigate@2x.png */,
-				CD0FF5F81881DA0500D349D5 /* ios7-world-outline.png */,
 				CD0FF5F91881DA0500D349D5 /* ios7-world-outline@2x.png */,
-				CD0FF5F41881D75A00D349D5 /* map.png */,
 				CD0FF5F51881D75A00D349D5 /* map@2x.png */,
-				CD0FF5F01880F02A00D349D5 /* bikepointer2.png */,
-				CD0FF5F11880F02A00D349D5 /* bikepointer2@2x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -1361,11 +1325,8 @@
 				CD0FF5FB1881DA0500D349D5 /* ios7-world-outline@2x.png in Resources */,
 				CD444AE31887851400719C9B /* station_pin_red_43@2x.png in Resources */,
 				CD444AEA1887851400719C9B /* station_pin_red_50@2x.png in Resources */,
-				CD3C5C6B1883BA47001292F7 /* DockSmartSettingsIcon.png in Resources */,
 				CD444A471887851400719C9B /* station_pin_blue_87@2x.png in Resources */,
 				CD4449F91887851400719C9B /* station_pin_blue_09@2x.png in Resources */,
-				CD0FF5F31880F02A00D349D5 /* bikepointer2@2x.png in Resources */,
-				CD3C5C691883BA47001292F7 /* DockSmartAppIcon.png in Resources */,
 				CD444B0A1887851400719C9B /* station_pin_red_82@2x.png in Resources */,
 				CD444AEF1887851400719C9B /* station_pin_red_55@2x.png in Resources */,
 				CD444A431887851400719C9B /* station_pin_blue_83@2x.png in Resources */,
@@ -1415,7 +1376,6 @@
 				CD444A761887851400719C9B /* station_pin_green_34@2x.png in Resources */,
 				CD444AC61887851400719C9B /* station_pin_red_14@2x.png in Resources */,
 				CD444A721887851400719C9B /* station_pin_green_30@2x.png in Resources */,
-				CD0FF5FE1881DAFB00D349D5 /* navigate.png in Resources */,
 				CD444A491887851400719C9B /* station_pin_blue_89@2x.png in Resources */,
 				CD444A5A1887851400719C9B /* station_pin_green_06@2x.png in Resources */,
 				CD444A231887851400719C9B /* station_pin_blue_51@2x.png in Resources */,
@@ -1443,7 +1403,6 @@
 				CD444AC11887851400719C9B /* station_pin_red_09@2x.png in Resources */,
 				CD444A8C1887851400719C9B /* station_pin_green_56@2x.png in Resources */,
 				CD444B051887851400719C9B /* station_pin_red_77@2x.png in Resources */,
-				CD0FF5F61881D75A00D349D5 /* map.png in Resources */,
 				CD444A1D1887851400719C9B /* station_pin_blue_45@2x.png in Resources */,
 				CD444A711887851400719C9B /* station_pin_green_29@2x.png in Resources */,
 				CD444B0B1887851400719C9B /* station_pin_red_83@2x.png in Resources */,
@@ -1457,8 +1416,6 @@
 				CD444A2E1887851400719C9B /* station_pin_blue_62@2x.png in Resources */,
 				CD4449F11887851400719C9B /* station_pin_blue_01@2x.png in Resources */,
 				CD4449FB1887851400719C9B /* station_pin_blue_11@2x.png in Resources */,
-				CD3C5C6C1883BA47001292F7 /* DockSmartSettingsIcon@2x.png in Resources */,
-				CD0FF5F21880F02A00D349D5 /* bikepointer2.png in Resources */,
 				CD444AE11887851400719C9B /* station_pin_red_41@2x.png in Resources */,
 				CD444A7B1887851400719C9B /* station_pin_green_39@2x.png in Resources */,
 				CD444B2018879C4600719C9B /* DockSmartSpotlightIcon3@2x.png in Resources */,
@@ -1547,7 +1504,6 @@
 				CD444AAB1887851400719C9B /* station_pin_green_87@2x.png in Resources */,
 				CD0FF5F71881D75A00D349D5 /* map@2x.png in Resources */,
 				CD444AB51887851400719C9B /* station_pin_green_97@2x.png in Resources */,
-				CD3C5C6D1883BA47001292F7 /* DockSmartSpotlightIcon.png in Resources */,
 				CD444A0F1887851400719C9B /* station_pin_blue_31@2x.png in Resources */,
 				CD444A421887851400719C9B /* station_pin_blue_82@2x.png in Resources */,
 				CD444ADA1887851400719C9B /* station_pin_red_34@2x.png in Resources */,
@@ -1571,7 +1527,6 @@
 				CD444AB81887851400719C9B /* station_pin_red_00@2x.png in Resources */,
 				CD444AC71887851400719C9B /* station_pin_red_15@2x.png in Resources */,
 				CD444AFF1887851400719C9B /* station_pin_red_71@2x.png in Resources */,
-				CD3C5C6A1883BA47001292F7 /* DockSmartAppIcon@2x.png in Resources */,
 				CD444A831887851400719C9B /* station_pin_green_47@2x.png in Resources */,
 				CD444AC31887851400719C9B /* station_pin_red_11@2x.png in Resources */,
 				CD444A271887851400719C9B /* station_pin_blue_55@2x.png in Resources */,
@@ -1615,16 +1570,13 @@
 				CD444AA91887851400719C9B /* station_pin_green_85@2x.png in Resources */,
 				CD444A121887851400719C9B /* station_pin_blue_34@2x.png in Resources */,
 				CD444ACC1887851400719C9B /* station_pin_red_20@2x.png in Resources */,
-				CD3C5C721883BF62001292F7 /* DockSmartAppIcon2@2x.png in Resources */,
 				CD444A0A1887851400719C9B /* station_pin_blue_26@2x.png in Resources */,
 				CD444B0C1887851400719C9B /* station_pin_red_84@2x.png in Resources */,
 				CD444A4C1887851400719C9B /* station_pin_blue_92@2x.png in Resources */,
 				CD444AFD1887851400719C9B /* station_pin_red_69@2x.png in Resources */,
 				CD444A1A1887851400719C9B /* station_pin_blue_42@2x.png in Resources */,
-				CD3C5C6E1883BA47001292F7 /* DockSmartSpotlightIcon@2x.png in Resources */,
 				CD444ADE1887851400719C9B /* station_pin_red_38@2x.png in Resources */,
 				CD444A3F1887851400719C9B /* station_pin_blue_79@2x.png in Resources */,
-				CD0FF5FA1881DA0500D349D5 /* ios7-world-outline.png in Resources */,
 				CD444A0D1887851400719C9B /* station_pin_blue_29@2x.png in Resources */,
 				CD444AB61887851400719C9B /* station_pin_green_98@2x.png in Resources */,
 				CD444AB01887851400719C9B /* station_pin_green_92@2x.png in Resources */,
