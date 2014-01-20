@@ -134,12 +134,24 @@ NSString *kDisplayedVersion = @"displayed_version";
     NSString *notificationMessage = [notification alertBody];
     UIAlertView *alertView =
     [[UIAlertView alloc] initWithTitle:
-     NSLocalizedString(@"Notification Title",
+     NSLocalizedString(@"Station Update",
                        @"Title for alert displayed when bike destination change message appears.")
                                message:notificationMessage
                               delegate:nil
                      cancelButtonTitle:@"OK"
                      otherButtonTitles:nil];
+    
+    //Play the alert sound
+    SystemSoundID soundFileObject;
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainBundle, CFSTR("bicycle_bell"), CFSTR("wav"), NULL);
+    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+    AudioServicesPlaySystemSound(soundFileObject);
+
+    //Vibrate the phone
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+
+    //Show the alert
     [alertView show];
     
     //TODO: Reload mapView w/ new icon colors

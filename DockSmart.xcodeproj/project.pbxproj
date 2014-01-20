@@ -353,6 +353,8 @@
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
 		CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */; };
 		CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CDC5C7C21870F63A0036BF18 /* Settings.bundle */; };
+		CDCCF6F4188B86B500295A35 /* bicycle_bell.wav in Resources */ = {isa = PBXBuildFile; fileRef = CDCCF6F3188B86B500295A35 /* bicycle_bell.wav */; };
+		CDCCF6F6188C6DC200295A35 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDCCF6F5188C6DC200295A35 /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -739,6 +741,8 @@
 		CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartSettingsViewController.h; sourceTree = "<group>"; };
 		CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartSettingsViewController.m; sourceTree = "<group>"; };
 		CDC5C7C21870F63A0036BF18 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		CDCCF6F3188B86B500295A35 /* bicycle_bell.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bicycle_bell.wav; sourceTree = "<group>"; };
+		CDCCF6F5188C6DC200295A35 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultsDetailViewController.h; sourceTree = "<group>"; };
 		CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultsDetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -748,6 +752,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDCCF6F6188C6DC200295A35 /* AudioToolbox.framework in Frameworks */,
 				CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */,
 				CD529F011730BFF0005420D6 /* MapKit.framework in Frameworks */,
 				CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */,
@@ -1107,6 +1112,7 @@
 		CD529EB91730B77F005420D6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CDCCF6F5188C6DC200295A35 /* AudioToolbox.framework */,
 				CD529EBA1730B77F005420D6 /* UIKit.framework */,
 				CD529EBC1730B77F005420D6 /* Foundation.framework */,
 				CD529EBE1730B77F005420D6 /* CoreGraphics.framework */,
@@ -1166,6 +1172,7 @@
 		CD529EC11730B77F005420D6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CDCCF6F3188B86B500295A35 /* bicycle_bell.wav */,
 				CD89114D17AD91FE00F32D53 /* Images */,
 				CD529EC21730B77F005420D6 /* DockSmart-Info.plist */,
 				CD529EC31730B77F005420D6 /* InfoPlist.strings */,
@@ -1336,6 +1343,7 @@
 				CD444AF31887851400719C9B /* station_pin_red_59@2x.png in Resources */,
 				CD444A5E1887851400719C9B /* station_pin_green_10@2x.png in Resources */,
 				CD444ABF1887851400719C9B /* station_pin_red_07@2x.png in Resources */,
+				CDCCF6F4188B86B500295A35 /* bicycle_bell.wav in Resources */,
 				CD444AD21887851400719C9B /* station_pin_red_26@2x.png in Resources */,
 				CD444AD51887851400719C9B /* station_pin_red_29@2x.png in Resources */,
 				CD444A021887851400719C9B /* station_pin_blue_18@2x.png in Resources */,

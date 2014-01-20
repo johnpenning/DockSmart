@@ -69,6 +69,11 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 @property (nonatomic) Station* currentDestinationStation;
 @property (nonatomic) Station* idealDestinationStation;
 @property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
+@property (nonatomic) NSString *regionIdentifier; //TODO: add to state restoration
+//the action sheet to show when making a user confirm their station destination
+@property (nonatomic, readwrite) UIActionSheet *navSheet; //TODO: add to state restoration?
+@property (nonatomic) MyLocation *selectedLocation; //TODO: add to state restoration
+
 
 //timer to refresh data:
 @property (nonatomic) NSTimer* minuteTimer;
@@ -100,8 +105,12 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
                                                  name:kLocationUpdateNotif
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateRegion:)
-                                                 name:kRegionUpdateNotif
+                                             selector:@selector(regionEntered:)
+                                                 name:kRegionEntryNotif
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(regionExited:)
+                                                 name:kRegionExitNotif
                                                object:nil];
 }
 
@@ -612,7 +621,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //                    if ([closeStation isEqual:station])
                     if (station.stationID == closeStation.stationID)
                     {
-                        //Use black icons to denote alternate stations:
+                        //Use blue icons to denote alternate stations:
                         annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
                         isClosestStation = YES;
                         break;
@@ -623,11 +632,9 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 }
                 if (!isClosestStation)
                 {
-                    //Use black icons for generic stations in Inactive state as well, but switch between showing the number of bikes or docks based on the toggle control:
+                    //Use blue icons for generic stations in Inactive state as well, but switch between showing the number of bikes or docks based on the toggle control:
                     NSInteger numberToShow = ([self.bikesDocksControl selectedSegmentIndex] == 0) ? station.nbBikes : station.nbEmptyDocks;
-//                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"black%02d.png", (numberToShow <= 99 ? numberToShow : 99)]];
                     annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02d.png", (numberToShow <= 99 ? numberToShow : 99)]];
-                    //                    annotationView.image = [UIImage imageNamed:@"station_pin_blue_0.png"];
                 }
                 
             }
@@ -637,7 +644,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
         else if ([annotation isKindOfClass:[Address class]])
         {
             Address* address = (Address*)annotation;
-            
+            //TODO: get rid of annotationIdentifier property and change this if statement to check if the station id is the same as currentDestinationStation.stationID?
             if ([address.annotationIdentifier isEqualToString:kDestinationLocation])
             {
                 //do not show a separate destination annotation if it's the station the user is actually about to bike to
@@ -727,10 +734,46 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     //TODO: add action sheet later for adding this location to favorites
     
     //TODO: make the user confirm the new destination in an action sheet
+    self.selectedLocation = location;
+    [self showNavigateActions:self.selectedLocation.name];
+
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kStartBikingNotif
+//                                                        object:self
+//                                                      userInfo:[NSDictionary dictionaryWithObject:location forKey:kBikeDestinationKey]];
+}
+
+#pragma mark -
+#pragma mark UIActionSheet implementation
+
+- (void)showNavigateActions:(NSString *)title {
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kStartBikingNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:location forKey:kBikeDestinationKey]];
+    NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
+    NSString *navigateHereTitle = NSLocalizedString(@"Navigate Here", @"Navigate Here button title");
+    
+    // If the user taps a destination to navigate to, present an action sheet to confirm.
+    //TODO: Present more options here (to add/delete to/from Favorites, for example).
+    self.navSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:nil otherButtonTitles:navigateHereTitle, nil];
+    //    [self.navSheet showInView:self.view];
+    [self.navSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 0)
+    {
+        /*
+         Inform the map view that the user chose to navigate to this destination.
+         */
+        [[NSNotificationCenter defaultCenter] postNotificationName:kStartBikingNotif
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:self.selectedLocation
+                                                                                               forKey:kBikeDestinationKey]];
+    }
+    //else cancel was pressed, just go back to the mapView
+
+    self.selectedLocation = nil;
+    self.navSheet = nil;
 }
 
 #pragma mark -
@@ -1092,6 +1135,9 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
             [self prepareBikeRouteCallback];
             break;
         case BikingStateActive:
+        {
+            BOOL notifSent = NO;
+            BOOL endTracking = NO;
             //Do not reload the map view at all, unless the app is coming back into the foreground.  Just check to see if we need to send a notification based on nbEmptyDocks for our current goal station
             for (Station *station in self.dataController.stationList)
             {
@@ -1118,8 +1164,25 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 //reassign class pointers to new data:
                 if (station.stationID == self.idealDestinationStation.stationID)
                 {
-                    //check to see if a dock at the ideal station has opened up.
-                    if (self.currentDestinationStation.stationID != station.stationID && station.nbEmptyDocks > 0 && self.idealDestinationStation.nbEmptyDocks == 0)
+                    //check to see if we're at the ideal station with a dock available:
+                    if ([self.regionIdentifier isEqualToString:kRegionMonitorStation1] && (station.nbEmptyDocks > 0))
+                    {
+                        //if there's a dock available now, it doesn't matter if we thought we were going somewhere else before, just tell the user to stop here:
+                        self.currentDestinationStation.annotationIdentifier = kAlternateStation;
+                        self.currentDestinationStation = station;
+                        self.currentDestinationStation.annotationIdentifier = kDestinationStation;
+                        
+                        UILocalNotification *stopAtIdealStationNotification = [[UILocalNotification alloc] init];
+                        [stopAtIdealStationNotification setAlertBody:[NSString stringWithFormat:@"Dock here! You have reached the station closest to your destination, %@. Station tracking will end.", self.idealDestinationStation.name]];
+                        stopAtIdealStationNotification.soundName = @"bicycle_bell.wav";
+                        [stopAtIdealStationNotification setFireDate:[NSDate date]];
+                        [[UIApplication sharedApplication] scheduleLocalNotification:stopAtIdealStationNotification];
+                        
+                        notifSent = YES;
+                        endTracking = YES;
+                    }
+                    //otherwise, if we're heading to a non-ideal station, check to see if a dock at the ideal station has opened up.
+                    else if (self.currentDestinationStation.stationID != station.stationID && station.nbEmptyDocks > 0 && self.idealDestinationStation.nbEmptyDocks == 0)
                     {
 //                      NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
                         
@@ -1130,15 +1193,16 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                         
                         UILocalNotification *bikeToIdealStationNotification = [[UILocalNotification alloc] init];
                         [bikeToIdealStationNotification setAlertBody:[NSString stringWithFormat:@"A dock has opened up at %@! Bike there instead!", self.currentDestinationStation.name]];
+                        bikeToIdealStationNotification.soundName = @"bicycle_bell.wav";
                         [bikeToIdealStationNotification setFireDate:[NSDate date]];
                         [[UIApplication sharedApplication] scheduleLocalNotification:bikeToIdealStationNotification];
-                        //TODO: Reload mapView w/ new icon colors
-
+                        
+                        notifSent = YES;
                     }
                     //update this pointer... will always continue to be the same stationID
                     self.idealDestinationStation = station;
                 }
-                if (station.stationID == self.currentDestinationStation.stationID)
+                else if (station.stationID == self.currentDestinationStation.stationID)
                 {
                     //the ideal non-current station did not empty out... but check if the currentDestinationStation filled up:
                     if (self.currentDestinationStation.nbEmptyDocks > 0 && station.nbEmptyDocks == 0)
@@ -1156,9 +1220,10 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                                 
                                 UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
                                 [bikeToNextBestStationNotification setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.", station.name, self.currentDestinationStation.name]];
+                                bikeToNextBestStationNotification.soundName = @"bicycle_bell.wav";
                                 [bikeToNextBestStationNotification setFireDate:[NSDate date]];
                                 [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
-                                //TODO: Reload mapView w/ new icon colors
+                                notifSent = YES;
                                 
                                 break;
                             }
@@ -1171,12 +1236,29 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 }
                 
                 //else, the user should just keep biking to the currentDestinationStation...
+            }
+            //...unless they're already there
+            if (!notifSent && (((self.currentDestinationStation.stationID == [[self.closestStationsToDestination objectAtIndex:1] stationID]) && self.regionIdentifier == kRegionMonitorStation2) || ((self.currentDestinationStation.stationID == [[self.closestStationsToDestination objectAtIndex:2] stationID]) && self.regionIdentifier == kRegionMonitorStation3)))
+            {
+                //We've reached an alternate station. if we've reached this point, no docks have opened up at the ideal station, so just dock here and walk the rest of the way
+                UILocalNotification *stopAtCurrentStationNotification = [[UILocalNotification alloc] init];
+                [stopAtCurrentStationNotification setAlertBody:[NSString stringWithFormat:@"Dock here! You have reached the station closest to your destination with an empty dock, %@. Station tracking will end.", self.currentDestinationStation.name]];
+                stopAtCurrentStationNotification.soundName = @"bicycle_bell.wav";
+                [stopAtCurrentStationNotification setFireDate:[NSDate date]];
+                [[UIApplication sharedApplication] scheduleLocalNotification:stopAtCurrentStationNotification];
+
                 
+                notifSent = YES;
+                endTracking = YES;
+            }
+            
+            if (!endTracking)
+            {
                 //reload annotations
-//                [self updateActiveBikingViewWithNewDestination:NO];
+                //          [self updateActiveBikingViewWithNewDestination:NO];
                 
                 //Hide the annotations for all other stations.
-//                [self.mapView removeAnnotations:self.mapView.annotations];
+                //          [self.mapView removeAnnotations:self.mapView.annotations];
                 for (id<MKAnnotation> annotation in self.mapView.annotations) {
                     if(![annotation isKindOfClass: [MKUserLocation class]])
                         [self.mapView removeAnnotation:annotation];
@@ -1184,7 +1266,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 
                 //Change buttons and label:
                 [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", self.sourceStation.name, self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
-                                
+                
                 //Add new annotations.
                 //TODO: pull this into its own method for code reuse
                 //if final destination and current destination station are the same object, only show the station object
@@ -1196,6 +1278,18 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                     [self.mapView addAnnotation:station];
                 }
             }
+            else
+            {
+                //Stop tracking stations:
+                [self stopStationTracking];
+                //setup PreparingToBike:
+                [self prepareBikeRoute:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.finalDestination forKey:kBikeDestinationKey]]];
+            }
+            
+            //clear out the region identifier so we don't alert at the wrong time
+            self.regionIdentifier = nil;
+            
+        }
             break;
         default:
             break;
@@ -1267,6 +1361,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 - (IBAction)updateLocationTapped:(id)sender {
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
     [self setUpdateLocationState:UpdateLocationStateActive];
+    //TODO: map sometimes doesn't update? specifically if biking state is active and zoomed in on destination bikes, and/or if wifi is off
 }
 
 //- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -1298,12 +1393,29 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     }
 }
 
-- (void)updateRegion:(NSNotification *)notif
+- (void)regionEntered:(NSNotification *)notif
 {
+    //Mark the region that we just entered:
+    self.regionIdentifier = [(CLRegion *)[[notif userInfo] valueForKey:kNewRegionKey] identifier];
+
+    //We hit a geofence. Get a bike data update
     [self refreshWasTapped];
     
     //TODO: stop tracking if we've reached either the ideal or current destination station?
     //TODO: if the user is at current and ideal is open, notify them?
+    
+}
+
+- (void)regionExited:(NSNotification *)notif
+{
+    //We just exited a region, so clear the region identifier if it's the same one:
+//    if ([self.regionIdentifier isEqualToString:[(CLRegion *)[[notif userInfo] valueForKey:kNewRegionKey] identifier]])
+//    {
+//        self.regionIdentifier = nil;
+//    }
+    
+    //Get another bike data update
+    [self refreshWasTapped];
 }
 
 #pragma mark - UIBarPositioningDelegate

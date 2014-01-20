@@ -733,7 +733,6 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     // If the user taps a destination to navigate to, present an action sheet to confirm.
     //TODO: Present more options here (to add/delete to/from Favorites, for example).
     self.navSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:nil otherButtonTitles:navigateHereTitle, nil];
-//    [self.navSheet showInView:self.view];
     [self.navSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
@@ -761,6 +760,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+    self.selectedLocation = nil;
     self.navSheet = nil;
 }
 

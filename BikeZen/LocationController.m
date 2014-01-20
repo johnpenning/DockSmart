@@ -13,7 +13,9 @@
 
 NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
 NSString *kNewLocationKey = @"NewLocationKey";
-NSString *kRegionUpdateNotif = @"RegionUpdateNotif";
+//NSString *kRegionUpdateNotif = @"RegionUpdateNotif";
+NSString *kRegionEntryNotif = @"RegionEntryNotif";
+NSString *kRegionExitNotif = @"RegionExitNotif";
 NSString *kNewRegionKey = @"NewRegionKey";
 
 @implementation LocationController
@@ -207,7 +209,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRegionUpdateNotif
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRegionEntryNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
 }
@@ -222,7 +224,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRegionUpdateNotif
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRegionExitNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
 }
