@@ -71,7 +71,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 @property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
 @property (nonatomic) NSString *regionIdentifier; //TODO: add to state restoration
 //the action sheet to show when making a user confirm their station destination
-@property (nonatomic, readwrite) UIActionSheet *navSheet; //TODO: add to state restoration?
+@property (nonatomic, readwrite) UIActionSheet *navSheet;
 @property (nonatomic) MyLocation *selectedLocation; //TODO: add to state restoration
 
 
@@ -255,6 +255,7 @@ static NSString *RegionCenterLatKey = @"RegionCenterLatKey";
 static NSString *RegionCenterLongKey = @"RegionCenterLongKey";
 static NSString *RegionSpanLatKey = @"RegionSpanLatKey";
 static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
+static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 
 - (void) encodeRestorableStateWithCoder:(NSCoder *)coder
 {
@@ -335,6 +336,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //    }
     [archiver encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
     [archiver encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
+    [archiver encodeObject:self.regionIdentifier forKey:RegionIdentifierKey];
     [archiver finishEncoding];
     
 //    NSString *filename = @"stationData.txt";
@@ -420,6 +422,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 //    }
     self.mapCenterAddress = [unarchiver decodeObjectForKey:MapCenterAddressKey];
     self.bikeCrosshairImage.hidden = [unarchiver decodeBoolForKey:BikeCrosshairImageKey];
+    self.regionIdentifier = [unarchiver decodeObjectForKey:RegionIdentifierKey];
     [unarchiver finishDecoding];
 }
 
@@ -1046,9 +1049,9 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
     //One more region for each of the three closest stations to the final destination:
 //    for (Station* station in self.closestStationsToDestination)
 //    {
-    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:0]).coordinate radius:10 identifier:kRegionMonitorStation1 accuracy:kCLLocationAccuracyBest];
-    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:1]).coordinate radius:10 identifier:kRegionMonitorStation2 accuracy:kCLLocationAccuracyBest];
-    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:2]).coordinate radius:10 identifier:kRegionMonitorStation3 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:0]).coordinate radius:5 identifier:kRegionMonitorStation1 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:1]).coordinate radius:5 identifier:kRegionMonitorStation2 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:2]).coordinate radius:5 identifier:kRegionMonitorStation3 accuracy:kCLLocationAccuracyBest];
 
 //    }
     
@@ -1138,6 +1141,8 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
         {
             BOOL notifSent = NO;
             BOOL endTracking = NO;
+            NSString *newlyFullStationName = nil;
+            
             //Do not reload the map view at all, unless the app is coming back into the foreground.  Just check to see if we need to send a notification based on nbEmptyDocks for our current goal station
             for (Station *station in self.dataController.stationList)
             {
@@ -1202,7 +1207,7 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                     //update this pointer... will always continue to be the same stationID
                     self.idealDestinationStation = station;
                 }
-                else if (station.stationID == self.currentDestinationStation.stationID)
+                if (station.stationID == self.currentDestinationStation.stationID)
                 {
                     //the ideal non-current station did not empty out... but check if the currentDestinationStation filled up:
                     if (self.currentDestinationStation.nbEmptyDocks > 0 && station.nbEmptyDocks == 0)
@@ -1218,12 +1223,13 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                                 self.currentDestinationStation = newStation;
                                 self.currentDestinationStation.annotationIdentifier = kDestinationStation;
                                 
-                                UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
-                                [bikeToNextBestStationNotification setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.", station.name, self.currentDestinationStation.name]];
-                                bikeToNextBestStationNotification.soundName = @"bicycle_bell.wav";
-                                [bikeToNextBestStationNotification setFireDate:[NSDate date]];
-                                [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
-                                notifSent = YES;
+                                newlyFullStationName = station.name;
+//                                UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
+//                                [bikeToNextBestStationNotification setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.", station.name, self.currentDestinationStation.name]];
+//                                bikeToNextBestStationNotification.soundName = @"bicycle_bell.wav";
+//                                [bikeToNextBestStationNotification setFireDate:[NSDate date]];
+//                                [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
+//                                notifSent = YES;
                                 
                                 break;
                             }
@@ -1238,7 +1244,12 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 //else, the user should just keep biking to the currentDestinationStation...
             }
             //...unless they're already there
-            if (!notifSent && (((self.currentDestinationStation.stationID == [[self.closestStationsToDestination objectAtIndex:1] stationID]) && self.regionIdentifier == kRegionMonitorStation2) || ((self.currentDestinationStation.stationID == [[self.closestStationsToDestination objectAtIndex:2] stationID]) && self.regionIdentifier == kRegionMonitorStation3)))
+            if (!notifSent &&
+                (   ((self.currentDestinationStation.stationID == [[self.closestStationsToDestination objectAtIndex:1] stationID])
+                     && [self.regionIdentifier isEqualToString:kRegionMonitorStation2])
+                 || ((self.currentDestinationStation.stationID == [[self.closestStationsToDestination objectAtIndex:2] stationID])
+                     && [self.regionIdentifier isEqualToString:kRegionMonitorStation3])
+                ))
             {
                 //We've reached an alternate station. if we've reached this point, no docks have opened up at the ideal station, so just dock here and walk the rest of the way
                 UILocalNotification *stopAtCurrentStationNotification = [[UILocalNotification alloc] init];
@@ -1250,6 +1261,14 @@ static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
                 
                 notifSent = YES;
                 endTracking = YES;
+            }
+            else if (newlyFullStationName != nil)
+            {
+                UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
+                [bikeToNextBestStationNotification setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.", newlyFullStationName, self.currentDestinationStation.name]];
+                bikeToNextBestStationNotification.soundName = @"bicycle_bell.wav";
+                [bikeToNextBestStationNotification setFireDate:[NSDate date]];
+                [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
             }
             
             if (!endTracking)
