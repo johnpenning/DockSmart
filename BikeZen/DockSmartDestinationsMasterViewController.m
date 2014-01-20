@@ -700,6 +700,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
             Address *address = [[Address alloc] initWithPlacemark:placemark distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(placemark.location.coordinate), MKMapPointForCoordinate(self.userCoordinate))];
             if ([address.name length] > 0)
             {
+                //TODO: geocodeSearchResults was nil when debugging once, figure out why
                 [self.geocodeSearchResults addObject:address];
             }
         }

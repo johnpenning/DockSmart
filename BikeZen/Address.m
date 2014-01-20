@@ -14,7 +14,7 @@
 
 - (id)initWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance
 {
-    self = [super initWithName:[NSString stringWithFormat:@"%@%@%@%@%@", placemark.subThoroughfare ? placemark.subThoroughfare : @"", placemark.subThoroughfare ? @" " : @"", placemark.thoroughfare ? placemark.thoroughfare : @"", (placemark.subThoroughfare || placemark.thoroughfare) ? @", " : @"", placemark.locality ? placemark.locality : @""] coordinate:placemark.location.coordinate distanceFromUser:distance];
+    self = [super initWithName:[NSString stringWithFormat:@"%@%@%@%@%@%@%@", placemark.subThoroughfare ? placemark.subThoroughfare : @"", placemark.subThoroughfare ? @" " : @"", placemark.thoroughfare ? placemark.thoroughfare : @"", (placemark.subThoroughfare || placemark.thoroughfare) ? @", " : @"", placemark.locality ? placemark.locality : @"", (placemark.locality && placemark.administrativeArea) ? @", " : @"", placemark.administrativeArea ? placemark.administrativeArea : @""] coordinate:placemark.location.coordinate distanceFromUser:distance];
     
     if (self)
     {

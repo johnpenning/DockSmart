@@ -214,9 +214,6 @@ NSString *kDisplayedVersion = @"displayed_version";
         // Start standard location service
         [[LocationController sharedInstance].locationManager startUpdatingLocation];
     }
-
-    // TODO: Reload the station data?
-//    [self loadXMLData];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

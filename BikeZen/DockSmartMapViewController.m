@@ -69,10 +69,10 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 @property (nonatomic) Station* currentDestinationStation;
 @property (nonatomic) Station* idealDestinationStation;
 @property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
-@property (nonatomic) NSString *regionIdentifier; //TODO: add to state restoration
+@property (nonatomic) NSString *regionIdentifier;
 //the action sheet to show when making a user confirm their station destination
 @property (nonatomic, readwrite) UIActionSheet *navSheet;
-@property (nonatomic) MyLocation *selectedLocation; //TODO: add to state restoration
+@property (nonatomic) MyLocation *selectedLocation;
 
 
 //timer to refresh data:
@@ -525,23 +525,6 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
         //add to the map
         [self.mapView addAnnotation:station];
     }
-
-//    NSDictionary *root = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
-//    NSArray *data = [root objectForKey:@"data"];
-//    
-//    for (NSArray *row in data) {
-//        NSNumber *latitude = row[21][1];
-//        NSNumber *longitude = row[21][2];
-//        NSString *crimeDescription = row[17];
-//        NSString *address = row[13];
-//        
-//        CLLocationCoordinate2D coordinate;
-//        coordinate.latitude = latitude.doubleValue;
-//        coordinate.longitude = longitude.doubleValue;
-//        MyLocation *annotation = [[MyLocation alloc] initWithName:crimeDescription address:address coordinate:coordinate];
-//        [self.mapView addAnnotation:annotation];
-//    }
-    
 }
 
 #pragma mark -
@@ -730,19 +713,12 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 {
     MyLocation *location = (MyLocation*)view.annotation;
     
-//    NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-//    [station.mapItem openInMapsWithLaunchOptions:launchOptions];
-    
     //Use this location as our final destination, same as selecting it from the Destinations tableView
     //TODO: add action sheet later for adding this location to favorites
     
-    //TODO: make the user confirm the new destination in an action sheet
+    //make the user confirm the new destination in an action sheet
     self.selectedLocation = location;
     [self showNavigateActions:self.selectedLocation.name];
-
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kStartBikingNotif
-//                                                        object:self
-//                                                      userInfo:[NSDictionary dictionaryWithObject:location forKey:kBikeDestinationKey]];
 }
 
 #pragma mark -
@@ -1419,20 +1395,10 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 
     //We hit a geofence. Get a bike data update
     [self refreshWasTapped];
-    
-    //TODO: stop tracking if we've reached either the ideal or current destination station?
-    //TODO: if the user is at current and ideal is open, notify them?
-    
 }
 
 - (void)regionExited:(NSNotification *)notif
 {
-    //We just exited a region, so clear the region identifier if it's the same one:
-//    if ([self.regionIdentifier isEqualToString:[(CLRegion *)[[notif userInfo] valueForKey:kNewRegionKey] identifier]])
-//    {
-//        self.regionIdentifier = nil;
-//    }
-    
     //Get another bike data update
     [self refreshWasTapped];
 }
