@@ -789,20 +789,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 
 - (void)prepareBikeRouteCallback
 {
-
     [self updateActiveBikingViewWithNewDestination:YES];
-    
-    //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
-    //TODO: If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
-    
-    //Start the rental timer, if we have one
-    
-
-    //Start tracking nbEmptyDocks by refreshing the data every minute until we manually stop
-    //(or until the timer runs out, or until our geofence tells us we are at our destination)
-//    NSTimer *minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
-//    [minuteTimer setFireDate:[NSDate date]];
-    
 }
 
 - (void)clearBikeRouteWithRefresh:(BOOL)refresh
@@ -941,6 +928,24 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
                 station.annotationIdentifier = kAlternateStation;
             }
         }
+    }
+    //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
+
+    //If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
+    //(Do not use sourceStation in case there is one closer with no bikes... use the top of the sorted station list instead)
+    if (self.idealDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID])
+    {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Walk to your destination!"
+                                                     message:@"The destination station is also the closest one to your current location. Perhaps it's best to just walk."
+                                                    delegate:nil
+                                           cancelButtonTitle:@"OK"
+                                           otherButtonTitles:nil];
+        [av show];
+        
+        //return to idle
+        [self clearBikeRouteWithRefresh:NO];
+        
+        return;
     }
     
     //Hide the annotations for all other stations.
