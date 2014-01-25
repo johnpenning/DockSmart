@@ -140,7 +140,6 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     
     //initialize states
     [self setBikingState:BikingStateInactive];
-    [self setUpdateLocationState:UpdateLocationStateInactive];
     
     //Define the initial zoom location (Dupont Circle for now)
     CLLocationCoordinate2D zoomLocation = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
@@ -177,36 +176,13 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     // Dispose of any resources that can be recreated.
 }
 
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    //Define the initial zoom location (Dupont Circle for now)
-//    CLLocationCoordinate2D zoomLocation;// = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
-//    
-//    zoomLocation.latitude = DUPONT_LAT;
-//    zoomLocation.longitude = DUPONT_LONG;
-//    
-//    //define the initial view region -> about the size of the neighborhood:
-////    MKCoordinateRegion viewRegion = [_mapView regionThatFits:MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE)];
-//    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE);
-//    
-//    [_mapView setRegion:viewRegion animated:YES];
-//}
+- (void)viewWillAppear:(BOOL)animated
+{
+    //Make sure the user has enabled location services before attempting to get the location
+    [[LocationController sharedInstance] startUpdatingCurrentLocation];
 
-//- (void)mapViewWillStartLoadingMap:(MKMapView *)mapView
-//{
-//    //Define the initial zoom location (Dupont Circle for now)
-//    CLLocationCoordinate2D zoomLocation;// = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
-//    
-//    zoomLocation.latitude = DUPONT_LAT;
-//    zoomLocation.longitude = DUPONT_LONG;
-//    
-//    //define the initial view region -> about the size of the neighborhood:
-//    MKCoordinateRegion viewRegion = [mapView regionThatFits:MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE)];
-////    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE);
-//    
-//    [mapView setRegion:viewRegion animated:NO];
-//}
+    [super viewWillAppear:animated];
+}
 
 - (void)viewDidUnload {
 //    [self setBikeDockViewSwitch:nil];
@@ -216,7 +192,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     [self setBikeCrosshairImage:nil];
     [self setCancelButton:nil];
     [self setBikesDocksControl:nil];
-    [self setClosestStationsToDestination:nil];
+//    [self setClosestStationsToDestination:nil];
     [super viewDidUnload];
 //    
 //    self.dataController.stationList = nil;
@@ -237,7 +213,6 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 static NSString *BikesDocksControlKey = @"BikesDocksControlKey";
 static NSString *BikesDocksControlHiddenKey = @"BikesDocksControlHiddenKey";
 static NSString *BikingStateKey = @"BikingStateKey";
-static NSString *UpdateLocationStateKey = @"UpdateLocationStateKey";
 static NSString *DataControllerKey = @"DataControllerKey";
 static NSString *SourceStationKey = @"SourceStationKey";
 static NSString *FinalDestinationKey = @"FinalDestinationKey";
@@ -276,7 +251,6 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     [coder encodeInteger:self.bikesDocksControl.selectedSegmentIndex forKey:BikesDocksControlKey];
     [coder encodeBool:self.bikesDocksControl.hidden forKey:BikesDocksControlHiddenKey];
 //    [coder encodeInteger:self.bikingState forKey:BikingStateKey];
-    [coder encodeInteger:self.updateLocationState forKey:UpdateLocationStateKey];
     
 //    //    [coder encodeObject:self.dataController forKey:DataControllerKey];
 //    [coder encodeObject:self.sourceStation forKey:SourceStationKey];
@@ -371,7 +345,6 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     self.bikesDocksControl.selectedSegmentIndex = [coder decodeIntegerForKey:BikesDocksControlKey];
     self.bikesDocksControl.hidden = [coder decodeBoolForKey:BikesDocksControlHiddenKey];
 //    self.bikingState = [coder decodeIntegerForKey:BikingStateKey];
-    self.updateLocationState = [coder decodeIntegerForKey:UpdateLocationStateKey];
     //    self.dataController = [coder decodeObjectForKey:DataControllerKey];
 //    self.sourceStation = [coder decodeObjectForKey:SourceStationKey];
 //    self.finalDestination = [coder decodeObjectForKey:FinalDestinationKey];
@@ -799,6 +772,9 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     self.bikingState = BikingStatePreparingToBike;
     self.finalDestination = [[[notif userInfo] valueForKey:kBikeDestinationKey] copy];
     
+    //Start tracking user location
+    [[LocationController sharedInstance] startUpdatingCurrentLocation];
+    
     //Disable the bikes/docks toggle:
     [self.bikesDocksControl setHidden:YES];
     //Disable the start/stop button until the data is refreshed:
@@ -1011,7 +987,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     //Create regions to monitor via geofencing app wakeups:
     //Concentric circles, getting closer to the final destination:
     
-    [self.finalDestination setDistanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(self.dataController.userCoordinate  ), MKMapPointForCoordinate(self.finalDestination.coordinate))];
+    [self.finalDestination setDistanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(self.dataController.userCoordinate), MKMapPointForCoordinate(self.finalDestination.coordinate))];
     
     
     [[LocationController sharedInstance] registerRegionWithCoordinate:self.finalDestination.coordinate 
@@ -1365,36 +1341,20 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 
 - (IBAction)updateLocationTapped:(id)sender {
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
-    [self setUpdateLocationState:UpdateLocationStateActive];
+//    MKCoordinateRegion region = [self.mapView region];
+//    region.center = [[[LocationController sharedInstance] location] coordinate];
+//    region.center = [[self.mapView userLocation] coordinate];
+//    [self.mapView setRegion:region animated:YES];
+    [self.mapView setCenterCoordinate:[[self.mapView userLocation] coordinate] animated:YES];
+
     //TODO: map sometimes doesn't update? specifically if biking state is active and zoomed in on destination bikes, and/or if wifi is off
 }
-
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-//{
-//    NSLog(@"Segue identifier: %@", [segue identifier]);
-//    NSLog(@"Segue destination: %@", [[segue destinationViewController] title]);
-//    
-//    if ([[segue identifier] isEqualToString:@"Test"])
-//    {
-//        DockSmartDestinationsMasterViewController *vc = [segue destinationViewController];
-//        //pass current station list to Destinations view controller
-////        [vc setDataController:self.dataController];
-//    };
-//}
 
 - (void)updateLocation:(NSNotification *)notif
 {
     if (self.bikingState != BikingStateActive)
     {
         [[LocationController sharedInstance] stopUpdatingCurrentLocation];
-    }
-    
-    if (self.updateLocationState == UpdateLocationStateActive)
-    {
-        MKCoordinateRegion region = [self.mapView region];
-        region.center = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
-        [self.mapView setRegion:region animated:YES];
-        [self setUpdateLocationState:UpdateLocationStateInactive];
     }
 }
 

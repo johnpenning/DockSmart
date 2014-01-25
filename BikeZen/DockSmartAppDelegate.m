@@ -56,23 +56,10 @@ NSString *kDisplayedVersion = @"displayed_version";
     // Override point for customization after application launch.
     
     //Begin location service
-//    _userCoordinate = kCLLocationCoordinate2DInvalid;
-    
-//    [[LocationController sharedInstance] init];
-    
-    //Make sure the user has enabled location services before attempting to get the location
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
     
 //    self.parseQueue = [NSOperationQueue new];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(addStations:)
-//                                                 name:kAddStationsNotif
-//                                               object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(stationError:)
-//                                                 name:kStationErrorNotif
-//                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshStationData:)
                                                  name:kRefreshTappedNotif
@@ -131,6 +118,13 @@ NSString *kDisplayedVersion = @"displayed_version";
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
+    NSString* logText = [NSString stringWithFormat:@"applicationDidReceiveLocalNotification: applicationState: %d", [application applicationState]];
+    NSLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+    
     NSString *notificationMessage = [notification alertBody];
     UIAlertView *alertView =
     [[UIAlertView alloc] initWithTitle:
@@ -141,16 +135,20 @@ NSString *kDisplayedVersion = @"displayed_version";
                      cancelButtonTitle:@"OK"
                      otherButtonTitles:nil];
     
-    //Play the alert sound
-    SystemSoundID soundFileObject;
-    CFBundleRef mainBundle = CFBundleGetMainBundle();
-    CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainBundle, CFSTR("bicycle_bell"), CFSTR("wav"), NULL);
-    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
-    AudioServicesPlaySystemSound(soundFileObject);
-
-    //Vibrate the phone
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-
+    if ([application applicationState] == UIApplicationStateActive)
+    {
+        //If we aren't entering the app from a local notification that already played an alert sound and vibrated:
+        //Play the alert sound
+        SystemSoundID soundFileObject;
+        CFBundleRef mainBundle = CFBundleGetMainBundle();
+        CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainBundle, CFSTR("bicycle_bell"), CFSTR("wav"), NULL);
+        AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
+        AudioServicesPlaySystemSound(soundFileObject);
+        
+        //Vibrate the phone
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+    }
+    
     //Show the alert
     [alertView show];
     
@@ -207,13 +205,17 @@ NSString *kDisplayedVersion = @"displayed_version";
     
     //TODO: get rid of this and just keep significant location changes?  We don't need standard location service when we're in the foreground, since we have the minute timer running then.
     // Stop significant location change updates
-    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-    if (controller.bikingState == BikingStateActive)
-    {
-        [[LocationController sharedInstance].locationManager stopMonitoringSignificantLocationChanges];
-        // Start standard location service
-        [[LocationController sharedInstance].locationManager startUpdatingLocation];
-    }
+//    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+//    if (controller.bikingState == BikingStateActive)
+//    {
+//        [[LocationController sharedInstance].locationManager stopMonitoringSignificantLocationChanges];
+//        // Start standard location service
+//        [[LocationController sharedInstance].locationManager startUpdatingLocation];
+//    }
+    
+    //Make sure the user has enabled location services before attempting to get the location
+    [[LocationController sharedInstance] startUpdatingCurrentLocation];
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -547,154 +549,5 @@ NSString *kDisplayedVersion = @"displayed_version";
                                                                                            forKey:kStationResultsKey]];
 
 }
-
-#pragma mark - CLLocationManagerDelegate
-#if 0
-- (void)startUpdatingCurrentLocation
-{
-    // if location services are restricted do nothing
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
-        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ||
-        [CLLocationManager locationServicesEnabled] == NO)
-    {
-        return;
-    }
-    
-    NSString* logText = [NSString stringWithFormat:@"startUpdatingCurrentLocation"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
-
-    
-    // if locationManager does not currently exist, create it
-    if (!_locationManager)
-    {
-        _locationManager = [[CLLocationManager alloc] init];
-    }
-    
-    [_locationManager setDelegate:self];
-    
-    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    _locationManager.distanceFilter = 5; //10.0f; // we don't need to be any more accurate than 10m
-    //        _locationManager.purpose = @"This will be used as part of the hint region for forward geocoding.";
-    
-    [_locationManager startUpdatingLocation];
-    
-//    [self showCurrentLocationSpinner:YES];
-}
-
-- (void)stopUpdatingCurrentLocation
-{
-    NSString* logText = [NSString stringWithFormat:@"stopUpdatingCurrentLocation"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
-
-    [_locationManager stopUpdatingLocation];
-//    [self showCurrentLocationSpinner:NO];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
-    //TODO: make current location button inactive on mapview
-}
-
-//- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-//{
-//    // if the location is older than 30s ignore
-//    if (fabs([newLocation.timestamp timeIntervalSinceDate:[NSDate date]]) > 30)
-//    {
-//        return;
-//    }
-//    
-//    _selectedCoordinate = [newLocation coordinate];
-//    
-//    // update the current location cells detail label with these coords
-//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
-//    cell.detailTextLabel.text = [NSString stringWithFormat:@"φ:%.4F, λ:%.4F", _selectedCoordinate.latitude, _selectedCoordinate.longitude];
-//    
-//    // after recieving a location, stop updating
-//    [self stopUpdatingCurrentLocation];
-//}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    // If it's a relatively recent event, turn off updates to save power
-    CLLocation* location = [locations lastObject];
-    NSDate* eventDate = location.timestamp;
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    
-    NSString* logText = [NSString stringWithFormat:@"didUpdateLocations: location: %@", location];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
-
-    if (abs(howRecent) < 15.0)
-    {
-        // If the event is recent, do something with it.
-
-        _userCoordinate = [location coordinate];
-        
-        NSLog(@"New location: %@", location);
-        
-//        [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
-//                                                            object:self
-//                                                          userInfo:[NSDictionary dictionaryWithObject:[[CLLocation alloc] initWithLatitude:self.userCoordinate.latitude longitude:self.userCoordinate.longitude] forKey:kNewLocationKey]];
-        
-        //If we're not actively biking, stop updating location to save battery
-        DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-        if (controller.bikingState != BikingStateActive)
-        {
-            [self stopUpdatingCurrentLocation];
-        }
-    }
-}
-
-- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
-{
-    //For testing: local notification
-    UILocalNotification *locationUpdatesPausedNotification = [[UILocalNotification alloc] init];
-    [locationUpdatesPausedNotification setAlertBody:[NSString stringWithFormat:@"Location updates paused: %f, %f %@", _userCoordinate.latitude, _userCoordinate.longitude, [NSDate date]]];
-    [locationUpdatesPausedNotification setFireDate:[NSDate date]];
-    [[UIApplication sharedApplication] presentLocalNotificationNow:locationUpdatesPausedNotification];
-}
-
-- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager
-{
-    //For testing: local notification
-    UILocalNotification *locationUpdatesResumedNotification = [[UILocalNotification alloc] init];
-    [locationUpdatesResumedNotification setAlertBody:[NSString stringWithFormat:@"Location updates resumed: %f, %f %@", _userCoordinate.latitude, _userCoordinate.longitude, [NSDate date]]];
-    [locationUpdatesResumedNotification setFireDate:[NSDate date]];
-    [[UIApplication sharedApplication] presentLocalNotificationNow:locationUpdatesResumedNotification];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-    NSLog(@"%@", error);
-    
-    NSString* logText = [NSString stringWithFormat:@"locationManagerDidFailWithError: %@", [error localizedDescription]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
-
-    
-    // stop updating
-    [self stopUpdatingCurrentLocation];
-    
-    // since we got an error, set selected location to invalid location
-    _userCoordinate = kCLLocationCoordinate2DInvalid;
-    
-    // show the error alert
-//    UIAlertView *alert = [[UIAlertView alloc] init];
-//    alert.title = @"Error obtaining location";
-//    alert.message = [error localizedDescription];
-//    [alert addButtonWithTitle:@"OK"];
-//    [alert show];
-}
-#endif
 
 @end

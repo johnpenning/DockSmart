@@ -86,10 +86,6 @@
     return [list objectAtIndex:index];
 }
 
-//- (MyLocation*)objectInSortedLocationListAtIndex:(NSUInteger)index {
-//    return [self.sortedLocationList objectAtIndex:index];
-//}
-
 - (void)addLocationObject:(MyLocation *)location toList:(NSMutableArray *)list
 {
     [list addObject:location];
@@ -108,9 +104,6 @@
 
 - (NSArray *)sortLocationList:(NSMutableArray *)locations byMethod:(LocationDataSortMethod)method
 {
-    //first update distances:
-    [self updateDistancesFromUserLocation:[self userCoordinate]];
-
     for (MyLocation *location in locations)
     {
         if ((![location isKindOfClass:[Station class]]) && ((method == LocationDataSortByBikes) || (method == LocationDataSortByDocks)))

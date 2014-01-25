@@ -23,11 +23,6 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
     BikingStateActive,
 };
 
-typedef NS_ENUM(NSInteger, UpdateLocationStateType) {
-    UpdateLocationStateInactive = 0,
-    UpdateLocationStateActive,
-};
-
 @class LocationDataController;
 
 @interface DockSmartMapViewController : UIViewController <MKMapViewDelegate, UIToolbarDelegate, UIActionSheetDelegate>//, UIObjectRestoration>
@@ -44,7 +39,6 @@ typedef NS_ENUM(NSInteger, UpdateLocationStateType) {
 
 @property (strong, nonatomic) LocationDataController *dataController;
 @property BikingStateType bikingState;
-@property UpdateLocationStateType updateLocationState;
 @property (weak, nonatomic) IBOutlet UIToolbar *topMapToolbar;
 
 @end
