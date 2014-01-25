@@ -944,6 +944,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
         
         //return to idle
         [self clearBikeRouteWithRefresh:NO];
+        [self plotStationPosition:self.dataController.stationList];
         
         return;
     }

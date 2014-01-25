@@ -115,8 +115,7 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     
 //    [self.navigationController setNavigationBarHidden:YES animated:animated];
     //deselect the last row selected
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -659,6 +658,11 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     
+    if (!self.geocodeSearchResults)
+    {
+        self.geocodeSearchResults = [[NSMutableArray alloc] init];
+    }
+    
     //Remove previous geocode results:
     [self.geocodeSearchResults removeAllObjects];
     
@@ -690,17 +694,14 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
         }
         
         NSLog(@"Received placemarks: %@", placemarks);
-        //            [self displayPlacemarks:placemarks];
+
         //place them at the top of the searchResults list in searchDisplayController instead of segueing to new view:
-        //TODO: a new section in the table for the search results, with "Addresses" header, above everything else
-        //            NSMutableArray *geocodeResults = [[NSMutableArray alloc] init];
         for (CLPlacemark *placemark in placemarks)
         {
             NSLog(@"Placemark name: %@ subthoroughfare: %@ thoroughfare: %@ sublocality: %@ locality: %@ subadministrativearea: %@ administrativearea: %@", placemark.name, placemark.subThoroughfare, placemark.thoroughfare, placemark.subLocality, placemark.locality, placemark.subAdministrativeArea, placemark.administrativeArea);
             Address *address = [[Address alloc] initWithPlacemark:placemark distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(placemark.location.coordinate), MKMapPointForCoordinate(self.userCoordinate))];
             if ([address.name length] > 0)
             {
-                //TODO: geocodeSearchResults was nil when debugging once, figure out why
                 [self.geocodeSearchResults addObject:address];
             }
         }
