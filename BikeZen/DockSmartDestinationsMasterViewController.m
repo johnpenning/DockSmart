@@ -157,7 +157,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     
     NSError *error;
     BOOL result = [data writeToFile:path options:NSDataWritingAtomic error:&error];
-    NSLog(@"Table view archive result = %d, %@", result, error);
+    DLog(@"Table view archive result = %d, %@", result, error);
     
 }
 
@@ -165,7 +165,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 - (void) decodeRestorableStateWithCoder:(NSCoder *)coder
 {
     NSString* logText = [NSString stringWithFormat:@"destinationsMasterViewController decodeRestorableStateWithCoder called"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -200,7 +200,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 {
     //Called on restored view controllers after other object decoding is complete.
     NSString* logText = [NSString stringWithFormat:@"finished restoring DestinationsMasterViewController"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -685,7 +685,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 
         if (error)
         {
-            NSLog(@"Geocode failed with error: %@", error);
+            DLog(@"Geocode failed with error: %@", error);
             //                [self displayError:error];
             //Hide the HUD
             //TODO: add "No results found" text and delay?
@@ -693,12 +693,12 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
             return;
         }
         
-        NSLog(@"Received placemarks: %@", placemarks);
+        DLog(@"Received placemarks: %@", placemarks);
 
         //place them at the top of the searchResults list in searchDisplayController instead of segueing to new view:
         for (CLPlacemark *placemark in placemarks)
         {
-            NSLog(@"Placemark name: %@ subthoroughfare: %@ thoroughfare: %@ sublocality: %@ locality: %@ subadministrativearea: %@ administrativearea: %@", placemark.name, placemark.subThoroughfare, placemark.thoroughfare, placemark.subLocality, placemark.locality, placemark.subAdministrativeArea, placemark.administrativeArea);
+            DLog(@"Placemark name: %@ subthoroughfare: %@ thoroughfare: %@ sublocality: %@ locality: %@ subadministrativearea: %@ administrativearea: %@", placemark.name, placemark.subThoroughfare, placemark.thoroughfare, placemark.subLocality, placemark.locality, placemark.subAdministrativeArea, placemark.administrativeArea);
             Address *address = [[Address alloc] initWithPlacemark:placemark distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(placemark.location.coordinate), MKMapPointForCoordinate(self.userCoordinate))];
             if ([address.name length] > 0)
             {

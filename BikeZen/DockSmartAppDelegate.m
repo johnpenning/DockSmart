@@ -107,7 +107,7 @@ NSString *kDisplayedVersion = @"displayed_version";
     
     
     NSString* logText = [NSString stringWithFormat:@"didFinishLaunchingWithOptions: startLocation %@ triggeredNotification %@ applicationState: %d", startLocation, [triggeredNotification alertBody], [application applicationState]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -119,7 +119,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSString* logText = [NSString stringWithFormat:@"applicationDidReceiveLocalNotification: applicationState: %d", [application applicationState]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -161,7 +161,7 @@ NSString *kDisplayedVersion = @"displayed_version";
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     NSString* logText = [NSString stringWithFormat:@"applicationWillResignActive: applicationState: %d", [application applicationState]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -175,7 +175,7 @@ NSString *kDisplayedVersion = @"displayed_version";
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     
     NSString* logText = [NSString stringWithFormat:@"applicationDidEnterBackground: applicationState: %d", [application applicationState]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -196,7 +196,7 @@ NSString *kDisplayedVersion = @"displayed_version";
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 
     NSString* logText = [NSString stringWithFormat:@"applicationWillEnterForeground: applicationState: %d", [application applicationState]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -223,7 +223,7 @@ NSString *kDisplayedVersion = @"displayed_version";
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
     NSString* logText = [NSString stringWithFormat:@"applicationDidBecomeActive: applicationState: %d", [application applicationState]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -252,7 +252,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     NSString* logText = [NSString stringWithFormat:@"applicationWillTerminate: applicationState: %d", [application applicationState]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -292,7 +292,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 //                     otherButtonTitles:nil];
 //    [alertView show];
     NSString* logText = [NSString stringWithFormat:@"NSXMLParser error: %@", [error localizedDescription]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -362,7 +362,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 {
     //log the new parse operation
     NSString* logText = [NSString stringWithFormat:@"XML parse operation started"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -383,7 +383,7 @@ NSString *kDisplayedVersion = @"displayed_version";
     DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSLog(@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]);
+    DLog(@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]);
     
     if ((controller.bikingState != BikingStateInactive) || ([defaults boolForKey:kAutoCityPreference] == NO))
     {
@@ -526,14 +526,14 @@ NSString *kDisplayedVersion = @"displayed_version";
         Station *tempStation = [[Station alloc] init];
         
         tempStation.stationID = [item stationID];
-//        NSLog(@"StationID: %d", tempStation.stationID);
+//        DLog(@"StationID: %d", tempStation.stationID);
         tempStation.name = [item name];
         tempStation.latitude = [item lat];
         tempStation.longitude = [item lng];
         tempStation.nbBikes = [item bikes];
         tempStation.nbEmptyDocks = [item free];
         tempStation.lastStationUpdate = [(NSDictionary*)item timestamp];
-//        NSLog(@"lastStationUpdate: %@", tempStation.lastStationUpdate);
+//        DLog(@"lastStationUpdate: %@", tempStation.lastStationUpdate);
         tempStation.installed = [item installed];
         tempStation.locked = [item locked];
         

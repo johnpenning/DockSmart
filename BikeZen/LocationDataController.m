@@ -109,7 +109,7 @@
         if ((![location isKindOfClass:[Station class]]) && ((method == LocationDataSortByBikes) || (method == LocationDataSortByDocks)))
         {
             //We cannot sort by bikes or docks if the list of locations to be sorted does not 100% contain Station objects. Return the original unsorted list and log an error.
-            NSLog(@"Non-Station objects attempted to be sorted by bikes or docks.");
+            DLog(@"Non-Station objects attempted to be sorted by bikes or docks.");
             return (NSArray *)locations;
         }
     }

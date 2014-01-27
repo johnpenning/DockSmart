@@ -45,7 +45,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
     }
     
     NSString* logText = [NSString stringWithFormat:@"startUpdatingCurrentLocation"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -72,7 +72,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
 - (void)stopUpdatingCurrentLocation
 {
     NSString* logText = [NSString stringWithFormat:@"stopUpdatingCurrentLocation"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -113,7 +113,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
     NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
     
     NSString* logText = [NSString stringWithFormat:@"didUpdateLocations: location: %@", location];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -126,7 +126,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
         //store it in the singleton's location property
         self.location = location;
         
-        NSLog(@"New location: %@", location);
+        DLog(@"New location: %@", location);
         //post notification
         [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
                                                             object:self
@@ -163,10 +163,10 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    NSLog(@"%@", error);
+    DLog(@"%@", error);
     
     NSString* logText = [NSString stringWithFormat:@"locationManagerDidFailWithError: %@", [error localizedDescription]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -191,7 +191,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
 {
 //    NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ %f, %f withError: %@", region.identifier, region.center.latitude, region.center.longitude, [error localizedDescription]];
     NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ withError: %@", region.identifier, [error localizedDescription]];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -203,7 +203,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
 {
 //    NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
     NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@", region.identifier];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -218,7 +218,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
 {
 //    NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
     NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@", region.identifier];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText

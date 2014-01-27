@@ -289,7 +289,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 //        [plistData writeToFile:plistPath atomically:YES];
 //    }
 //    else {
-//        NSLog(@"Error : %@",error);
+//        DLog(@"Error : %@",error);
 //        [error release];
 //    }
     
@@ -320,7 +320,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     
     NSError *error;
     BOOL result = [data writeToFile:path options:NSDataWritingAtomic error:&error];
-    NSLog(@"Archive result = %d, %@", result, error);
+    DLog(@"Archive result = %d, %@", result, error);
     
 }
 
@@ -328,7 +328,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 - (void) decodeRestorableStateWithCoder:(NSCoder *)coder
 {
     NSString* logText = [NSString stringWithFormat:@"mapViewController decodeRestorableStateWithCoder called"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -466,7 +466,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 {
     //Called on restored view controllers after other object decoding is complete.
     NSString* logText = [NSString stringWithFormat:@"finished restoring MapViewController"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -663,7 +663,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 
             if (error)
             {
-                NSLog(@"Reverse geocode failed with error: %@", error);
+                DLog(@"Reverse geocode failed with error: %@", error);
                 //still use the center coordinate for mapCenterAddress
                 return;
             }
@@ -1019,7 +1019,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     //Start minute timer:
     
     NSString* logText = [NSString stringWithFormat:@"Starting minute timer"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -1075,7 +1075,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
                        context:(void *)context
 {
     NSString* logText = [NSString stringWithFormat:@"NEW STATION DATA: bikingState: %d", self.bikingState];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
@@ -1117,11 +1117,11 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
                 
                 if (stationIndex != NSNotFound)
                 {
-//                    NSLog(@"stationIndex = %d", stationIndex);
-//                    NSLog(@"station.stationID = %d", station.stationID);
-//                    NSLog(@"station.name = %@", station.name);
-//                    NSLog(@"station = %08x", (unsigned int)station);
-//                    NSLog(@"closeststations = %08x %08x %08x", (unsigned int)[self.closestStationsToDestination objectAtIndex:0], (unsigned int)[self.closestStationsToDestination objectAtIndex:1], (unsigned int)[self.closestStationsToDestination objectAtIndex:2]);
+//                    DLog(@"stationIndex = %d", stationIndex);
+//                    DLog(@"station.stationID = %d", station.stationID);
+//                    DLog(@"station.name = %@", station.name);
+//                    DLog(@"station = %08x", (unsigned int)station);
+//                    DLog(@"closeststations = %08x %08x %08x", (unsigned int)[self.closestStationsToDestination objectAtIndex:0], (unsigned int)[self.closestStationsToDestination objectAtIndex:1], (unsigned int)[self.closestStationsToDestination objectAtIndex:2]);
                     [self.closestStationsToDestination replaceObjectAtIndex:stationIndex withObject:station];
                 }
                 
@@ -1224,8 +1224,6 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
                     [stopAtCurrentStationNotification setFireDate:[NSDate date]];
                     [[UIApplication sharedApplication] scheduleLocalNotification:stopAtCurrentStationNotification];
                     
-                    
-                    notifSent = YES;
                     endTracking = YES;
                     break;
                 }
@@ -1295,7 +1293,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     
     //log it for debugging
     NSString* logText = [NSString stringWithFormat:@"cancelTapped"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText

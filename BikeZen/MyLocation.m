@@ -102,7 +102,7 @@ static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 {
     //Called on restored view controllers after other object decoding is complete.
     NSString* logText = [NSString stringWithFormat:@"finished restoring MyLocation"];
-    NSLog(@"%@",logText);
+    DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
