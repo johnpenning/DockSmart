@@ -37,7 +37,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 - (void)parseLiveData:(NSDictionary*)data;
 //- (void)loadJSONData;
 - (void)refreshStationData:(NSNotification *)notif;
-- (void)stationError:(NSNotification *)notif;
+//- (void)stationError:(NSNotification *)notif;
 @end
 
 
@@ -308,7 +308,6 @@ NSString *kDisplayedVersion = @"displayed_version";
     
     [self addStationsToList:[[notif userInfo] valueForKey:kStationResultsKey]];
 }
-#endif
 
 // Our NSNotification callback from the running NSOperation when a parsing error has occurred
 //
@@ -322,7 +321,6 @@ NSString *kDisplayedVersion = @"displayed_version";
 // which in turn calls this method, with batches of parsed objects.
 // The batch size is set via the kSizeOfEarthquakeBatch constant.
 //
-#if 0
 - (void)addStationsToList:(NSArray *)stations {
     
     // insert the earthquakes into our mapViewController's data source (for KVO purposes)
@@ -385,11 +383,17 @@ NSString *kDisplayedVersion = @"displayed_version";
     
     DLog(@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]);
     
+    /*
+     If auto city detection is off, or if we're already on a bike route, do not load the list of networks to determine which city we're in.
+     Just load the current city's data.
+     */
     if ((controller.bikingState != BikingStateInactive) || ([defaults boolForKey:kAutoCityPreference] == NO))
     {
         [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
         return;
     }
+    
+    /* Otherwise continue with auto city detection. Load the full list of bikeshare networks. */
     
     //Start spinning the network activity indicator:
     [self setNetworkActivityIndicatorVisible:YES];
@@ -419,13 +423,20 @@ NSString *kDisplayedVersion = @"displayed_version";
              //Stop spinning the network activity indicator:
              [self setNetworkActivityIndicatorVisible:NO];
              
-             [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
-                                                                 object:self
-                                                               userInfo:[NSDictionary dictionaryWithObject:error
-                                                                                                    forKey:kStationsMsgErrorKey]];
-             
-             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-             [av show];
+             if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+             {
+                 //Let the app know that we had trouble getting data.  We don't need to alert the user if this happens in the background, it just means they have to wait for the next time we refresh the data
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
+                                                                     object:self
+                                                                   userInfo:[NSDictionary dictionaryWithObject:error
+                                                                                                        forKey:kStationsMsgErrorKey]];
+#ifdef DEBUG
+                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+#else
+                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+#endif
+                 [av show];
+             }
          }];
 }
 
@@ -479,14 +490,20 @@ NSString *kDisplayedVersion = @"displayed_version";
              //Stop spinning the network activity indicator:
              [self setNetworkActivityIndicatorVisible:NO];
              
-             [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
-                                                                 object:self
-                                                               userInfo:[NSDictionary dictionaryWithObject:error
-                                                                                                    forKey:kStationsMsgErrorKey]];
-
-             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-             [av show];
-             
+             //Let the app know that we had trouble getting data.  We don't need to alert the user if this happens in the background, it just means they have to wait for the next time we refresh the data
+             if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+             {
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
+                                                                     object:self
+                                                                   userInfo:[NSDictionary dictionaryWithObject:error
+                                                                                                        forKey:kStationsMsgErrorKey]];
+#ifdef DEBUG
+                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+#else
+                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+#endif
+                 [av show];
+             }
          }];
 }
 

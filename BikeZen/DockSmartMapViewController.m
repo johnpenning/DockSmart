@@ -97,7 +97,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
                                                  name:kStationErrorNotif
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(prepareBikeRoute:)
+                                             selector:@selector(prepareNewBikeRoute:)
                                                  name:kStartBikingNotif
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -142,6 +142,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     [self setBikingState:BikingStateInactive];
     
     //Define the initial zoom location (Dupont Circle for now)
+    //TODO: change this to current user location, wherever that may be
     CLLocationCoordinate2D zoomLocation = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
     
 //    zoomLocation.latitude = DUPONT_LAT;
@@ -277,21 +278,6 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     [coder encodeDouble:[self.mapView region].center.longitude forKey:RegionCenterLongKey];
     [coder encodeDouble:[self.mapView region].span.latitudeDelta forKey:RegionSpanLatKey];
     [coder encodeDouble:[self.mapView region].span.longitudeDelta forKey:RegionSpanLongKey];
-//    
-//    NSString *error;
-//    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-//    NSString *plistPath = [rootPath stringByAppendingPathComponent:@"yourFile.plist"];
-//    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:rootObj
-//                                                                   format:NSPropertyListXMLFormat_v1_0
-//                                                         errorDescription:&error];
-//    NSData *plistData = [NSPropertyListSerialization dataWithPropertyList:<#(id)#> format:<#(NSPropertyListFormat)#> options:<#(NSPropertyListWriteOptions)#> error:<#(out NSError *__autoreleasing *)#>]
-//    if(plistData) {
-//        [plistData writeToFile:plistPath atomically:YES];
-//    }
-//    else {
-//        DLog(@"Error : %@",error);
-//        [error release];
-//    }
     
     NSMutableData *data = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
@@ -764,14 +750,20 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     [self didChangeValueForKey:kStationList];
 }
 
-- (void)prepareBikeRoute:(NSNotification *)notif
+- (void)prepareNewBikeRoute:(NSNotification *)notif
 {
 //    assert([NSThread isMainThread]);
     
+    //Set up a new route:
+    [self prepareBikeRouteWithDestination:[[notif userInfo] valueForKey:kBikeDestinationKey] newDestination:YES];
+}
+
+- (void)prepareBikeRouteWithDestination:(MyLocation *)dest newDestination:(BOOL)newDest
+{
     //Get ready to bike, set the new state and the final destination location
-    self.bikingState = BikingStatePreparingToBike;
-    self.finalDestination = [[[notif userInfo] valueForKey:kBikeDestinationKey] copy];
-    
+    self.bikingState = (newDest) ? BikingStatePreparingToBike : BikingStateTrackingDidStop;
+    self.finalDestination = [dest copy];
+
     //Start tracking user location
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
     
@@ -787,10 +779,12 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
                                                       userInfo:nil];
 }
 
+#if 0
 - (void)prepareBikeRouteCallback
 {
     [self updateActiveBikingViewWithNewDestination:YES];
 }
+#endif
 
 - (void)clearBikeRouteWithRefresh:(BOOL)refresh
 {
@@ -869,84 +863,115 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
         }
     }
     
-    if (newDest)
+    /* Change the map view to show the current user location, and the start, end and backup end stations */
+    
+    //Really nice code for this adapted from https://gist.github.com/andrewgleave/915374 via http://stackoverflow.com/a/7141612 :
+    //Start with the user coordinate:
+    MKMapPoint annotationPoint;
+    MKMapRect zoomRect;
+    if (self.dataController.userCoordinate.latitude && self.dataController.userCoordinate.longitude)
     {
-        /* Change the map view to show the current user location, and the start, end and backup end stations */
-        
-        //Really nice code for this adapted from https://gist.github.com/andrewgleave/915374 via http://stackoverflow.com/a/7141612 :
-        //Start with the user coordinate:
-        MKMapPoint annotationPoint;
-        MKMapRect zoomRect;
-        if (self.dataController.userCoordinate.latitude && self.dataController.userCoordinate.longitude)
-        {
-            annotationPoint = MKMapPointForCoordinate(self.dataController.userCoordinate);
-            zoomRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
-        }
-        else
-        {
-            zoomRect = MKMapRectNull;
-        }
-        //Then add the closest station to the user:
-        annotationPoint = MKMapPointForCoordinate(self.sourceStation.coordinate);
-        MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
-        zoomRect = MKMapRectUnion(zoomRect, pointRect);
-        //Then add the destination:
-        annotationPoint = MKMapPointForCoordinate(self.finalDestination.coordinate);
+        annotationPoint = MKMapPointForCoordinate(self.dataController.userCoordinate);
+        zoomRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    }
+    else
+    {
+        zoomRect = MKMapRectNull;
+    }
+    //Then add the closest station to the user:
+    annotationPoint = MKMapPointForCoordinate(self.sourceStation.coordinate);
+    MKMapRect pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    zoomRect = MKMapRectUnion(zoomRect, pointRect);
+    //Then add the destination:
+    annotationPoint = MKMapPointForCoordinate(self.finalDestination.coordinate);
+    pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+    zoomRect = MKMapRectUnion(zoomRect, pointRect);
+    //Then add the closest stations to the destination:
+    for (Station* station in self.closestStationsToDestination)
+    {
+        annotationPoint = MKMapPointForCoordinate(station.coordinate);
         pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
         zoomRect = MKMapRectUnion(zoomRect, pointRect);
-        //Then add the closest stations to the destination:
-        for (Station* station in self.closestStationsToDestination)
-        {
-            annotationPoint = MKMapPointForCoordinate(station.coordinate);
-            pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
-            zoomRect = MKMapRectUnion(zoomRect, pointRect);
-        }
-        //increased edge padding so all relevant markers are visible
-        [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(104, 15, 104, 15) animated:YES];
     }
+    //increased edge padding so all relevant markers are visible
+    [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(104, 15, 104, 15) animated:YES];
     
     //Change the annotation identifiers for the Station/MyLocation objects we want to view as annotations on the map:
     //i.e. change the pin color (other attributes?) for start, end and backup end stations
     self.sourceStation.annotationIdentifier = kSourceStation;
-    if (newDest)
+    self.finalDestination.annotationIdentifier = kDestinationLocation;
+    //Label the closest destination to the finalDestination as the idealDestinationStation, so if it's full we can check to see if a dock opens up there later.
+    self.idealDestinationStation = [self.closestStationsToDestination objectAtIndex:0];
+    //Destintation stations: label the closest one with at least one empty dock as the current destination and the rest as "alternates."
+    BOOL destinationFound = NO;
+    for (Station* station in self.closestStationsToDestination)
     {
-        self.finalDestination.annotationIdentifier = kDestinationLocation;
-        //Label the closest destination to the finalDestination as the idealDestinationStation, so if it's full we can check to see if a dock opens up there later.
-        self.idealDestinationStation = [self.closestStationsToDestination objectAtIndex:0];
-        //Destintation stations: label the closest one with at least one empty dock as the current destination and the rest as "alternates."
-        BOOL destinationFound = NO;
-        for (Station* station in self.closestStationsToDestination)
+        if ((station.nbEmptyDocks > 0) && !destinationFound)
         {
-            if ((station.nbEmptyDocks > 0) && !destinationFound)
+            station.annotationIdentifier = kDestinationStation;
+            self.currentDestinationStation = station;
+            destinationFound = YES;
+        }
+        else
+        {
+            station.annotationIdentifier = kAlternateStation;
+        }
+    }
+
+    //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
+
+    /* JUST WALK ALERTS:
+     If the closest station to the destination is also the closest one to the user, perhaps it's best to just tell the user to walk.
+     (Do not use sourceStation in case there is one closer with no bikes... use the top of the sorted station list instead)
+     ALSO: Show this alert as well if the destination station is different but
+     (dist(user to sourceStation) + dist(destinationStation to finalDestination) >= dist(user to finalDestination)), 
+     otherwise the user is walking an equal or longer distance (to the closest station with a bike, plus from the station nearest to 
+     their destination with a dock) as well as biking, which is foolish
+     */
+    if ((self.idealDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID]) ||
+        ((self.sourceStation.distanceFromUser + self.currentDestinationStation.distanceFromDestination) >= self.finalDestination.distanceFromUser))
+    {
+        //Only show an alertView popup if newDest == YES (so we don't show a Just Walk alert if the app stops tracking, either manually or automatically, when the user gets to their destination)
+        if (newDest)
+        {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Walk to your destination!"
+                                                        message:nil
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+            if (self.idealDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID])
             {
-                station.annotationIdentifier = kDestinationStation;
-                self.currentDestinationStation = station;
-                destinationFound = YES;
+                [av setMessage:@"The destination station is also the closest one to your current location. Perhaps it's best to just walk."];
             }
             else
             {
-                station.annotationIdentifier = kAlternateStation;
+                [av setMessage:@"The best stations to start and finish your route are both out of the way. Perhaps it's best to just walk."];
+            }
+            [av show];
+            
+            //return to idle
+            [self clearBikeRouteWithRefresh:NO];
+            [self plotStationPosition:self.dataController.stationList];
+            
+            return;
+        }
+        else
+        {
+            //If our final destination isn't the station itself, change label to show where to walk:
+            if (self.finalDestination.coordinate.latitude != self.currentDestinationStation.coordinate.latitude && self.finalDestination.coordinate.longitude != self.currentDestinationStation.coordinate.longitude)
+            {
+                [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Walk to %@", self.finalDestination.name]];
+            }
+            else //We've reached our final destination (which is either the idealDestinationStation or a non-station Address)
+            {
+                [self.destinationDetailLabel setText:@"You have arrived!"];
             }
         }
     }
-    //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
-
-    //If the closest station to the destination is closer than the sourceStation, perhaps it's best to just tell the user to walk?
-    //(Do not use sourceStation in case there is one closer with no bikes... use the top of the sorted station list instead)
-    if (self.idealDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID])
+    else
     {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Walk to your destination!"
-                                                     message:@"The destination station is also the closest one to your current location. Perhaps it's best to just walk."
-                                                    delegate:nil
-                                           cancelButtonTitle:@"OK"
-                                           otherButtonTitles:nil];
-        [av show];
-        
-        //return to idle
-        [self clearBikeRouteWithRefresh:NO];
-        [self plotStationPosition:self.dataController.stationList];
-        
-        return;
+        //Change label to show where to pick up and drop off your bike:
+        [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", self.sourceStation.name, self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
     }
     
     //Hide the annotations for all other stations.
@@ -958,21 +983,16 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     //Hide center bike pointer image
     [self.bikeCrosshairImage setHidden:YES];
     
-    //Change buttons and label:
-    [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", self.sourceStation.name, self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
-    
-    if (newDest)
-    {
-        /* iOS6 : pre-toolbar */
-//        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-//        [self.startStopButton setTitle:@"Start Station Tracking" forState:UIControlStateNormal];
-//        [self.cancelButton setHidden:NO];
-        /* iOS7 : with toolbar */
-        [self.startStopButton setTintColor:[UIColor greenColor]];
-        [self.startStopButton setTitle:@"Start Station Tracking"];
-        [self.startStopButton setEnabled:YES];
-        [self.cancelButton setEnabled:YES];
-    }
+    //Change buttons:
+    /* iOS6 : pre-toolbar */
+    //        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    //        [self.startStopButton setTitle:@"Start Station Tracking" forState:UIControlStateNormal];
+    //        [self.cancelButton setHidden:NO];
+    /* iOS7 : with toolbar */
+    [self.startStopButton setTintColor:[UIColor greenColor]];
+    [self.startStopButton setTitle:@"Start Station Tracking"];
+    [self.startStopButton setEnabled:YES];
+    [self.cancelButton setEnabled:YES];
     
     //Add new annotations.
     //TODO: update distanceFromUser, etc (other properties) in local MyLocation objects (finalDestination, etc) here? instead of in startStationTracking for example?
@@ -1008,9 +1028,9 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     //One more region for each of the three closest stations to the final destination:
 //    for (Station* station in self.closestStationsToDestination)
 //    {
-    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:0]).coordinate radius:15 identifier:kRegionMonitorStation1 accuracy:kCLLocationAccuracyBest];
-    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:1]).coordinate radius:15 identifier:kRegionMonitorStation2 accuracy:kCLLocationAccuracyBest];
-    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:2]).coordinate radius:15 identifier:kRegionMonitorStation3 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:0]).coordinate radius:10 identifier:kRegionMonitorStation1 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:1]).coordinate radius:10 identifier:kRegionMonitorStation2 accuracy:kCLLocationAccuracyBest];
+    [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:2]).coordinate radius:10 identifier:kRegionMonitorStation3 accuracy:kCLLocationAccuracyBest];
 
 //    }
     
@@ -1094,7 +1114,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
             break;
         case BikingStatePreparingToBike:
             //Do not reload the map view yet, just go to the callback to finish the setup to start biking:
-            [self prepareBikeRouteCallback];
+            [self updateActiveBikingViewWithNewDestination:YES];
             break;
         case BikingStateActive:
         {
@@ -1267,14 +1287,18 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
             {
                 //Stop tracking stations:
                 [self stopStationTracking];
-                //setup PreparingToBike:
-                [self prepareBikeRoute:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.finalDestination forKey:kBikeDestinationKey]]];
+                //Show the route setup screen again:
+                [self prepareBikeRouteWithDestination:self.finalDestination newDestination:NO];
             }
             
             //clear out the region identifier queue so we don't alert at the wrong time
             [self.regionIdentifierQueue removeAllObjects];
             
         }
+            break;
+        case BikingStateTrackingDidStop:
+            //Allow the user to restart the same route, but don't give them a "Just walk" alert if they're close to their destination:
+            [self updateActiveBikingViewWithNewDestination:NO];
             break;
         default:
             break;
@@ -1306,11 +1330,11 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 - (IBAction)startStopTapped:(UIButton *)sender {
     switch (self.bikingState) {
         case BikingStateInactive:
-            //set the final destination to equal the placemark at the center of the crosshairs
-            //then call startBiking: with the location
-            [self prepareBikeRoute:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.mapCenterAddress forKey:kBikeDestinationKey]]];
+            //set the final destination to equal the placemark at the center of the crosshairs and prepare a new route to the location
+            [self prepareBikeRouteWithDestination:self.mapCenterAddress newDestination:YES];
             break;
         case BikingStatePreparingToBike:
+        case BikingStateTrackingDidStop:
             //Change buttons:
 
             /* iOS6 : pre-toolbar */
@@ -1328,10 +1352,11 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
             
             break;
         case BikingStateActive:
-            //stop station tracking and return PreparingToBike state
+            //stop station tracking and return to the route setup screen
             [self stopStationTracking];
-            //setup PreparingToBike:
-            [self prepareBikeRoute:[NSNotification notificationWithName:kStartBikingNotif object:self userInfo:[NSDictionary dictionaryWithObject:self.finalDestination forKey:kBikeDestinationKey]]];
+            //setup route screen:
+            [self prepareBikeRouteWithDestination:self.finalDestination newDestination:NO];
+
             break;
         default:
             break;

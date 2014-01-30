@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
     BikingStateInactive = 0,
     BikingStatePreparingToBike,
     BikingStateActive,
+    BikingStateTrackingDidStop,
 };
 
 @class LocationDataController;
