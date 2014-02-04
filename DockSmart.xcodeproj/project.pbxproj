@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		44D5914B240349EBA5C27A30 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47E2CC56A7754EEA88180D42 /* libPods.a */; };
+		CD00396C189DC52C00349A88 /* DSHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CD00396B189DC52C00349A88 /* DSHTTPSessionManager.m */; };
 		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
 		CD0FF5F71881D75A00D349D5 /* map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD0FF5F51881D75A00D349D5 /* map@2x.png */; };
@@ -368,6 +369,8 @@
 /* Begin PBXFileReference section */
 		30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		47E2CC56A7754EEA88180D42 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD00396A189DC52C00349A88 /* DSHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSHTTPSessionManager.h; sourceTree = "<group>"; };
+		CD00396B189DC52C00349A88 /* DSHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSHTTPSessionManager.m; sourceTree = "<group>"; };
 		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD0344321730D01400682A78 /* MyLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyLocation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD0344341730DC9D00682A78 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -1158,6 +1161,8 @@
 				CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */,
 				CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */,
 				CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */,
+				CD00396A189DC52C00349A88 /* DSHTTPSessionManager.h */,
+				CD00396B189DC52C00349A88 /* DSHTTPSessionManager.m */,
 			);
 			name = DockSmart;
 			path = BikeZen;
@@ -1689,6 +1694,7 @@
 				CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */,
 				CDC454001736D7BF008E2966 /* Station.m in Sources */,
 				CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */,
+				CD00396C189DC52C00349A88 /* DSHTTPSessionManager.m in Sources */,
 				CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */,
 				CDA95510176CCE47003C49DF /* StationDataController.m in Sources */,
 				CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */,

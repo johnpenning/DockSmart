@@ -111,7 +111,7 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
     self.currentParsedCharacterData = [NSMutableString string];
     
     //Start spinning the network activity indicator:
-    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+//    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
     
     // It's also possible to have NSXMLParser download the data, by passing it a URL, but this is
     // not desirable because it gives less control over the network, particularly in responding to
@@ -136,7 +136,7 @@ NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
     }
     
     //Stop spinning the network activity indicator:
-    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
+//    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
     
     self.currentParseBatch = nil;
     self.currentStationObject = nil;

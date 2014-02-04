@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "LocationController.h"
+#import "DSHTTPSessionManager.h"
 
 @class Station, DockSmartMapViewController;
 
@@ -24,6 +25,8 @@
 
 @property (nonatomic) NSString *currentCityUrl;
 
+#if 0
 - (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible;
+#endif
 
 @end

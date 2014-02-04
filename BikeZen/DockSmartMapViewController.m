@@ -17,6 +17,7 @@
 #import "ParseOperation.h"
 #import "DockSmartLogViewController.h"
 #import "DockSmartAppDelegate.h"
+#import "MBProgressHUD.h"
 
 // NSNotification name for reporting that refresh was tapped
 NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
@@ -180,7 +181,17 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 - (void)viewWillAppear:(BOOL)animated
 {
     //Make sure the user has enabled location services before attempting to get the location
-    [[LocationController sharedInstance] startUpdatingCurrentLocation];
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
+        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ||
+        [CLLocationManager locationServicesEnabled] == NO)
+    {
+        [self.updateLocationButton setEnabled:NO];
+    }
+    else
+    {
+        [self.updateLocationButton setEnabled:YES];
+        [[LocationController sharedInstance] startUpdatingCurrentLocation];
+    }
 
     [super viewWillAppear:animated];
 }
@@ -193,6 +204,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     [self setBikeCrosshairImage:nil];
     [self setCancelButton:nil];
     [self setBikesDocksControl:nil];
+    [self setUpdateLocationButton:nil];
 //    [self setClosestStationsToDestination:nil];
     [super viewDidUnload];
 //    
@@ -233,6 +245,7 @@ static NSString *RegionCenterLongKey = @"RegionCenterLongKey";
 static NSString *RegionSpanLatKey = @"RegionSpanLatKey";
 static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
+static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledKey";
 
 - (void) encodeRestorableStateWithCoder:(NSCoder *)coder
 {
@@ -298,6 +311,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     [archiver encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
     [archiver encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
     [archiver encodeObject:self.regionIdentifierQueue forKey:RegionIdentifierKey];
+    [archiver encodeBool:self.updateLocationButton.enabled forKey:UpdateLocationButtonEnabledKey];
     [archiver finishEncoding];
     
 //    NSString *filename = @"stationData.txt";
@@ -305,8 +319,12 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"stationData.txt"];
     
     NSError *error;
+#ifdef DEBUG
     BOOL result = [data writeToFile:path options:NSDataWritingAtomic error:&error];
-    DLog(@"Archive result = %d, %@", result, error);
+    DLog(@"Map view archive result = %d, %@", result, error);
+#else
+    [data writeToFile:path options:NSDataWritingAtomic error:&error];
+#endif
     
 }
 
@@ -383,6 +401,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     self.mapCenterAddress = [unarchiver decodeObjectForKey:MapCenterAddressKey];
     self.bikeCrosshairImage.hidden = [unarchiver decodeBoolForKey:BikeCrosshairImageKey];
     self.regionIdentifierQueue = [unarchiver decodeObjectForKey:RegionIdentifierKey];
+    self.updateLocationButton.enabled = [unarchiver decodeBoolForKey:UpdateLocationButtonEnabledKey];
     [unarchiver finishDecoding];
 }
 
@@ -467,7 +486,13 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 - (void)refreshWasTapped
 {
 //    assert([NSThread isMainThread]);
-    
+    //Start HUD if we're not just refreshing during active biking:
+    if (self.bikingState != BikingStateActive)
+    {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"Loading stations...";
+    }
+
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
                                                         object:self
                                                       userInfo:nil];
@@ -640,12 +665,12 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
         [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
         
         //Start spinning the network activity indicator:
-        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+//        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
 
         [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
             
             //Stop spinning the network activity indicator:
-            [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
+//            [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
 
             if (error)
             {
@@ -727,12 +752,33 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 
 - (void)stationError:(NSNotification*)notif
 {
-    //Reset the bikingState to inactive if we were trying to prepare a route before getting a station error:
-    if (self.bikingState == BikingStatePreparingToBike)
-    {
-//        self.bikingState = BikingStateInactive;
-        [self clearBikeRouteWithRefresh:NO];
+    switch (self.bikingState) {
+        case BikingStateInactive:
+            //Reload map view with the full set of station annotations from the last time we were able to get station data:
+            [self plotStationPosition:self.dataController.stationList];
+            break;
+            
+        case BikingStatePreparingToBike:
+            //Set up new route with old data, so user can at least see where they need to go, even if the data is old:
+            [self updateActiveBikingViewWithNewDestination:YES];
+            break;
+            
+        case BikingStateActive:
+            //do nothing, the user will just keep biking and we'll get new data the next time we connect
+            //Pretend there's new data in case we just entered a geofence and we want to tell a user to dock
+            [self willChangeValueForKey:kStationList];
+            [self didChangeValueForKey:kStationList];
+            break;
+            
+        case BikingStateTrackingDidStop:
+            //Show route setup screen again, using the last available data:
+            [self updateActiveBikingViewWithNewDestination:NO];
+            break;
+        default:
+            break;
     }
+    //Hide the HUD
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
 - (void)insertStations:(NSArray *)stations
@@ -772,6 +818,11 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     //Disable the start/stop button until the data is refreshed:
     [self.startStopButton setEnabled:NO];
     
+    //TODO: just call refreshWasTapped: here?
+    //Start HUD:
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Loading stations...";
+
     //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
     //Equivalent to hitting Refresh:
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
@@ -791,6 +842,12 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     if (refresh)
     {
         //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
+        
+        //TODO: just call refreshWasTapped: here?
+        //Start HUD:
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"Loading stations...";
+
         //Equivalent to hitting Refresh:
         [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
                                                             object:self
@@ -814,7 +871,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 //    [self.startStopButton setTitle:@"Set Destination" forState:UIControlStateNormal];
     /* iOS7 : with toolbar */
     [self.startStopButton setEnabled:YES];
-    [self.startStopButton setTintColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+    [self.startStopButton setTintColor: nil];
     [self.startStopButton setTitle:@"Set Destination"];
     
     //hide cancel button
@@ -902,7 +959,7 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
     self.finalDestination.annotationIdentifier = kDestinationLocation;
     //Label the closest destination to the finalDestination as the idealDestinationStation, so if it's full we can check to see if a dock opens up there later.
     self.idealDestinationStation = [self.closestStationsToDestination objectAtIndex:0];
-    //Destintation stations: label the closest one with at least one empty dock as the current destination and the rest as "alternates."
+    //Destination stations: label the closest one with at least one empty dock as the current destination and the rest as "alternates."
     BOOL destinationFound = NO;
     for (Station* station in self.closestStationsToDestination)
     {
@@ -1303,6 +1360,9 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
         default:
             break;
     }
+    
+    //Hide the HUD
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
 
 }
 
@@ -1374,8 +1434,11 @@ static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 //    region.center = [[[LocationController sharedInstance] location] coordinate];
 //    region.center = [[self.mapView userLocation] coordinate];
 //    [self.mapView setRegion:region animated:YES];
-    [self.mapView setCenterCoordinate:[[self.mapView userLocation] coordinate] animated:YES];
-
+    if ([[self.mapView userLocation] location])
+    {
+        [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate animated:YES];
+    }
+        
     //TODO: map sometimes doesn't update? specifically if biking state is active and zoomed in on destination bikes, and/or if wifi is off
 }
 

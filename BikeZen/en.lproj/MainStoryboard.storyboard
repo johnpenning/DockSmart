@@ -447,6 +447,7 @@
                         <outlet property="mapView" destination="bko-ft-Kfm" id="ehq-V1-CIH"/>
                         <outlet property="startStopButton" destination="Xjb-g8-cGh" id="ZYz-dy-auH"/>
                         <outlet property="topMapToolbar" destination="lTq-OJ-asp" id="z1U-UO-mhC"/>
+                        <outlet property="updateLocationButton" destination="dVs-pM-MfS" id="Kvx-ue-fi5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="12" sceneMemberID="firstResponder"/>

@@ -14,10 +14,13 @@
 #import "LocationDataController.h"
 #import "DockSmartLogViewController.h"
 #import "NSDictionary+CityBikesAPI.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
 NSString *kAutoCityPreference = @"auto_city_preference";
 NSString *kCityPreference = @"city_preference";
 NSString *kDisplayedVersion = @"displayed_version";
+
+const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -32,9 +35,9 @@ NSString *kDisplayedVersion = @"displayed_version";
 - (void)handleError:(NSError *)error;
 - (void)loadXMLData;
 - (void)loadJSONCityData;
-- (NSString *)closestBikeshareNetworkToLocation:(CLLocation*)location withData:(NSDictionary*)networkData;
+- (NSString *)closestBikeshareNetworkToLocation:(CLLocation *)location withData:(NSDictionary *)networkData;
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url;
-- (void)parseLiveData:(NSDictionary*)data;
+- (void)parseLiveData:(NSDictionary *)data;
 //- (void)loadJSONData;
 - (void)refreshStationData:(NSNotification *)notif;
 //- (void)stationError:(NSNotification *)notif;
@@ -58,6 +61,9 @@ NSString *kDisplayedVersion = @"displayed_version";
     //Begin location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
     
+    //Begin tracking network activity and showing the indicator in the status bar when appropriate
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+
 //    self.parseQueue = [NSOperationQueue new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -213,7 +219,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 //        [[LocationController sharedInstance].locationManager startUpdatingLocation];
 //    }
     
-    //Make sure the user has enabled location services before attempting to get the location
+    //Start standard location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
 
 }
@@ -237,6 +243,10 @@ NSString *kDisplayedVersion = @"displayed_version";
 //        // Start standard location service
 //        [self.locationManager startUpdatingLocation];
 //    }
+    
+    //Start standard location service
+    [[LocationController sharedInstance] startUpdatingCurrentLocation];
+
     // Recall current city URL from NSUserDefaults:
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults synchronize];
@@ -396,15 +406,14 @@ NSString *kDisplayedVersion = @"displayed_version";
     /* Otherwise continue with auto city detection. Load the full list of bikeshare networks. */
     
     //Start spinning the network activity indicator:
-    [self setNetworkActivityIndicatorVisible:YES];
+//    [self setNetworkActivityIndicatorVisible:YES];
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"http://api.citybik.es/networks.json"]
+    [[DSHTTPSessionManager sharedInstance] GET:[NSString stringWithFormat:@"http://api.citybik.es/networks.json"]
       parameters:nil
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         success:^(NSURLSessionTask *task, id responseObject) {
              
              //Stop spinning the network activity indicator:
-             [self setNetworkActivityIndicatorVisible:NO];
+//             [self setNetworkActivityIndicatorVisible:NO];
              
              NSDictionary *networkData = (NSDictionary *)responseObject;
              
@@ -418,22 +427,24 @@ NSString *kDisplayedVersion = @"displayed_version";
              //Load this city's bike data:
              [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
          }
-         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         failure:^(NSURLSessionTask *task, NSError *error) {
              
              //Stop spinning the network activity indicator:
-             [self setNetworkActivityIndicatorVisible:NO];
+//             [self setNetworkActivityIndicatorVisible:NO];
              
+             //Let the app know that we had trouble getting data.
+             [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
+                                                                 object:self
+                                                               userInfo:[NSDictionary dictionaryWithObject:error
+                                                                                                    forKey:kStationsMsgErrorKey]];
+             
+             //We don't need to alert the user if this happens in the background, it just means they have to wait for the next time we refresh the data
              if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
              {
-                 //Let the app know that we had trouble getting data.  We don't need to alert the user if this happens in the background, it just means they have to wait for the next time we refresh the data
-                 [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
-                                                                     object:self
-                                                                   userInfo:[NSDictionary dictionaryWithObject:error
-                                                                                                        forKey:kStationsMsgErrorKey]];
 #ifdef DEBUG
                  UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 #else
-                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data" message:(NSString *)stationErrorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 #endif
                  [av show];
              }
@@ -441,7 +452,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 }
 
 //Returns the URL pointing towards the data for the closest network to a location, using the location of all the networks as listed in the networkData NSDictionary.
-- (NSString *)closestBikeshareNetworkToLocation:(CLLocation*)location withData:(NSDictionary*)networkData
+- (NSString *)closestBikeshareNetworkToLocation:(CLLocation *)location withData:(NSDictionary *)networkData
 {
     //Find the distance from location to each network center and add that distance to new key-value pair in NSDictionary
 //    NSMutableArray /*NSDictionary*/ *newNetworkDict = [(NSArray*)networkData mutableCopy];
@@ -470,37 +481,38 @@ NSString *kDisplayedVersion = @"displayed_version";
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url
 {
     //Start spinning the network activity indicator:
-    [self setNetworkActivityIndicatorVisible:YES];
+//    [self setNetworkActivityIndicatorVisible:YES];
     //TODO: use built-in activity indicator in AFNetworking?
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:url
+    [[DSHTTPSessionManager sharedInstance] GET:url
       parameters:nil
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         success:^(NSURLSessionTask *task, id responseObject) {
 
              //Stop spinning the network activity indicator:
-             [self setNetworkActivityIndicatorVisible:NO];
+//             [self setNetworkActivityIndicatorVisible:NO];
 
              NSDictionary *liveData = (NSDictionary *)responseObject;
              //Parse the new data:
              [self parseLiveData:liveData];
          }
-         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         failure:^(NSURLSessionTask *task, NSError *error) {
 
              //Stop spinning the network activity indicator:
-             [self setNetworkActivityIndicatorVisible:NO];
+//             [self setNetworkActivityIndicatorVisible:NO];
              
-             //Let the app know that we had trouble getting data.  We don't need to alert the user if this happens in the background, it just means they have to wait for the next time we refresh the data
+             //Let the app know that we had trouble getting data.
+             [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
+                                                                 object:self
+                                                               userInfo:[NSDictionary dictionaryWithObject:error
+                                                                                                    forKey:kStationsMsgErrorKey]];
+
+             //We don't need to alert the user if this happens in the background, it just means they have to wait for the next time we refresh the data
              if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
              {
-                 [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
-                                                                     object:self
-                                                                   userInfo:[NSDictionary dictionaryWithObject:error
-                                                                                                        forKey:kStationsMsgErrorKey]];
 #ifdef DEBUG
                  UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 #else
-                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data" message:(NSString *)stationErrorMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 #endif
                  [av show];
              }
@@ -517,6 +529,7 @@ NSString *kDisplayedVersion = @"displayed_version";
 
 }
 
+#if 0
 //Manage the network activity indicator (from http://oleb.net/blog/2009/09/managing-the-network-activity-indicator/ )
 - (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible {
     static NSInteger NumberOfCallsToSetVisible = 0;
@@ -533,6 +546,7 @@ NSString *kDisplayedVersion = @"displayed_version";
     // Display the indicator as long as our static counter is > 0.
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(NumberOfCallsToSetVisible > 0)];
 }
+#endif
 
 - (void)parseLiveData:(NSDictionary*)data
 {

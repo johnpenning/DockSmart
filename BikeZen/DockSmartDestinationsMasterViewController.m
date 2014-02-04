@@ -156,9 +156,12 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
     
     NSError *error;
+#ifdef DEBUG
     BOOL result = [data writeToFile:path options:NSDataWritingAtomic error:&error];
     DLog(@"Table view archive result = %d, %@", result, error);
-    
+#else
+    [data writeToFile:path options:NSDataWritingAtomic error:&error];
+#endif
 }
 
 
@@ -517,7 +520,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 }
 #endif
 
-/* Search Bar Implementation - Pilfered & tweaked from Apple's TableSearch example project */
+/* Search Bar Implementation - Tweaked from Apple's TableSearch example project */
 
 #pragma mark - Content Filtering
 
@@ -670,7 +673,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Loading addresses...";
     //Start spinning the network activity indicator:
-    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+//    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
 
     //Create a hint region around the user's current location for the geocoder
 //    CLRegion *region = [[CLRegion alloc]
@@ -681,7 +684,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     [geocoder geocodeAddressString:string inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {
         
         //Stop spinning the network activity indicator:
-        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
+//        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
 
         if (error)
         {

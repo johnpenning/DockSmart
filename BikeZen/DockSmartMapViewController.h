@@ -41,5 +41,6 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
 @property (strong, nonatomic) LocationDataController *dataController;
 @property BikingStateType bikingState;
 @property (weak, nonatomic) IBOutlet UIToolbar *topMapToolbar;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *updateLocationButton;
 
 @end

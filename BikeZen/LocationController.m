@@ -26,8 +26,10 @@ NSString *kNewRegionKey = @"NewRegionKey";
     if (self != nil) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.pausesLocationUpdatesAutomatically = NO;
+        self.locationManager.activityType = CLActivityTypeFitness;
+
     }
     return self;
 }
@@ -63,6 +65,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
     _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     _locationManager.distanceFilter = 5; //10.0f; // we don't need to be any more accurate than 10m
     //        _locationManager.purpose = @"This will be used as part of the hint region for forward geocoding.";
+    _locationManager.activityType = CLActivityTypeFitness;
     
     [_locationManager startUpdatingLocation];
     
@@ -84,7 +87,19 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    //TODO: make current location button inactive on mapview
+    //Make current location button inactive on mapview if location services are disabled
+    DockSmartMapViewController *controller = [[[[UIApplication sharedApplication] delegate] window] rootViewController].childViewControllers[0];
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
+        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ||
+        [CLLocationManager locationServicesEnabled] == NO)
+    {
+        [controller.updateLocationButton setEnabled:NO];
+    }
+    else
+    {
+        [controller.updateLocationButton setEnabled:YES];
+    }
+    
 }
 
 //- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
