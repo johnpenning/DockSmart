@@ -62,6 +62,8 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 
 //location property for the center of the map:
 @property (nonatomic) Address* mapCenterAddress;
+//bool flag to determine if we need to pan to the user location once it's acquired:
+@property (nonatomic) BOOL needsNewCenter;
 
 //keep track of the station we're getting the bike from:
 @property (nonatomic) Station* sourceStation;
@@ -74,7 +76,6 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 //the action sheet to show when making a user confirm their station destination
 @property (nonatomic, readwrite) UIActionSheet *navSheet;
 @property (nonatomic) MyLocation *selectedLocation;
-
 
 //timer to refresh data:
 @property (nonatomic) NSTimer* minuteTimer;
@@ -144,17 +145,21 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     
     //Define the initial zoom location (Dupont Circle for now)
     //TODO: change this to current user location, wherever that may be
-    CLLocationCoordinate2D zoomLocation = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
+    CLLocationCoordinate2D zoomLocation;
+    //TODO: if we have a mapView.userLocation.location != nil, use that as the center here. Else use a default location, set a flag, wait for it to update and then pan/zoom when we have the new location. If there's a location saved in state restoration, just use that one instead. Perform reverse geocode after settling on wherever we end up.
+    if (self.mapView.userLocation.location)
+    {
+        zoomLocation = self.mapView.userLocation.location.coordinate;
+    }
+    else
+    {
+        zoomLocation = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
+        self.needsNewCenter = YES;
+    }
     
-//    zoomLocation.latitude = DUPONT_LAT;
-//    zoomLocation.longitude = DUPONT_LONG;
-    
-    //define the initial view region -> about the size of the neighborhood:
-//    MKCoordinateRegion viewRegion = [self.mapView regionThatFits:MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE)];
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 2*METERS_PER_MILE, 2*METERS_PER_MILE);
-    
-    [self.mapView setRegion:viewRegion animated:YES];
-    
+    [self.mapView setCenterCoordinate:zoomLocation animated:YES];
+//    [self reverseGeocodeMapCenter];
+
     //Show the license agreement alert if this is the first time the app has been opened:
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (![defaults boolForKey:kHasSeenIntro])
@@ -375,10 +380,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     //set hidden state in archiver? is not hidden when app launches in background
 //    self.bikeCrosshairImage.hidden = [coder decodeBoolForKey:BikeCrosshairImageKey];
     self.cancelButton.enabled = [coder decodeBoolForKey:CancelButtonKey];
-    [self.mapView setRegion:MKCoordinateRegionMake(
-                                                   CLLocationCoordinate2DMake([coder decodeDoubleForKey:RegionCenterLatKey], [coder decodeDoubleForKey:RegionCenterLongKey]),
-                                                   MKCoordinateSpanMake([coder decodeDoubleForKey:RegionSpanLatKey], [coder decodeDoubleForKey:RegionSpanLongKey])
-                                                   ) animated:YES];
+    
     
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"stationData.txt"];
@@ -401,7 +403,19 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     self.mapCenterAddress = [unarchiver decodeObjectForKey:MapCenterAddressKey];
     self.bikeCrosshairImage.hidden = [unarchiver decodeBoolForKey:BikeCrosshairImageKey];
     self.regionIdentifierQueue = [unarchiver decodeObjectForKey:RegionIdentifierKey];
+    //TODO: fix coder vs. unarchiver discrepancies (bools should be in the coder)
     self.updateLocationButton.enabled = [unarchiver decodeBoolForKey:UpdateLocationButtonEnabledKey];
+    
+    //Set map region (has to be done after bikingState is unarchived so we don't unintentionally reverse geocode)
+    [self.mapView setRegion:MKCoordinateRegionMake(
+                                                   CLLocationCoordinate2DMake([coder decodeDoubleForKey:RegionCenterLatKey], [coder decodeDoubleForKey:RegionCenterLongKey]),
+                                                   MKCoordinateSpanMake([coder decodeDoubleForKey:RegionSpanLatKey], [coder decodeDoubleForKey:RegionSpanLongKey])
+                                                   ) animated:YES];
+    self.needsNewCenter = NO; //Don't center on the user location once it's acquired
+    //    [self reverseGeocodeMapCenter];
+    
+    //TODO: perform geocode here? or does mapView:regionDidChange:animated: take care of that?
+
     [unarchiver finishDecoding];
 }
 
@@ -652,39 +666,48 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
 {
     [self.startStopButton setEnabled:YES];
     
-    if (self.bikingState == BikingStateInactive)
+    [self reverseGeocodeMapCenter];
+}
+
+- (void)reverseGeocodeMapCenter
+{
+    if (self.bikingState != BikingStateInactive)
     {
-        //re-display center bike pointer image
-        [self.bikeCrosshairImage setHidden:NO];
-        
-        //geocode new location, then create a new MyLocation object
-        CLLocationCoordinate2D centerCoord = self.mapView.centerCoordinate;
-        CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
-        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-        
-        [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
-        
-        //Start spinning the network activity indicator:
-//        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
-
-        [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-            
-            //Stop spinning the network activity indicator:
-//            [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
-
-            if (error)
-            {
-                DLog(@"Reverse geocode failed with error: %@", error);
-                //still use the center coordinate for mapCenterAddress
-                return;
-            }
-            
-            [self.mapCenterAddress initWithPlacemark:[placemarks objectAtIndex:0] distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(centerCoord), MKMapPointForCoordinate(self.dataController.userCoordinate))];
-            
-            [self.destinationDetailLabel setText:[self.mapCenterAddress name]];
-            
-        }];
+        //we only want to do this when the biking state is inactive
+        //TODO: also return if needsNewCenter? will need to set it to NO before setting the region in updateLocation
+        return;
     }
+    
+    //re-display center bike pointer image
+    [self.bikeCrosshairImage setHidden:NO];
+    
+    //geocode new location, then create a new MyLocation object
+    CLLocationCoordinate2D centerCoord = self.mapView.centerCoordinate;
+    CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    
+    [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
+    
+    //Start spinning the network activity indicator:
+    //        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
+    
+    [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        
+        //Stop spinning the network activity indicator:
+        //            [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
+        
+        if (error)
+        {
+            DLog(@"Reverse geocode failed with error: %@", error);
+            //still use the center coordinate for mapCenterAddress
+            return;
+        }
+        
+        [self.mapCenterAddress initWithPlacemark:[placemarks objectAtIndex:0] distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(centerCoord), MKMapPointForCoordinate(self.dataController.userCoordinate))];
+        
+        [self.destinationDetailLabel setText:[self.mapCenterAddress name]];
+        
+    }];
 }
 
 //- (IBAction)refreshTapped:(id)sender
@@ -1444,10 +1467,26 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
 
 - (void)updateLocation:(NSNotification *)notif
 {
+    //pan to new user location if we said we needed to when the view loaded
+    if (self.needsNewCenter)
+    {
+//        [self.mapView setCenterCoordinate:[[[LocationController sharedInstance] location] coordinate] animated:YES];
+        MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([[[LocationController sharedInstance] location] coordinate], 2*METERS_PER_MILE, 2*METERS_PER_MILE);
+        
+        [self.mapView setRegion:region animated:YES];
+        //clear flag
+        self.needsNewCenter = NO;
+        //reverse geocode this location for the destinationDetailText
+//        [self reverseGeocodeMapCenter];
+
+    }
+
     if (self.bikingState != BikingStateActive)
     {
         [[LocationController sharedInstance] stopUpdatingCurrentLocation];
     }
+    //TODO: if biking state is active, get a bike data update, but make sure that a minute has passed since the last one (especially if we're in the background and using standard location svcs instead of significant change)... maybe check to see if the minuteTimer is running
+    //TODO: You can save the time the next station update should occur next when your App is going to the background and check if you should take action when the App comes back to the foreground. If we're entering a geofence, and it's not time to get new station data yet (unless we just want to force an update at those times anyway), perhaps turn the new stationError: code into a usePresentData: function and call that instead to figure out docking notifications?
 }
 
 - (void)regionEntered:(NSNotification *)notif

@@ -481,7 +481,7 @@
                             <constraint firstItem="HoK-Cg-Srd" firstAttribute="top" secondItem="TUe-CF-5nA" secondAttribute="bottom" constant="49" id="kdt-hK-xpX"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Log" image="first" id="AMz-4A-r2M"/>
+                    <tabBarItem key="tabBarItem" title="Log" image="first.png" id="AMz-4A-r2M"/>
                     <connections>
                         <outlet property="settingsTextView" destination="TUe-CF-5nA" id="aSa-6H-FnC"/>
                     </connections>
@@ -619,6 +619,7 @@
     <resources>
         <image name="bikepointer3.png" width="25" height="50"/>
         <image name="first" width="16" height="16"/>
+        <image name="first.png" width="25" height="25"/>
         <image name="ios7-world-outline.png" width="25" height="25"/>
         <image name="map.png" width="25" height="25"/>
         <image name="navigate.png" width="22" height="22"/>
