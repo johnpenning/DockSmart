@@ -141,7 +141,7 @@ NSString *kNewRegionKey = @"NewRegionKey";
         //store it in the singleton's location property
         self.location = location;
         
-        DLog(@"New location: %@", location);
+//        DLog(@"New location: %@", location);
         //post notification
         [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
                                                             object:self

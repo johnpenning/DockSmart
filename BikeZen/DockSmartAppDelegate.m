@@ -31,6 +31,9 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 @property (strong, nonatomic) NSMutableData *stationXMLData;    // the data returned from the NSURLConnection (or from initDataWithURL)
 @property (strong, nonatomic) NSOperationQueue *parseQueue;     // the queue that manages our NSOperation for parsing station data
 
+//Flag that tells us if a data load is in process
+@property BOOL isHTTPRequestInProcess;
+
 //- (void)addStationsToList:(NSArray *)stations;
 - (void)handleError:(NSError *)error;
 - (void)loadXMLData;
@@ -58,7 +61,9 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 {
     // Override point for customization after application launch.
     
-    //Begin location service
+    //In case significant change location services were on from the last time we terminated, turn them off:
+    [[LocationController sharedInstance].locationManager stopMonitoringSignificantLocationChanges];
+    //Begin standard location service:
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
     
     //Begin tracking network activity and showing the indicator in the status bar when appropriate
@@ -68,15 +73,7 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshStationData:)
-                                                 name:kRefreshTappedNotif
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(trackingDidStart:)
-                                                 name:kTrackingStartedNotif
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(trackingDidStop:)
-                                                 name:kTrackingStoppedNotif
+                                                 name:kRefreshDataNotif
                                                object:nil];
     
     // Register default NSUserDefaults:
@@ -275,6 +272,13 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
 
+    //Switch to significant change location service:
+    DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
+    if (controller.bikingState == BikingStateActive)
+    {
+        [[LocationController sharedInstance].locationManager startMonitoringSignificantLocationChanges];
+    }
+
 }
 
 #pragma mark - State Restoration
@@ -398,7 +402,15 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    DLog(@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]);
+    NSString* logText = [NSString stringWithFormat:@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]];
+    DLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+    //Set a flag saying we are currently loading data:
+    self.isHTTPRequestInProcess = YES;
     
     /*
      If auto city detection is off, or if we're already on a bike route, do not load the list of networks to determine which city we're in.
@@ -433,11 +445,16 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
              
              //Load this city's bike data:
              [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
+             
+             //Note: We do not reset the isHTTPRequestInProcess flag here, since we immediately start another request for the current city's station data.
          }
          failure:^(NSURLSessionTask *task, NSError *error) {
              
              //Stop spinning the network activity indicator:
 //             [self setNetworkActivityIndicatorVisible:NO];
+
+             //Reset flag
+             self.isHTTPRequestInProcess = NO;
              
              //Let the app know that we had trouble getting data.
              [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
@@ -496,6 +513,9 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 
              //Stop spinning the network activity indicator:
 //             [self setNetworkActivityIndicatorVisible:NO];
+             
+             //Reset flag
+             self.isHTTPRequestInProcess = NO;
 
              NSDictionary *liveData = (NSDictionary *)responseObject;
              //Parse the new data:
@@ -505,6 +525,9 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 
              //Stop spinning the network activity indicator:
 //             [self setNetworkActivityIndicatorVisible:NO];
+             
+             //Reset flag
+             self.isHTTPRequestInProcess = NO;
              
              //Let the app know that we had trouble getting data.
              [[NSNotificationCenter defaultCenter] postNotificationName:kStationErrorNotif
@@ -531,6 +554,18 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     
 //    [self loadXMLData];
 //    [self loadJSONData];
+    //if data is currently loading, don't try to load it again
+    if (self.isHTTPRequestInProcess)
+    {
+        NSString* logText = [NSString stringWithFormat:@"HTTP request in process, overlapping request blocked"];
+        DLog(@"%@",logText);
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                               forKey:kLogTextKey]];
+        return;
+    }
+    
     [self loadJSONCityData];
 
 }

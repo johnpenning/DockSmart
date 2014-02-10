@@ -20,9 +20,7 @@
 #import "MBProgressHUD.h"
 
 // NSNotification name for reporting that refresh was tapped
-NSString *kRefreshTappedNotif = @"RefreshTappedNotif";
-NSString *kTrackingStartedNotif = @"TrackingStartedNotif";
-NSString *kTrackingStoppedNotif = @"TrackingStoppedNotif";
+NSString *kRefreshDataNotif = @"RefreshDataNotif";
 NSString *kStationList = @"stationList";
 
 // Key noting if user has seen the intro screen/alert
@@ -43,11 +41,8 @@ static NSString *IdealDestinationStationID = @"IdealDestinationStationID";
 static NSString *ClosestStationsToDestinationID = @"ClosestStationsToDestinationID";
 static NSString *MapCenterAddressID = @"MapCenterAddressID";
 
-// NSNotification userInfo key for obtaining command to refresh the station list
-//NSString *kRefreshStationsKey = @"RefreshStationsKey";
-
 @interface DockSmartMapViewController ()
-- (IBAction)refeshTapped:(id)sender;
+- (IBAction)refreshTapped:(id)sender;
 - (IBAction)cancelTapped:(id)sender;
 - (IBAction)startStopTapped:(id)sender;
 - (IBAction)bikesDocksToggled:(id)sender;
@@ -61,16 +56,16 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 @property (weak, nonatomic) IBOutlet UISegmentedControl *bikesDocksControl;
 
 //location property for the center of the map:
-@property (nonatomic) Address* mapCenterAddress;
+@property (nonatomic) Address *mapCenterAddress;
 //bool flag to determine if we need to pan to the user location once it's acquired:
 @property (nonatomic) BOOL needsNewCenter;
 
 //keep track of the station we're getting the bike from:
-@property (nonatomic) Station* sourceStation;
+@property (nonatomic) Station *sourceStation;
 //keep track of where we're going:
-@property (nonatomic) MyLocation* finalDestination;
-@property (nonatomic) Station* currentDestinationStation;
-@property (nonatomic) Station* idealDestinationStation;
+@property (nonatomic) MyLocation *finalDestination;
+@property (nonatomic) Station *currentDestinationStation;
+@property (nonatomic) Station *idealDestinationStation;
 @property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
 @property (nonatomic) NSMutableArray *regionIdentifierQueue;
 //the action sheet to show when making a user confirm their station destination
@@ -78,7 +73,9 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 @property (nonatomic) MyLocation *selectedLocation;
 
 //timer to refresh data:
-@property (nonatomic) NSTimer* minuteTimer;
+@property (nonatomic) NSTimer *minuteTimer;
+//last time the data was updated:
+@property (nonatomic) NSDate *lastDataUpdateTime;
 
 @end
 
@@ -89,7 +86,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     [super awakeFromNib];
     
     // KVO: listen for changes to our station data source for map view updates
-//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
+//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL]; //done manually
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(addStations:)
                                                  name:kAddStationsNotif
@@ -252,6 +249,7 @@ static NSString *RegionSpanLatKey = @"RegionSpanLatKey";
 static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
 static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
 static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledKey";
+static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 - (void) encodeRestorableStateWithCoder:(NSCoder *)coder
 {
@@ -303,6 +301,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
 
     [archiver encodeInteger:self.bikingState forKey:BikingStateKey];
     [archiver encodeObject:self.minuteTimer.fireDate forKey:MinuteTimerFireDateKey];
+    [archiver encodeObject:self.lastDataUpdateTime forKey:LastDataUpdateTimeKey];
     [archiver encodeObject:self.dataController.stationList forKey:DataControllerKey];
     [archiver encodeObject:self.sourceStation forKey:SourceStationKey];
     [archiver encodeObject:self.finalDestination forKey:FinalDestinationKey];
@@ -403,11 +402,11 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     self.regionIdentifierQueue = [unarchiver decodeObjectForKey:RegionIdentifierKey];
     //TODO: fix coder vs. unarchiver discrepancies (bools should be in the coder)
     self.updateLocationButton.enabled = [unarchiver decodeBoolForKey:UpdateLocationButtonEnabledKey];
-    
+    self.lastDataUpdateTime = [unarchiver decodeObjectForKey:LastDataUpdateTimeKey];
     //restart timer or fire timer now, depending on what the fire date was
     if ([coder decodeBoolForKey:MinuteTimerValidKey])
     {
-        self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
+        self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(minuteTimerDidFire:) userInfo:nil repeats:YES];
         
         //If the timer was supposed to fire at some point while suspended/terminated, fire now
         if ([(NSDate *)[unarchiver decodeObjectForKey:MinuteTimerFireDateKey] timeIntervalSinceNow] < 0)
@@ -501,14 +500,39 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
 
-    [self refreshWasTapped];
+    [self refreshBikeDataWithForce:NO];
+}
+
+#pragma mark - Timer Handling
+
+- (void)minuteTimerDidFire:(NSTimer *)timer
+{
+    NSString* logText = [NSString stringWithFormat:@"Timer fired"];
+    DLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
+    [self refreshBikeDataWithForce:NO];
 }
 
 
 #pragma mark - Getting New Bike Data
 
-- (void)refreshWasTapped
+- (void)refreshBikeDataWithForce:(BOOL)force
 {
+    if (!force && self.lastDataUpdateTime && (abs([self.lastDataUpdateTime timeIntervalSinceNow]) < 30))
+    {
+        //We are not forcing a refresh, and the last data received exists and is most likely the most recent data available, so we don't need new data yet.
+        NSString* logText = [NSString stringWithFormat:@"Unforced data refresh blocked, last data was %d seconds ago", abs([self.lastDataUpdateTime timeIntervalSinceNow])];
+        DLog(@"%@",logText);
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                               forKey:kLogTextKey]];
+        return;
+    }
 
     //Start HUD if we're not just refreshing during active biking:
     if (self.bikingState != BikingStateActive)
@@ -517,7 +541,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
         hud.labelText = @"Loading stations...";
     }
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshDataNotif
                                                         object:self
                                                       userInfo:nil];
 }
@@ -720,13 +744,6 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     }];
 }
 
-//- (IBAction)refreshTapped:(id)sender
-//{
-//    [self performSelectorOnMainThread:@selector(refreshWasTapped:)
-//                           withObject:nil
-//                        waitUntilDone:NO];
-//}
-
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     MyLocation *location = (MyLocation*)view.annotation;
@@ -850,17 +867,8 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     [self.bikesDocksControl setHidden:YES];
     //Disable the start/stop button until the data is refreshed:
     [self.startStopButton setEnabled:NO];
-    
-    //TODO: just call refreshWasTapped: here?
-    //Start HUD:
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Loading stations...";
-
-    //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
-    //Equivalent to hitting Refresh:
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
-                                                        object:self
-                                                      userInfo:nil];
+    //Get new data:
+    [self refreshBikeDataWithForce:YES];
 }
 
 #if 0
@@ -875,16 +883,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     if (refresh)
     {
         //Refresh all station data to get the absolute latest nbBikes and nbEmptyDocks counts.
-        
-        //TODO: just call refreshWasTapped: here?
-        //Start HUD:
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"Loading stations...";
-
-        //Equivalent to hitting Refresh:
-        [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshTappedNotif
-                                                            object:self
-                                                          userInfo:nil];
+        [self refreshBikeDataWithForce:YES];
     }
     
     //re-center map on previous final destination
@@ -1141,7 +1140,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
     
-    self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
+    self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(minuteTimerDidFire:) userInfo:nil repeats:YES];
     
     //Change the state to active:
     self.bikingState = BikingStateActive;
@@ -1199,6 +1198,8 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
+    
+    self.lastDataUpdateTime = [NSDate date];
 
     switch (self.bikingState) {
         case BikingStateInactive:
@@ -1418,15 +1419,14 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
 
 }
 
-- (IBAction)refeshTapped:(id)sender {
-//    [self performSelectorOnMainThread:@selector(refreshWasTapped)
-//                           withObject:nil
-//                        waitUntilDone:NO];
-    [self refreshWasTapped];
+- (IBAction)refreshTapped:(id)sender
+{
+    //Force a refresh of bike data now
+    [self refreshBikeDataWithForce:YES];
 }
 
-- (IBAction)cancelTapped:(id)sender {
-    
+- (IBAction)cancelTapped:(id)sender
+{
     //log it for debugging
     NSString* logText = [NSString stringWithFormat:@"cancelTapped"];
     DLog(@"%@",logText);
@@ -1439,7 +1439,8 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     [self clearBikeRouteWithRefresh:YES];
 }
 
-- (IBAction)startStopTapped:(UIButton *)sender {
+- (IBAction)startStopTapped:(UIButton *)sender
+{
     switch (self.bikingState) {
         case BikingStateInactive:
             //set the final destination to equal the placemark at the center of the crosshairs and prepare a new route to the location
@@ -1477,12 +1478,14 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     }
 }
 
-- (IBAction)bikesDocksToggled:(id)sender {
+- (IBAction)bikesDocksToggled:(id)sender
+{
     //replot the station annotations with either the number of bikes or empty docks at each
     [self plotStationPosition:self.dataController.stationList];
 }
 
-- (IBAction)updateLocationTapped:(id)sender {
+- (IBAction)updateLocationTapped:(id)sender
+{
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
 //    MKCoordinateRegion region = [self.mapView region];
 //    region.center = [[[LocationController sharedInstance] location] coordinate];
@@ -1532,13 +1535,13 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     [self.regionIdentifierQueue addObject:[(CLRegion *)[[notif userInfo] valueForKey:kNewRegionKey] identifier]];
 
     //We hit a geofence. Get a bike data update
-    [self refreshWasTapped];
+    [self refreshBikeDataWithForce:YES];
 }
 
 - (void)regionExited:(NSNotification *)notif
 {
     //Get another bike data update
-    [self refreshWasTapped];
+    [self refreshBikeDataWithForce:NO];
 }
 
 #pragma mark - UIBarPositioningDelegate

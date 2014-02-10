@@ -352,7 +352,7 @@
                                 <items>
                                     <barButtonItem systemItem="refresh" id="GIb-b0-BgB">
                                         <connections>
-                                            <action selector="refeshTapped:" destination="3" id="bv1-MD-h0N"/>
+                                            <action selector="refreshTapped:" destination="3" id="2q9-uD-Dvp"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="RBU-RD-uR0"/>

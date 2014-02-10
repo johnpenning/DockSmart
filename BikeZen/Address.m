@@ -27,8 +27,9 @@
 - (void)setNameAndCoordinateWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance
 {
     self.name = [NSString stringWithFormat:@"%@%@%@%@%@%@%@", placemark.subThoroughfare ? placemark.subThoroughfare : @"", placemark.subThoroughfare ? @" " : @"", placemark.thoroughfare ? placemark.thoroughfare : @"", (placemark.subThoroughfare || placemark.thoroughfare) ? @", " : @"", placemark.locality ? placemark.locality : @"", (placemark.locality && placemark.administrativeArea) ? @", " : @"", placemark.administrativeArea ? placemark.administrativeArea : @""];
-    self.coordinate = placemark.location.coordinate;
+    [self initCoordinateWithLatitude:placemark.location.coordinate.latitude longitude:placemark.location.coordinate.longitude];
     self.distanceFromUser = distance;
+    _placemark = placemark;
 }
 
 - (NSString *)subtitle
