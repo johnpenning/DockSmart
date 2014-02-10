@@ -188,9 +188,12 @@ NSString *kNewRegionKey = @"NewRegionKey";
                                                                                            forKey:kLogTextKey]];
     
     
-    // stop updating
-    [self stopUpdatingCurrentLocation];
-    
+    // stop updating if not actively biking
+//    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+//    if (controller.bikingState != BikingStateActive)
+//    {
+//        [self stopUpdatingCurrentLocation];
+//    }
     // since we got an error, set selected location to invalid location
 //    _userCoordinate = kCLLocationCoordinate2DInvalid;
     
@@ -271,7 +274,10 @@ NSString *kNewRegionKey = @"NewRegionKey";
     // Clear out any old regions to prevent buildup.
     if ([self.locationManager.monitoredRegions count] > 5) {
         for (id obj in self.locationManager.monitoredRegions)
+        {
+            DLog(@"Removing geofence %@", [obj identifier]);
             [self.locationManager stopMonitoringForRegion:obj];
+        }
     }
     
     // If the overlay's radius is too large, registration fails automatically,

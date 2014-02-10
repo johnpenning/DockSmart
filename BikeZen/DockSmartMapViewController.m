@@ -238,6 +238,7 @@ static NSString *CurrentDestinationStationKey = @"CurrentDestinationStationKey";
 static NSString *IdealDestinationStationKey = @"IdealDestinationStationKey";
 static NSString *ClosestStationsToDestinationKey = @"ClosestStationsToDestinationKey";
 static NSString *MinuteTimerValidKey = @"MinuteTimerValidKey";
+static NSString *MinuteTimerFireDateKey = @"MinuteTimerFireDateKey";
 static NSString *StartStopButtonTitleKey = @"StartStopButtonTitleKey";
 static NSString *StartStopButtonTintColorKey = @"StartStopButtonTintColorKey";
 static NSString *StartStopButtonEnabledKey = @"StartStopButtonEnabledKey";
@@ -301,6 +302,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
     [archiver encodeInteger:self.bikingState forKey:BikingStateKey];
+    [archiver encodeObject:self.minuteTimer.fireDate forKey:MinuteTimerFireDateKey];
     [archiver encodeObject:self.dataController.stationList forKey:DataControllerKey];
     [archiver encodeObject:self.sourceStation forKey:SourceStationKey];
     [archiver encodeObject:self.finalDestination forKey:FinalDestinationKey];
@@ -369,10 +371,6 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     //    self.mapCenterAddress = [coder decodeObjectForKey:MapCenterAddressKey];
 
     
-    if ([coder decodeBoolForKey:MinuteTimerValidKey])
-    {
-        self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
-    }
     self.startStopButton.title = [coder decodeObjectForKey:StartStopButtonTitleKey];
     self.startStopButton.tintColor = [coder decodeObjectForKey:StartStopButtonTintColorKey];
     self.startStopButton.enabled = [coder decodeBoolForKey:StartStopButtonEnabledKey];
@@ -405,6 +403,18 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     self.regionIdentifierQueue = [unarchiver decodeObjectForKey:RegionIdentifierKey];
     //TODO: fix coder vs. unarchiver discrepancies (bools should be in the coder)
     self.updateLocationButton.enabled = [unarchiver decodeBoolForKey:UpdateLocationButtonEnabledKey];
+    
+    //restart timer or fire timer now, depending on what the fire date was
+    if ([coder decodeBoolForKey:MinuteTimerValidKey])
+    {
+        self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(refreshWasTapped) userInfo:nil repeats:YES];
+        
+        //If the timer was supposed to fire at some point while suspended/terminated, fire now
+        if ([(NSDate *)[unarchiver decodeObjectForKey:MinuteTimerFireDateKey] timeIntervalSinceNow] < 0)
+        {
+            [self.minuteTimer fire];
+        }
+    }
     
     //Set map region (has to be done after bikingState is unarchived so we don't unintentionally reverse geocode)
     [self.mapView setRegion:MKCoordinateRegionMake(
@@ -499,7 +509,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
 
 - (void)refreshWasTapped
 {
-//    assert([NSThread isMainThread]);
+
     //Start HUD if we're not just refreshing during active biking:
     if (self.bikingState != BikingStateActive)
     {
@@ -703,7 +713,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
             return;
         }
         
-        [self.mapCenterAddress initWithPlacemark:[placemarks objectAtIndex:0] distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(centerCoord), MKMapPointForCoordinate(self.dataController.userCoordinate))];
+        [self.mapCenterAddress setNameAndCoordinateWithPlacemark:[placemarks objectAtIndex:0] distanceFromUser:MKMetersBetweenMapPoints(MKMapPointForCoordinate(centerCoord), MKMapPointForCoordinate(self.dataController.userCoordinate))];
         
         [self.destinationDetailLabel setText:[self.mapCenterAddress name]];
         
@@ -1001,7 +1011,8 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     //TODO: If there is no station in closestStationsToDestination with >0 nbEmptyDocks, do we warn the user or just keep going down the list?
 
     /* JUST WALK ALERTS:
-     If the closest station to the destination is also the closest one to the user, perhaps it's best to just tell the user to walk.
+     If the closest station to the destination is also the closest one to the user, or if the ideal destination station is full but the closest one 
+     to the destination that isn't full is also the closest one to the user, perhaps it's best to just tell the user to walk.
      (Do not use sourceStation in case there is one closer with no bikes... use the top of the sorted station list instead)
      ALSO: Show this alert as well if the destination station is different but
      (dist(user to sourceStation) + dist(destinationStation to finalDestination) >= dist(user to finalDestination)), 
@@ -1009,6 +1020,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
      their destination with a dock) as well as biking, which is foolish
      */
     if ((self.idealDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID]) ||
+        ((self.idealDestinationStation.stationID != self.currentDestinationStation.stationID) && (self.currentDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID])) ||
         ((self.sourceStation.distanceFromUser + self.currentDestinationStation.distanceFromDestination) >= self.finalDestination.distanceFromUser))
     {
         //Only show an alertView popup if newDest == YES (so we don't show a Just Walk alert if the app stops tracking, either manually or automatically, when the user gets to their destination)
@@ -1022,6 +1034,10 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
             if (self.idealDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID])
             {
                 [av setMessage:@"The destination station is also the closest one to your current location. Perhaps it's best to just walk."];
+            }
+            else if ((self.idealDestinationStation.stationID != self.currentDestinationStation.stationID) && (self.currentDestinationStation.stationID == [[self.dataController.sortedStationList objectAtIndex:0] stationID]))
+            {
+                [av setMessage:@"The closest station to your destination with an empty dock is also the closest one to your current location. Perhaps it's best to just walk."];
             }
             else
             {
@@ -1129,6 +1145,9 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
     
     //Change the state to active:
     self.bikingState = BikingStateActive;
+
+    //Start tracking user location; since the station tracking is now active, it will continue updating in the background even after it gets the first location
+    [[LocationController sharedInstance] startUpdatingCurrentLocation];
 }
 
 - (void)stopStationTracking
@@ -1201,6 +1220,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
             BOOL notifSent = NO;
             BOOL endTracking = NO;
             NSString *newlyFullStationName = nil;
+            NSMutableArray *regionIdentifiersToCheck = [self.regionIdentifierQueue copy];
             
             //Do not reload the map view at all, unless the app is coming back into the foreground.  Just check to see if we need to send a notification based on nbEmptyDocks for our current goal station
             for (Station *station in self.dataController.stationList)
@@ -1229,7 +1249,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                 if (station.stationID == self.idealDestinationStation.stationID)
                 {
                     //check to see if we're at the ideal station with a dock available:
-                    for (NSString *identifier in self.regionIdentifierQueue)
+                    for (NSString *identifier in regionIdentifiersToCheck)
                     {
                         if ([identifier isEqualToString:kRegionMonitorStation1] && (station.nbEmptyDocks > 0))
                         {
@@ -1244,6 +1264,9 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                             [stopAtIdealStationNotification setFireDate:[NSDate date]];
                             [[UIApplication sharedApplication] scheduleLocalNotification:stopAtIdealStationNotification];
                             
+                            //Remove all region identifiers from the queue
+//                            [self.regionIdentifierQueue removeAllObjects];
+                            //Set flags
                             notifSent = YES;
                             endTracking = YES;
                             break;
@@ -1307,9 +1330,8 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                 //else, the user should just keep biking to the currentDestinationStation...
             }
             //...unless they're already there
-            for (NSString *identifier in self.regionIdentifierQueue)
+            for (NSString *identifier in regionIdentifiersToCheck)
             {
-                
                 if (!notifSent &&
                     (   ((self.currentDestinationStation.stationID == [[self.closestStationsToDestination objectAtIndex:1] stationID])
                          && [identifier isEqualToString:kRegionMonitorStation2])
@@ -1324,9 +1346,15 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                     [stopAtCurrentStationNotification setFireDate:[NSDate date]];
                     [[UIApplication sharedApplication] scheduleLocalNotification:stopAtCurrentStationNotification];
                     
+                    //Remove all region identifiers from the queue
+//                    [self.regionIdentifierQueue removeAllObjects];
+//                    [self.regionIdentifierQueue indexOfObject:identifier];
+                    //Set flag
                     endTracking = YES;
                     break;
                 }
+                //Remove this object, one at a time instead of doing them all at the end in case another is added by a geofence notification between now and the end of the method
+//                [self.regionIdentifierQueue removeObject:identifier];
             }
             if (!endTracking && newlyFullStationName != nil)
             {
@@ -1371,8 +1399,9 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
                 [self prepareBikeRouteWithDestination:self.finalDestination newDestination:NO];
             }
             
-            //clear out the region identifier queue so we don't alert at the wrong time
-            [self.regionIdentifierQueue removeAllObjects];
+            //clear out the region identifiers that we just checked from the queue so we don't alert at the wrong time
+//            [self.regionIdentifierQueue removeAllObjects];
+            [self.regionIdentifierQueue removeObjectsInArray:regionIdentifiersToCheck];
             
         }
             break;
@@ -1416,6 +1445,7 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
             //set the final destination to equal the placemark at the center of the crosshairs and prepare a new route to the location
             [self prepareBikeRouteWithDestination:self.mapCenterAddress newDestination:YES];
             break;
+            
         case BikingStatePreparingToBike:
         case BikingStateTrackingDidStop:
             //Change buttons:
@@ -1434,13 +1464,14 @@ static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledK
             [self startStationTracking];
             
             break;
+            
         case BikingStateActive:
             //stop station tracking and return to the route setup screen
             [self stopStationTracking];
             //setup route screen:
             [self prepareBikeRouteWithDestination:self.finalDestination newDestination:NO];
-
             break;
+            
         default:
             break;
     }

@@ -17,5 +17,6 @@
 @property (nonatomic, readonly) CLPlacemark *placemark;
 
 - (id)initWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance;
+- (void)setNameAndCoordinateWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance;
 
 @end

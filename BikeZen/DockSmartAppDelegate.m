@@ -186,14 +186,21 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
-    //Stop standard location service:
-    [[LocationController sharedInstance] stopUpdatingCurrentLocation];
-    //Switch to significant change location service:
-    //TODO: Change to use notifications/KVO?
-    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-    if (controller.bikingState == BikingStateActive)
+//    //Stop standard location service:
+//    [[LocationController sharedInstance] stopUpdatingCurrentLocation];
+//    //Switch to significant change location service:
+//    //TODO: Change to use notifications/KVO?
+//    DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
+//    if (controller.bikingState == BikingStateActive)
+//    {
+//        [[LocationController sharedInstance].locationManager startMonitoringSignificantLocationChanges];
+//    }
+    
+    //Continue using standard location services if we are currently station tracking, else stop
+    DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
+    if (controller.bikingState != BikingStateActive)
     {
-        [[LocationController sharedInstance].locationManager startMonitoringSignificantLocationChanges];
+        [[LocationController sharedInstance] stopUpdatingCurrentLocation];
     }
 }
 
@@ -482,7 +489,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 {
     //Start spinning the network activity indicator:
 //    [self setNetworkActivityIndicatorVisible:YES];
-    //TODO: use built-in activity indicator in AFNetworking?
     
     [[DSHTTPSessionManager sharedInstance] GET:url
       parameters:nil
