@@ -15,7 +15,6 @@
 #import "Address.h"
 #import "LocationDataController.h"
 #import "DockSmartMapViewController.h"
-#import "ParseOperation.h"
 #import "MBProgressHUD.h"
 #import "define.h"
 #import "DockSmartAppDelegate.h"
@@ -218,14 +217,12 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 #pragma mark - KVO compliance
 
 - (void)updateLocation:(NSNotification *)notif {
-//    assert([NSThread isMainThread]);
     
     self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
 //    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
 }
 
 - (void)addStations:(NSNotification *)notif {
-//    assert([NSThread isMainThread]);
     
     //This notification came from the parse operation telling us that a new station list has been posted.
     //Use KVO to tell this view controller to resort the list and update the tableView.

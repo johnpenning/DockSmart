@@ -144,7 +144,6 @@
 #pragma mark - KVO compliance
 
 - (void)updateLocation:(NSNotification *)notif {
-//    assert([NSThread isMainThread]);
     
     [self setUserCoordinate:[(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate]];
     [self updateDistancesFromUserLocation:[self userCoordinate]];

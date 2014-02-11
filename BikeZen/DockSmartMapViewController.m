@@ -14,7 +14,6 @@
 #import "Station.h"
 #import "Address.h"
 #import "LocationDataController.h"
-#import "ParseOperation.h"
 #import "DockSmartLogViewController.h"
 #import "DockSmartAppDelegate.h"
 #import "MBProgressHUD.h"
@@ -132,10 +131,6 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     
     // KVO: listen for changes to our station data source for map view updates
     [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(addStations:)
-//                                                 name:kAddStationsNotif
-//                                               object:nil];
     
     //initialize states
     [self setBikingState:BikingStateInactive];
@@ -789,8 +784,7 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 - (void)addStations:(NSNotification *)notif
 {
-//    assert([NSThread isMainThread]);
-    
+    //Transfer the notif data into the method that adds the stations to the stationList array
     [self insertStations:[[notif userInfo] valueForKey:kStationResultsKey]];
 }
 
@@ -829,7 +823,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     // this will allow us as an observer to notified (see observeValueForKeyPath)
     // so we can update our MapView
-    //
     [self willChangeValueForKey:kStationList];
 
     //Clear out current stations:
@@ -842,8 +835,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 - (void)prepareNewBikeRoute:(NSNotification *)notif
 {
-//    assert([NSThread isMainThread]);
-    
     //Set up a new route:
     [self prepareBikeRouteWithDestination:[[notif userInfo] valueForKey:kBikeDestinationKey] newDestination:YES];
 }
@@ -1154,7 +1145,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 }
 
 //- (void)updateLocation:(NSNotification *)notif {
-//    assert([NSThread isMainThread]);
 //    
 //    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
 //}
@@ -1198,13 +1188,7 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     switch (self.bikingState) {
         case BikingStateInactive:
             //Reload map view
-//            if (![NSThread isMainThread]) {
-//                [self performSelectorOnMainThread:@selector(plotStationPosition:) withObject:self.dataController.stationList waitUntilDone:NO];
-//            }
-//            else
-//            {
-                [self plotStationPosition:self.dataController.stationList];
-//            }
+            [self plotStationPosition:self.dataController.stationList];
             break;
         case BikingStatePreparingToBike:
             //Do not reload the map view yet, just go to the callback to finish the setup to start biking:

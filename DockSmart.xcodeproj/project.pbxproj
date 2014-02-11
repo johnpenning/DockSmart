@@ -348,7 +348,6 @@
 		CDA9550D176CC765003C49DF /* stationData.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDA9550C176CC765003C49DF /* stationData.plist */; };
 		CDA95510176CCE47003C49DF /* StationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA9550F176CCE47003C49DF /* StationDataController.m */; };
 		CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */; };
-		CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FC1736D5DA008E2966 /* ParseOperation.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
 		CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */; };
 		CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CDC5C7C21870F63A0036BF18 /* Settings.bundle */; };
@@ -1691,7 +1690,6 @@
 				CD529ECB1730B77F005420D6 /* DockSmartAppDelegate.m in Sources */,
 				CD529EDE1730B77F005420D6 /* DockSmartMapViewController.m in Sources */,
 				CD0344331730D01400682A78 /* MyLocation.m in Sources */,
-				CDC453FD1736D5DA008E2966 /* ParseOperation.m in Sources */,
 				CDC454001736D7BF008E2966 /* Station.m in Sources */,
 				CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */,
 				CD00396C189DC52C00349A88 /* DSHTTPSessionManager.m in Sources */,

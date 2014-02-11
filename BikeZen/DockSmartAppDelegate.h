@@ -12,9 +12,14 @@
 #import "LocationController.h"
 #import "DSHTTPSessionManager.h"
 
+extern NSString *kAddStationsNotif;
+extern NSString *kStationResultsKey;
+extern NSString *kStationErrorNotif;
+extern NSString *kStationsMsgErrorKey;
+
 @class Station, DockSmartMapViewController;
 
-@interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, NSXMLParserDelegate, UIStateRestoring>
+@interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, UIStateRestoring>
 
 @property (strong, nonatomic) UIWindow *window;
 

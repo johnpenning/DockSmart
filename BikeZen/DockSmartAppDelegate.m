@@ -9,12 +9,20 @@
 #import "DockSmartAppDelegate.h"
 #import "define.h"
 #import "Station.h"
-#import "ParseOperation.h"
 #import "DockSmartMapViewController.h"
 #import "LocationDataController.h"
 #import "DockSmartLogViewController.h"
 #import "NSDictionary+CityBikesAPI.h"
 #import "AFNetworkActivityIndicatorManager.h"
+
+// NSNotification name for sending station data to the map view
+NSString *kAddStationsNotif = @"AddStationsNotif";
+// NSNotification userInfo key for obtaining the station data
+NSString *kStationResultsKey = @"StationResultsKey";
+// NSNotification name for reporting errors
+NSString *kStationErrorNotif = @"StationErrorNotif";
+// NSNotification userInfo key for obtaining the error message
+NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
 
 NSString *kAutoCityPreference = @"auto_city_preference";
 NSString *kCityPreference = @"city_preference";
@@ -27,23 +35,15 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 // forward declarations
 @interface DockSmartAppDelegate ()
 
-//@property (strong, nonatomic) NSURLConnection *earthquakeFeedConnection;
-@property (strong, nonatomic) NSMutableData *stationXMLData;    // the data returned from the NSURLConnection (or from initDataWithURL)
-@property (strong, nonatomic) NSOperationQueue *parseQueue;     // the queue that manages our NSOperation for parsing station data
-
 //Flag that tells us if a data load is in process
 @property BOOL isHTTPRequestInProcess;
 
-//- (void)addStationsToList:(NSArray *)stations;
-- (void)handleError:(NSError *)error;
-- (void)loadXMLData;
 - (void)loadJSONCityData;
 - (NSString *)closestBikeshareNetworkToLocation:(CLLocation *)location withData:(NSDictionary *)networkData;
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url;
 - (void)parseLiveData:(NSDictionary *)data;
-//- (void)loadJSONData;
 - (void)refreshStationData:(NSNotification *)notif;
-//- (void)stationError:(NSNotification *)notif;
+
 @end
 
 
@@ -68,8 +68,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     
     //Begin tracking network activity and showing the indicator in the status bar when appropriate
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-
-//    self.parseQueue = [NSOperationQueue new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshStationData:)
@@ -89,21 +87,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     
     // Recall current city URL from NSUserDefaults:
     self.currentCityUrl = [defaults stringForKey:kCityPreference];
-    
-    // Spawn an NSOperation to parse the earthquake data so that the UI is not blocked while the
-    // application parses the XML data.
-    //
-    // IMPORTANT! - Don't access or affect UIKit objects on secondary threads.
-    //
-//    ParseOperation *parseOperation = [[ParseOperation alloc] init];
-//    [self.parseQueue addOperation:parseOperation];
-//    
-//    // stationXMLData will be retained by the NSOperation until it has finished executing,
-//    // so we no longer need a reference to it in the main thread.
-//    self.stationXMLData = nil;
-    
-//    [self loadXMLData];
-//    [self loadJSONData]; //taken care of in ApplicationDidBecomeActive:
     
     NSNumber *startLocation = [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey];
     UILocalNotification *triggeredNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -256,8 +239,7 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     [defaults synchronize];
     self.currentCityUrl = [defaults stringForKey:kCityPreference];
 
-//    // Reload the station data
-//    [self loadXMLData];
+    // Reload the station data
     [self loadJSONCityData];
 
 }
@@ -294,108 +276,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     return YES;
 }
 
-#pragma mark - NSXMLParser Methods
-
-// Handle errors in the download by showing an alert to the user. This is a very
-// simple way of handling the error, partly because this application does not have any offline
-// functionality for the user. Most real applications should handle the error in a less obtrusive
-// way and provide offline functionality to the user.
-//
-- (void)handleError:(NSError *)error {
-//    NSString *errorMessage = [error localizedDescription];
-//    UIAlertView *alertView =
-//    [[UIAlertView alloc] initWithTitle:
-//     NSLocalizedString(@"Error Title",
-//                       @"Title for alert displayed when download or parse error occurs.")
-//                               message:errorMessage
-//                              delegate:nil
-//                     cancelButtonTitle:@"OK"
-//                     otherButtonTitles:nil];
-//    [alertView show];
-    NSString* logText = [NSString stringWithFormat:@"NSXMLParser error: %@", [error localizedDescription]];
-    DLog(@"%@",logText);
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
-
-}
-
-// Our NSNotification callback from the running NSOperation to add the earthquakes
-//
-#if 0
-- (void)addStations:(NSNotification *)notif {
-    assert([NSThread isMainThread]);
-    
-    [self addStationsToList:[[notif userInfo] valueForKey:kStationResultsKey]];
-}
-
-// Our NSNotification callback from the running NSOperation when a parsing error has occurred
-//
-- (void)stationError:(NSNotification *)notif {
-//    assert([NSThread isMainThread]);
-    
-    [self handleError:[[notif userInfo] valueForKey:kStationsMsgErrorKey]];
-}
-
-// The NSOperation "ParseOperation" calls addStations: via NSNotification, on the main thread
-// which in turn calls this method, with batches of parsed objects.
-// The batch size is set via the kSizeOfEarthquakeBatch constant.
-//
-- (void)addStationsToList:(NSArray *)stations {
-    
-    // insert the earthquakes into our mapViewController's data source (for KVO purposes)
-//    [self.rootViewController insertEarthquakes:earthquakes];
-    
-    //Insert stations in .plist file for displaying in the Destinations view later.
-//    NSString* plistPath = nil;
-//    NSFileManager* manager = [NSFileManager defaultManager];
-//    if ((plistPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Supporting Files/stationData.plist"]))
-//    {
-//        if ([manager isWritableFileAtPath:plistPath])
-//        {
-//            NSMutableDictionary* infoDict = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-//            [infoDict setObject:@"foo object" forKey:@"fookey"];
-//            [infoDict writeToFile:plistPath atomically:NO];
-//            [manager setAttributes:[NSDictionary dictionaryWithObject:[NSDate date] forKey:NSFileModificationDate] ofItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-//        }
-//    }
-    
-    //This will in turn add the stations to the map.
-    UIViewController *controller = (UIViewController*)self.window.rootViewController;
-    //TODO: the following line is super dangerous and dumb as implemented.  Please change! (use Notifs?)
-    [controller.childViewControllers[0] insertStations:stations];
-//    DockSmartMapViewController *mapViewController = (DockSmartMapViewController *)self.window.rootViewController.childViewControllers[0];
-//    [mapViewController.dataController addStationListObjectsFromArray:stations];
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
-//                                                        object:self
-//                                                      userInfo:[NSDictionary dictionaryWithObject:stations
-//                                                                                           forKey:kStationResultsKey]];
-
-    
-}
-#endif
-
-- (void)loadXMLData //TODO: do this multiple times without adding duplicate stations (done, test)
-{
-    //log the new parse operation
-    NSString* logText = [NSString stringWithFormat:@"XML parse operation started"];
-    DLog(@"%@",logText);
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
-
-    self.parseQueue = [NSOperationQueue new];
-    
-    ParseOperation *parseOperation = [[ParseOperation alloc] initWithData:self.stationXMLData];
-    [self.parseQueue addOperation:parseOperation];
-    
-    // stationXMLData will be retained by the NSOperation until it has finished executing,
-    // so we no longer need a reference to it in the main thread.
-    self.stationXMLData = nil;
-}
 
 - (void)loadJSONCityData
 {
@@ -532,10 +412,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 
 - (void)refreshStationData:(NSNotification *)notif
 {
-//    assert([NSThread isMainThread]);
-    
-//    [self loadXMLData];
-//    [self loadJSONData];
     //if data is currently loading, don't try to load it again
     if (self.isHTTPRequestInProcess)
     {
@@ -547,9 +423,8 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
                                                                                                forKey:kLogTextKey]];
         return;
     }
-    
+    //Start loading
     [self loadJSONCityData];
-
 }
 
 - (void)parseLiveData:(NSDictionary*)data
