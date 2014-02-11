@@ -732,8 +732,6 @@
 		CDA95515176E72C4003C49DF /* DockSmartAddressDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartAddressDetailViewController.m; sourceTree = "<group>"; };
 		CDC3BC82185D1C67007C73BF /* NSDictionary+CityBikesAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+CityBikesAPI.h"; sourceTree = "<group>"; };
 		CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+CityBikesAPI.m"; sourceTree = "<group>"; };
-		CDC453FB1736D5DA008E2966 /* ParseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ParseOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		CDC453FC1736D5DA008E2966 /* ParseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ParseOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CDC453FE1736D7BF008E2966 /* Station.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Station.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CDC453FF1736D7BF008E2966 /* Station.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Station.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartSettingsViewController.h; sourceTree = "<group>"; };
@@ -1136,8 +1134,6 @@
 				CD529F041730C209005420D6 /* define.h */,
 				CD0344311730D01400682A78 /* MyLocation.h */,
 				CD0344321730D01400682A78 /* MyLocation.m */,
-				CDC453FB1736D5DA008E2966 /* ParseOperation.h */,
-				CDC453FC1736D5DA008E2966 /* ParseOperation.m */,
 				CDC3BC82185D1C67007C73BF /* NSDictionary+CityBikesAPI.h */,
 				CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */,
 				CDC453FE1736D7BF008E2966 /* Station.h */,
