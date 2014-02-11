@@ -140,8 +140,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     //initialize states
     [self setBikingState:BikingStateInactive];
     
-    //Define the initial zoom location (Dupont Circle for now)
-    //TODO: change this to current user location, wherever that may be
+    //Define the initial zoom location
     CLLocationCoordinate2D zoomLocation;
     //TODO: if we have a mapView.userLocation.location != nil, use that as the center here. Else use a default location, set a flag, wait for it to update and then pan/zoom when we have the new location. If there's a location saved in state restoration, just use that one instead. Perform reverse geocode after settling on wherever we end up.
     if (self.mapView.userLocation.location)
@@ -150,6 +149,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     }
     else
     {
+        //Default location = center of Dupont Circle (sure, why not?)
         zoomLocation = CLLocationCoordinate2DMake((CLLocationDegrees)DUPONT_LAT, (CLLocationDegrees)DUPONT_LONG);
         self.needsNewCenter = YES;
     }
@@ -722,14 +722,8 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     
     [self.mapCenterAddress initCoordinateWithLatitude:centerCoord.latitude longitude:centerCoord.longitude];
     
-    //Start spinning the network activity indicator:
-    //        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
-    
     [geocoder reverseGeocodeLocation:centerLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-        
-        //Stop spinning the network activity indicator:
-        //            [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
-        
+                
         if (error)
         {
             DLog(@"Reverse geocode failed with error: %@", error);

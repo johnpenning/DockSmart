@@ -672,8 +672,6 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     //Start HUD:
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"Loading addresses...";
-    //Start spinning the network activity indicator:
-//    [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:YES];
 
     //Create a hint region around the user's current location for the geocoder
 //    CLRegion *region = [[CLRegion alloc]
@@ -683,9 +681,6 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     //Perform the geocode
     [geocoder geocodeAddressString:string inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {
         
-        //Stop spinning the network activity indicator:
-//        [(DockSmartAppDelegate *)[[UIApplication sharedApplication] delegate] setNetworkActivityIndicatorVisible:NO];
-
         if (error)
         {
             DLog(@"Geocode failed with error: %@", error);

@@ -17,16 +17,7 @@
 @interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, NSXMLParserDelegate, UIStateRestoring>
 
 @property (strong, nonatomic) UIWindow *window;
-//@property (strong, nonatomic) IBOutlet DockSmartMapViewController *mapViewController;
-
-//CLLocationManager properties
-//@property (strong, nonatomic) CLLocationManager *locationManager;
-//@property (readonly) CLLocationCoordinate2D userCoordinate;
 
 @property (nonatomic) NSString *currentCityUrl;
-
-#if 0
-- (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible;
-#endif
 
 @end

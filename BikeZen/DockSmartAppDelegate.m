@@ -424,15 +424,9 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     
     /* Otherwise continue with auto city detection. Load the full list of bikeshare networks. */
     
-    //Start spinning the network activity indicator:
-//    [self setNetworkActivityIndicatorVisible:YES];
-    
     [[DSHTTPSessionManager sharedInstance] GET:[NSString stringWithFormat:@"http://api.citybik.es/networks.json"]
       parameters:nil
          success:^(NSURLSessionTask *task, id responseObject) {
-             
-             //Stop spinning the network activity indicator:
-//             [self setNetworkActivityIndicatorVisible:NO];
              
              NSDictionary *networkData = (NSDictionary *)responseObject;
              
@@ -450,9 +444,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
          }
          failure:^(NSURLSessionTask *task, NSError *error) {
              
-             //Stop spinning the network activity indicator:
-//             [self setNetworkActivityIndicatorVisible:NO];
-
              //Reset flag
              self.isHTTPRequestInProcess = NO;
              
@@ -504,15 +495,9 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url
 {
-    //Start spinning the network activity indicator:
-//    [self setNetworkActivityIndicatorVisible:YES];
-    
     [[DSHTTPSessionManager sharedInstance] GET:url
       parameters:nil
          success:^(NSURLSessionTask *task, id responseObject) {
-
-             //Stop spinning the network activity indicator:
-//             [self setNetworkActivityIndicatorVisible:NO];
              
              //Reset flag
              self.isHTTPRequestInProcess = NO;
@@ -522,9 +507,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
              [self parseLiveData:liveData];
          }
          failure:^(NSURLSessionTask *task, NSError *error) {
-
-             //Stop spinning the network activity indicator:
-//             [self setNetworkActivityIndicatorVisible:NO];
              
              //Reset flag
              self.isHTTPRequestInProcess = NO;
@@ -569,25 +551,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     [self loadJSONCityData];
 
 }
-
-#if 0
-//Manage the network activity indicator (from http://oleb.net/blog/2009/09/managing-the-network-activity-indicator/ )
-- (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible {
-    static NSInteger NumberOfCallsToSetVisible = 0;
-    if (setVisible)
-        NumberOfCallsToSetVisible++;
-    else
-        NumberOfCallsToSetVisible--;
-    
-    // The assertion helps to find programmer errors in activity indicator management.
-    // Since a negative NumberOfCallsToSetVisible is not a fatal error,
-    // it should probably be removed from production code.
-    NSAssert(NumberOfCallsToSetVisible >= 0, @"Network Activity Indicator was asked to hide more often than shown");
-    
-    // Display the indicator as long as our static counter is > 0.
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(NumberOfCallsToSetVisible > 0)];
-}
-#endif
 
 - (void)parseLiveData:(NSDictionary*)data
 {
