@@ -37,14 +37,8 @@
     NSString* addressSummary;
     
     //only show sublocality (i.e. neighborhood, ideally) if it's not null and not the same string as the locality (i.e. town, ideally)
-//    if ([[_placemark subLocality] isEqualToString:[_placemark locality]])
-//        addressSummary = [[NSString alloc] initWithFormat:@""]; //TODO: add distance later
-//    else
-//        addressSummary = [[NSString alloc] initWithFormat:@"%@", _placemark.subLocality]; //TODO: add distance later
-    
     addressSummary = [[NSString alloc] initWithFormat:@"%@%@Dist: %2.2f mi", (_placemark.subLocality && (![[_placemark subLocality] isEqualToString:[_placemark locality]])) ? _placemark.subLocality : @"", (_placemark.subLocality && (![[_placemark subLocality] isEqualToString:[_placemark locality]])) ? @" - " : @"", [super distanceFromUser]/METERS_PER_MILE];
     
-    //    CLLocationDistance *distance = MKMetersBetweenMapPoints(MKMapPointForCoordinate(_coordinate), )
     return addressSummary;
 }
 
@@ -52,19 +46,15 @@
 
 static NSString *PlacemarkKey = @"PlacemarkKey";
 
-//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-//    [super encodeRestorableStateWithCoder:coder];
     [super encodeWithCoder:aCoder];
     
     [aCoder encodeObject:_placemark forKey:PlacemarkKey];
 }
 
-//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-//    [super decodeRestorableStateWithCoder:coder];
     self = [super initWithCoder:aDecoder];
     
     if (self)
@@ -76,12 +66,8 @@ static NSString *PlacemarkKey = @"PlacemarkKey";
 
 - (id)copyWithZone:(NSZone *)zone
 {
-//    Address *other = (Address *)[super copyWithZone:zone];
-
     Address *other = [[Address alloc] initWithPlacemark:[_placemark copyWithZone:zone] distanceFromUser:self.distanceFromUser];
     other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
-//    other.coordinate = self.coordinate;
-//    other.distanceFromUser = self.distanceFromUser;
 
     return other;
 }

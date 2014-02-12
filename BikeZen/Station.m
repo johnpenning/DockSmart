@@ -31,8 +31,6 @@
     if (self)
     {
         _stationID = stationID;
-//        _name = name;
-//        _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
         _latitude = latitude;
         _longitude = longitude;
         _installed = installed;
@@ -48,40 +46,11 @@
     return nil;
 }
 
-//- (void)initCoordinateWithLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude
-//{
-//    _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-//}
-
-//- (NSString *)title
-//{
-////    return [[NSString alloc] initWithFormat:@"Test name"];
-//    return _name;
-//}
-
 - (NSString *)subtitle
 {
     NSString* bikeSummary = [[NSString alloc] initWithFormat:@"Bikes: %i - Docks: %i - Dist: %2.2f mi", _nbBikes, _nbEmptyDocks, [super distanceFromUser]/METERS_PER_MILE];
-//    CLLocationDistance *distance = MKMetersBetweenMapPoints(MKMapPointForCoordinate(_coordinate), )
     return bikeSummary;
 }
-
-//- (CLLocationCoordinate2D)coordinate
-//{
-//    return _coordinate;
-//}
-
-//- (MKMapItem*)mapItem
-//{
-//    NSDictionary *addressDict = @{(NSString*)kABPersonAddressStreetKey : _address};
-//    
-//    MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:self.coordinate addressDictionary:addressDict];
-//    
-//    MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-//    mapItem.name = self.title;
-//    
-//    return mapItem;
-//}
 
 #pragma mark - State Restoration
 
@@ -96,10 +65,8 @@ static NSString *NbEmptyDocksKey = @"NbEmptyDocksKey";
 static NSString *LastStationUpdateKey = @"LastStationUpdateKey";
 static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
 
-//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-//    [super encodeRestorableStateWithCoder:coder];
     [super encodeWithCoder:aCoder];
     
     [aCoder encodeInteger:self.stationID forKey:StationIDKey];
@@ -114,10 +81,8 @@ static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
     [aCoder encodeDouble:self.distanceFromDestination forKey:DistanceFromDestinationKey];
 }
 
-//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-//    [super decodeRestorableStateWithCoder:coder];
     self = [super initWithCoder:aDecoder];
     
     if (self)
@@ -139,7 +104,7 @@ static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
 - (id)copyWithZone:(NSZone *)zone
 {
     Station *other = [[Station alloc] init];
-//    other = (Station *)[super copyWithZone:zone];
+
     other = [other initWithName:[self.name copyWithZone:zone] coordinate:self.coordinate distanceFromUser:self.distanceFromUser];
 
     other.stationID = self.stationID;
@@ -153,8 +118,6 @@ static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
     other.lastStationUpdate = [self.lastStationUpdate copyWithZone:zone];
     other.distanceFromDestination = self.distanceFromDestination;
     other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
-//    [other initCoordinateWithLatitude:self.latitude longitude:self.longitude];
-//    other.distanceFromUser = self.distanceFromUser;
     
     return other;
 }

@@ -26,11 +26,7 @@ NSString *kStation = @"Station";
     {
         _name = name;
         _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
-//        _latitude = latitude;
-//        _longitude = longitude;
         _distanceFromUser = distance;
-        
-//        [UIApplication registerObjectForStateRestoration:self restorationIdentifier:@"MyLocationID"];
         
         return self;
     }
@@ -47,8 +43,6 @@ NSString *kStation = @"Station";
         _name = name;
         _coordinate = coordinate;
         _distanceFromUser = distance;
-
-//        [UIApplication registerObjectForStateRestoration:self restorationIdentifier:@"MyLocationID"];
 
         return self;
     }
@@ -73,7 +67,6 @@ static NSString *CoordinateLongitudeKey = @"CoordinateLongitudeKey";
 static NSString *DistanceFromUserKey = @"DistanceFromUserKey";
 static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 
-//- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.name forKey:NameKey];
@@ -83,7 +76,6 @@ static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
     [aCoder encodeObject:self.annotationIdentifier forKey:AnnotationIdentifierKey];
 }
 
-//- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];

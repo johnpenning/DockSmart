@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
 
-//#import <UIKit/UIKit.h>
-//#import <MapKit/MapKit.h>
 #import "DockSmartMapViewController.h"
 #import "DockSmartDestinationsMasterViewController.h"
 #import "define.h"
@@ -47,7 +45,6 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 - (IBAction)bikesDocksToggled:(id)sender;
 - (IBAction)updateLocationTapped:(id)sender;
 
-//@property (weak, nonatomic) IBOutlet UIBarButtonItem *startStopButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *startStopButton;
 @property (weak, nonatomic) IBOutlet UILabel *destinationDetailLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *bikeCrosshairImage;
@@ -65,7 +62,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 @property (nonatomic) MyLocation *finalDestination;
 @property (nonatomic) Station *currentDestinationStation;
 @property (nonatomic) Station *idealDestinationStation;
-@property (nonatomic/*, strong*/) NSMutableArray *closestStationsToDestination;
+@property (nonatomic) NSMutableArray *closestStationsToDestination;
 @property (nonatomic) NSMutableArray *regionIdentifierQueue;
 //the action sheet to show when making a user confirm their station destination
 @property (nonatomic, readwrite) UIActionSheet *navSheet;
@@ -84,8 +81,6 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 {
     [super awakeFromNib];
     
-    // KVO: listen for changes to our station data source for map view updates
-//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL]; //done manually
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(addStations:)
                                                  name:kAddStationsNotif
@@ -193,20 +188,13 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 }
 
 - (void)viewDidUnload {
-//    [self setBikeDockViewSwitch:nil];
-//    [self setRefreshButtonTapped:nil];
     [self setStartStopButton:nil];
     [self setDestinationDetailLabel:nil];
     [self setBikeCrosshairImage:nil];
     [self setCancelButton:nil];
     [self setBikesDocksControl:nil];
     [self setUpdateLocationButton:nil];
-//    [self setClosestStationsToDestination:nil];
     [super viewDidUnload];
-//    
-//    self.dataController.stationList = nil;
-//    
-//    [self unregisterFromKVO];
 }
 
 - (void)dealloc
@@ -415,73 +403,9 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                                                    MKCoordinateSpanMake([coder decodeDoubleForKey:RegionSpanLatKey], [coder decodeDoubleForKey:RegionSpanLongKey])
                                                    ) animated:YES];
     self.needsNewCenter = NO; //Don't center on the user location once it's acquired
-    
-    //TODO: perform geocode here? or does mapView:regionDidChange:animated: take care of that?
 
     [unarchiver finishDecoding];
 }
-
-//+ (Station *)makeStationWithRestorationIdentifier:(NSString *)identifier
-//{
-//    Station* station = [Station new];
-//    [UIApplication registerObjectForStateRestoration:station restorationIdentifier:identifier];
-////    station.objectRestorationClass = self;
-//    
-//    return station;
-//}
-//
-//+ (Address *)makeAddressWithRestorationIdentifier:(NSString *)identifier
-//{
-//    Address* address = [Address new];
-//    [UIApplication registerObjectForStateRestoration:address restorationIdentifier:identifier];
-////    address.objectRestorationClass = self;
-//    
-//    return address;
-//}
-//
-//+ (MyLocation *)makeMyLocationWithRestorationIdentifier:(NSString *)identifier
-//{
-//    MyLocation* myLocation = [MyLocation new];
-//    [UIApplication registerObjectForStateRestoration:myLocation restorationIdentifier:identifier];
-////    myLocation.objectRestorationClass = self;
-//    
-//    return myLocation;
-//}
-//
-//+ (id<UIStateRestoring>) objectWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
-//{
-//    NSString *lastIdentifier = [identifierComponents lastObject];
-//    
-////    if ([[identifierComponents lastObject] isEqualToString:SourceStationID])
-////    {
-//////        return [[UIApplication sharedApplication] delegate] ;
-////    }
-//    if ([lastIdentifier isEqualToString:FinalDestinationID])
-//        return [self makeMyLocationWithRestorationIdentifier:lastIdentifier];
-////    else if ([[identifierComponents lastObject] isEqualToString:CurrentDestinationStationID])
-////    {
-////        
-////    }
-////    else if ([[identifierComponents lastObject] isEqualToString:IdealDestinationStationID])
-////    {
-////        
-////    }
-//    else if ([lastIdentifier isEqualToString:MapCenterAddressID])
-//        return [self makeAddressWithRestorationIdentifier:lastIdentifier];
-////    else
-////    {
-////        NSUInteger idx = 0;
-////        for (idx = 0; idx < [self.closestStationsToDestination count]; idx++)
-////        {
-////            if ([[identifierComponents lastObject] isEqualToString:SourceStationID])
-////            {
-////                
-////            }
-////        }
-////    }
-//    else
-//        return [self makeStationWithRestorationIdentifier:lastIdentifier];
-//}
 
 - (void)applicationFinishedRestoringState
 {
@@ -562,34 +486,14 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     
     static NSString *identifier = @"Station";
     
+    //use default annotation view for current user location
     if([annotation isKindOfClass: [MKUserLocation class]])
         return nil;
     
+    //custom annotations for stations and addresses:
     if ([annotation isKindOfClass:[MyLocation class]]) {
-//        MyLocation* location = (MyLocation*)annotation;
+        
         MKAnnotationView *annotationView;
-        //        if ([location.annotationIdentifier isEqualToString:kDestinationLocation])
-        //        {
-        //            //Use a standard red MKPinAnnotationView for the final destination address, if it's not a station itself
-        //            annotationView = (MKPinAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier:location.annotationIdentifier];
-        //            if (annotationView == nil)
-        //            {
-        ////                MKPinAnnotationView* pinView = (MKPinAnnotationView *)annotationView;
-        //                MKPinAnnotationView* pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:location.annotationIdentifier];
-        //                pinView.enabled = YES;
-        //                pinView.canShowCallout = YES;
-        //                pinView.pinColor = MKPinAnnotationColorRed;
-        //                pinView.animatesDrop = YES;
-        //                pinView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        //                annotationView = pinView;
-        //            }
-        //            else
-        //            {
-        //                annotationView.annotation = annotation;
-        //            }
-        //        }
-        //        else
-        //        {
         //Use a generic MKAnnotationView instead of a pin view so we can use our custom image
         annotationView = [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier]; //location.annotationIdentifier];
         
@@ -610,27 +514,21 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         {
             Station* station = (Station*)annotation;
             
-            //            if ([location.annotationIdentifier isEqualToString:kSourceStation])
-//            if ([station isEqual:self.sourceStation])
             if (self.sourceStation && (station.stationID == self.sourceStation.stationID))
             {
                 //Use green icons to denote a starting point, and show the number of bikes in the start station:
                 annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_green_%02d.png", (station.nbBikes <= 99 ? station.nbBikes : 99)]];
             }
-            //            else if ([location.annotationIdentifier isEqualToString:kDestinationStation])
-//            else if ([station isEqual:self.currentDestinationStation])
             else if (self.currentDestinationStation && (station.stationID == self.currentDestinationStation.stationID))
             {
                 //Use red icons to denote destinations, and show the number of empty docks:
                 annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_red_%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
             }
-            //            else if ([location.annotationIdentifier isEqualToString:kAlternateStation])
             else
             {
                 BOOL isClosestStation = NO;
                 for (Station *closeStation in self.closestStationsToDestination)
                 {
-//                    if ([closeStation isEqual:station])
                     if (station.stationID == closeStation.stationID)
                     {
                         //Use blue icons to denote alternate stations:
@@ -638,9 +536,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                         isClosestStation = YES;
                         break;
                     }
-                    //            }
-                    //            else if ([location.annotationIdentifier isEqualToString:kStation])
-                    //            {
                 }
                 if (!isClosestStation)
                 {
@@ -684,7 +579,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         {
             [self.destinationDetailLabel setText:nil];
         }
-//        [self.destinationDetailLabel setAlpha:0.5];
         [self.startStopButton setEnabled:NO];
     }
 }
@@ -736,7 +630,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     MyLocation *location = (MyLocation*)view.annotation;
     
     //Use this location as our final destination, same as selecting it from the Destinations tableView
-    //TODO: add action sheet later for adding this location to favorites
     
     //make the user confirm the new destination in an action sheet
     self.selectedLocation = location;
@@ -754,7 +647,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     // If the user taps a destination to navigate to, present an action sheet to confirm.
     //TODO: Present more options here (to add/delete to/from Favorites, for example).
     self.navSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:nil otherButtonTitles:navigateHereTitle, nil];
-    //    [self.navSheet showInView:self.view];
     [self.navSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
@@ -854,13 +746,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self refreshBikeDataWithForce:YES];
 }
 
-#if 0
-- (void)prepareBikeRouteCallback
-{
-    [self updateActiveBikingViewWithNewDestination:YES];
-}
-#endif
-
 - (void)clearBikeRouteWithRefresh:(BOOL)refresh
 {
     if (refresh)
@@ -879,19 +764,13 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     
     //Change buttons and label:
     [self.destinationDetailLabel setText:[self.finalDestination name]];
-//    [self.startStopButton setBackgroundColor:[UIColor whiteColor]];
     
-    /* iOS6 : pre-toolbar */
-//    [self.startStopButton setTitleColor:[UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0] forState:UIControlStateNormal];
-//    [self.startStopButton setTitle:@"Set Destination" forState:UIControlStateNormal];
     /* iOS7 : with toolbar */
     [self.startStopButton setEnabled:YES];
     [self.startStopButton setTintColor: nil];
     [self.startStopButton setTitle:@"Set Destination"];
     
     //hide cancel button
-    /* iOS6 : pre-toolbar */
-//    [self.cancelButton setHidden:YES];
     /* iOS7 : with toolbar */
     [self.cancelButton setEnabled:NO];
     
@@ -1053,7 +932,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     }
     
     //Hide the annotations for all other stations.
-//    [self.mapView removeAnnotations:self.mapView.annotations];
     for (id<MKAnnotation> annotation in self.mapView.annotations) {
         if(![annotation isKindOfClass: [MKUserLocation class]])
             [self.mapView removeAnnotation:annotation];
@@ -1062,10 +940,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self.bikeCrosshairImage setHidden:YES];
     
     //Change buttons:
-    /* iOS6 : pre-toolbar */
-    //        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-    //        [self.startStopButton setTitle:@"Start Station Tracking" forState:UIControlStateNormal];
-    //        [self.cancelButton setHidden:NO];
     /* iOS7 : with toolbar */
     [self.startStopButton setTintColor:[UIColor greenColor]];
     [self.startStopButton setTitle:@"Start Station Tracking"];
@@ -1104,13 +978,9 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                                                              accuracy:kCLLocationAccuracyNearestTenMeters];
     
     //One more region for each of the three closest stations to the final destination:
-//    for (Station* station in self.closestStationsToDestination)
-//    {
     [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:0]).coordinate radius:10 identifier:kRegionMonitorStation1 accuracy:kCLLocationAccuracyBest];
     [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:1]).coordinate radius:10 identifier:kRegionMonitorStation2 accuracy:kCLLocationAccuracyBest];
     [[LocationController sharedInstance] registerRegionWithCoordinate:((Station*)[self.closestStationsToDestination objectAtIndex:2]).coordinate radius:10 identifier:kRegionMonitorStation3 accuracy:kCLLocationAccuracyBest];
-
-//    }
     
     //TODO: Start the rental timer, if we have one
     
@@ -1204,11 +1074,7 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                 
                 if (stationIndex != NSNotFound)
                 {
-//                    DLog(@"stationIndex = %d", stationIndex);
-//                    DLog(@"station.stationID = %d", station.stationID);
-//                    DLog(@"station.name = %@", station.name);
-//                    DLog(@"station = %08x", (unsigned int)station);
-//                    DLog(@"closeststations = %08x %08x %08x", (unsigned int)[self.closestStationsToDestination objectAtIndex:0], (unsigned int)[self.closestStationsToDestination objectAtIndex:1], (unsigned int)[self.closestStationsToDestination objectAtIndex:2]);
+                    //switch out old array objects with the new data
                     [self.closestStationsToDestination replaceObjectAtIndex:stationIndex withObject:station];
                 }
                 
@@ -1231,8 +1097,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                             [stopAtIdealStationNotification setFireDate:[NSDate date]];
                             [[UIApplication sharedApplication] scheduleLocalNotification:stopAtIdealStationNotification];
                             
-                            //Remove all region identifiers from the queue
-//                            [self.regionIdentifierQueue removeAllObjects];
                             //Set flags
                             notifSent = YES;
                             endTracking = YES;
@@ -1242,8 +1106,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                     //otherwise, if we're heading to a non-ideal station, check to see if a dock at the ideal station has opened up.
                     if (!endTracking && (self.currentDestinationStation.stationID != station.stationID) && (station.nbEmptyDocks > 0) && (self.idealDestinationStation.nbEmptyDocks == 0))
                     {
-//                      NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
-                        
                         //Alert the user to bike to the idealDestinationStation instead!
                         self.currentDestinationStation.annotationIdentifier = kAlternateStation;
                         self.currentDestinationStation = station;
@@ -1260,30 +1122,22 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                     //update this pointer... will always continue to be the same stationID
                     self.idealDestinationStation = station;
                 }
-                if (station.stationID == self.currentDestinationStation.stationID)
+                if (station.stationID == self.currentDestinationStation.stationID) //TODO: && !notifSent?? test this
                 {
                     //the ideal non-current station did not empty out... but check if the currentDestinationStation filled up:
                     if (self.currentDestinationStation.nbEmptyDocks > 0 && station.nbEmptyDocks == 0)
                     {
                         //it filled up... alert the user to go to the next non-empty station
-                        //re-sort station list with the distance from the destination
-//                        [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByDistanceFromDestination]];
                         for (Station *newStation in self.closestStationsToDestination)
                         {
                             if (newStation.nbEmptyDocks > 0)
                             {
+                                //TODO: is this alternate station being assigned incorrectly or perhaps just doubly executed due to the "bike to idealDestinationStation instead!" code?
                                 self.currentDestinationStation.annotationIdentifier = kAlternateStation;
                                 self.currentDestinationStation = newStation;
                                 self.currentDestinationStation.annotationIdentifier = kDestinationStation;
                                 
                                 newlyFullStationName = station.name;
-//                                UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
-//                                [bikeToNextBestStationNotification setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.", station.name, self.currentDestinationStation.name]];
-//                                bikeToNextBestStationNotification.soundName = @"bicycle_bell.wav";
-//                                [bikeToNextBestStationNotification setFireDate:[NSDate date]];
-//                                [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
-//                                notifSent = YES;
-                                
                                 break;
                             }
                         }
@@ -1313,15 +1167,10 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                     [stopAtCurrentStationNotification setFireDate:[NSDate date]];
                     [[UIApplication sharedApplication] scheduleLocalNotification:stopAtCurrentStationNotification];
                     
-                    //Remove all region identifiers from the queue
-//                    [self.regionIdentifierQueue removeAllObjects];
-//                    [self.regionIdentifierQueue indexOfObject:identifier];
                     //Set flag
                     endTracking = YES;
                     break;
                 }
-                //Remove this object, one at a time instead of doing them all at the end in case another is added by a geofence notification between now and the end of the method
-//                [self.regionIdentifierQueue removeObject:identifier];
             }
             if (!endTracking && newlyFullStationName != nil)
             {
@@ -1334,11 +1183,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
             
             if (!endTracking)
             {
-                //reload annotations
-                //          [self updateActiveBikingViewWithNewDestination:NO];
-                
-                //Hide the annotations for all other stations.
-                //          [self.mapView removeAnnotations:self.mapView.annotations];
                 for (id<MKAnnotation> annotation in self.mapView.annotations) {
                     if(![annotation isKindOfClass: [MKUserLocation class]])
                         [self.mapView removeAnnotation:annotation];
@@ -1367,7 +1211,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
             }
             
             //clear out the region identifiers that we just checked from the queue so we don't alert at the wrong time
-//            [self.regionIdentifierQueue removeAllObjects];
             [self.regionIdentifierQueue removeObjectsInArray:regionIdentifiersToCheck];
             
         }
@@ -1416,12 +1259,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         case BikingStatePreparingToBike:
         case BikingStateTrackingDidStop:
             //Change buttons:
-
-            /* iOS6 : pre-toolbar */
-//            [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//            [self.startStopButton setTitle:@"Stop Station Tracking" forState:UIControlStateNormal];
-//            [self.cancelButton setHidden:YES];
-            
             /* iOS7 : with toolbar */
             [self.startStopButton setTintColor:[UIColor redColor]];
             [self.startStopButton setTitle:@"Stop Station Tracking"];

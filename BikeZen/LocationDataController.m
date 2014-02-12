@@ -161,16 +161,4 @@
 
 }
 
-#pragma mark - State Restoration
-
-//- (void) encodeRestorableStateWithCoder:(NSCoder *)coder
-//{
-//    
-//}
-//
-//- (void) decodeRestorableStateWithCoder:(NSCoder *)coder
-//{
-//    
-//}
-
 @end

@@ -52,14 +52,12 @@
 -(CLLocationDegrees)lat
 {
     CLLocationDegrees n = [[self objectForKey:@"lat"] integerValue]/1e6;
-//    CLLocationDegrees n = (CLLocationDegrees)[str integerValue];
     return n;
 }
 
 -(CLLocationDegrees)lng
 {
     CLLocationDegrees n = [[self objectForKey:@"lng"] integerValue]/1e6;
-    //    CLLocationDegrees n = (CLLocationDegrees)[str integerValue];
     return n;
 }
 

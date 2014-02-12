@@ -321,8 +321,7 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 - (NSString *)closestBikeshareNetworkToLocation:(CLLocation *)location withData:(NSDictionary *)networkData
 {
     //Find the distance from location to each network center and add that distance to new key-value pair in NSDictionary
-//    NSMutableArray /*NSDictionary*/ *newNetworkDict = [(NSArray*)networkData mutableCopy];
-    NSMutableArray *newCityData = [[NSMutableArray alloc] init];//[[NSMutableArray alloc] initWithCapacity:[networkData count]];
+    NSMutableArray *newCityData = [[NSMutableArray alloc] init];
     CLLocationDistance distanceToUser;
     
     for (id item in networkData)

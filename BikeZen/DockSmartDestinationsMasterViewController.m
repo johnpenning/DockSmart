@@ -35,7 +35,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 @property (nonatomic) MyLocation *selectedLocation;
 @property (nonatomic) NSMutableArray *filterResults;
 @property (nonatomic) NSMutableArray *geocodeSearchResults;
-//@property (nonatomic) NSUInteger geocodeSearchResultsCount;
 @property (nonatomic) CLLocationCoordinate2D userCoordinate;
 @property (nonatomic, readwrite) UIActionSheet *navSheet;
 
@@ -60,11 +59,8 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
     [super awakeFromNib];
 
     //initialize local userCoordinate property:
-//    self.userCoordinate = CLLocationCoordinate2DMake(0, 0);
     self.userCoordinate = kCLLocationCoordinate2DInvalid;
     
-    // KVO: listen for changes to our station data source for table view updates
-//    [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(addStations:)
                                                  name:kAddStationsNotif
@@ -79,8 +75,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-//    [LocationController sharedInstance].delegate = self;
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -102,11 +96,10 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //TODO: the following line is perhaps not so super dangerous and dumb as implemented?  Keeps us from having to store twice as many lists...
+    //Pointing to the map view controller's data keeps us from having to store twice as many lists...
     self.dataController = [self.tabBarController.childViewControllers[0] dataController];
     [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
     
-//    [self.navigationController setNavigationBarHidden:YES animated:animated];
     //deselect the last row selected
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
@@ -131,20 +124,15 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     [super encodeRestorableStateWithCoder:coder];
     
     //Encode objects:
-//    [coder encodeInteger:self.userCoordinate.latitude forKey:UserCoordinateLatitudeKey];
-//    [coder encodeInteger:self.userCoordinate.longitude forKey:UserCoordinateLongitudeKey];
-    
     NSMutableData *data = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     
-//    [archiver encodeObject:self.dataController.stationList forKey:DataControllerKey];
     [archiver encodeObject:self.searchLocation forKey:SearchLocationKey];
     [archiver encodeObject:self.selectedLocation forKey:SelectedLocationKey];
     [archiver encodeObject:self.filterResults forKey:FilterResultsKey];
     [archiver encodeObject:self.geocodeSearchResults forKey:GeocodeSearchResultsKey];
     [archiver finishEncoding];
     
-    //    NSString *filename = @"stationData.txt";
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
     
@@ -169,22 +157,12 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 
     [super decodeRestorableStateWithCoder:coder];
     
-    //    //Register custom objects for state restoration:
-    //    [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
-    //    [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
-    //    [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
-    //    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
-    
-//    self.userCoordinate.latitude = [coder decodeIntegerForKey:UserCoordinateLatitudeKey];
-//    self.userCoordinate.longitude = [coder decodeIntegerForKey:UserCoordinateLongitudeKey];
-
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
     
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     
-//    self.dataController.stationList = [unarchiver decodeObjectForKey:DataControllerKey];
     self.searchLocation = [unarchiver decodeObjectForKey:SearchLocationKey];
     self.selectedLocation = [unarchiver decodeObjectForKey:SelectedLocationKey];
     self.filterResults = [unarchiver decodeObjectForKey:FilterResultsKey];
@@ -202,7 +180,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
     
-    //TODO: the following line is perhaps not so super dangerous and dumb as implemented?  Keeps us from having to store twice as many lists...
+    //Pointing to the map view controller's data keeps us from having to store twice as many lists...
     self.dataController = [self.tabBarController.childViewControllers[0] dataController];
     [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
 
@@ -232,7 +210,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     //Reload station data in Destinations list
     [self.dataController setSortedStationList:[self.dataController sortLocationList:self.dataController.stationList byMethod:LocationDataSortByName]];
     [self.tableView reloadData];
-    //TODO: reperform search
+    //TODO: reperform search?
 }
 
 #pragma mark - Table view data source
@@ -535,37 +513,19 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
             NSMutableArray *searchResults = [[NSMutableArray alloc] init];
             for (Station *station in self.dataController.sortedStationList)
             {
-//                if ([product.type isEqualToString:typeName])
-//                {
-                    [searchResults addObject:station];
-//                }
+                [searchResults addObject:station];
             }
             self.filterResults = searchResults;
         }
         return;
     }
     
-//    if ([self.filterResults count])
-//    {
-//        //remove previous search results, if the top cell was a previous geocode search prompt:
-//        if ([[self.filterResults objectAtIndex:0] isMemberOfClass:[MyLocation class]])
-//        {
-//            [self.filterResults removeObjectAtIndex:0];
-//        }
-//        
-//        //Remove all the stations for filtering with new locationName (and typeName):
-//        NSRange stationRange = NSMakeRange(self.geocodeSearchResultsCount, ([self.filterResults count] - self.geocodeSearchResultsCount));
-//        [self.filterResults removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:stationRange]]; // First clear the filtered array.
-//        
-//    }
     [self.filterResults removeAllObjects]; // First clear the filtered array.
     
     /* Add a search row at the top, to begin a geocode for the input address.
        Since this does not have coordinates yet, initialize this simply as a MyLocation object
        instead of an Address.
      */
-//    MyLocation *newSearchAddress = [[MyLocation alloc] initWithName:locationName latitude:0 longitude:0];
-//    [self.filterResults addObject:newSearchAddress];
     self.searchLocation = [[MyLocation alloc] initWithName:locationName coordinate:CLLocationCoordinate2DMake(0, 0) distanceFromUser:CLLocationDistanceMax];
     
 	/*
@@ -573,16 +533,13 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 	 */
     for (Station *station in self.dataController.sortedStationList)
 	{
-//		if ((typeName == nil) || [product.type isEqualToString:typeName])
-//		{
-            NSUInteger searchOptions = NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
-            NSRange stationNameRange = NSMakeRange(0, station.name.length);
-            NSRange foundRange = [station.name rangeOfString:locationName options:searchOptions range:stationNameRange];
-            if (foundRange.length > 0)
-			{
-				[self.filterResults addObject:station];
-            }
-//		}
+        NSUInteger searchOptions = NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
+        NSRange stationNameRange = NSMakeRange(0, station.name.length);
+        NSRange foundRange = [station.name rangeOfString:locationName options:searchOptions range:stationNameRange];
+        if (foundRange.length > 0)
+        {
+            [self.filterResults addObject:station];
+        }
 	}
     
 }
@@ -610,7 +567,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
 {
     NSString *searchString = [self.searchDisplayController.searchBar text];
-    NSString *scope;
+    NSString *scope = nil;
     
 //    if (searchOption > 0)
 //    {
@@ -625,7 +582,6 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    //TODO: Decide if you should start geocoding here...
     // perform the Geocode
     [self performStringGeocode:[searchBar text]];
 }

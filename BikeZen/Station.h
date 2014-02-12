@@ -33,26 +33,10 @@
 
  The data we care about is declared in the Station object and parsed appropriately.
  */
-/* TODO: make this a subclass of MyLocation?*/
+
 @interface Station : MyLocation <MKAnnotation, NSCoding, NSCopying>
 
-//{
-//@private
-//    NSInteger stationId;
-//    NSString *name;
-//    CLLocationCoordinate2D *location;
-//    bool installed;
-//    bool locked;
-//    bool public;
-//    NSInteger nbBikes;
-//    NSInteger nbEmptyDocks;
-//    NSDate *lastStationUpdate;
-//}
-
-/* TODO: Make these nonatomic?? */
 @property (nonatomic) NSInteger stationID;
-//@property (nonatomic, copy) NSString *name;
-//@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic) CLLocationDegrees latitude;
 @property (nonatomic) CLLocationDegrees longitude;
 @property (nonatomic) bool installed;
@@ -65,20 +49,4 @@
 
 - (id)initWithStationID:(NSInteger)stationID name:(NSString*)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude installed:(bool)installed locked:(bool)locked publiclyViewable:(bool)publiclyViewable nbBikes:(NSInteger)nbBikes nbEmptyDocks:(NSInteger)nbEmptyDocks lastStationUpdate:(NSDate *)lastStationUpdate distanceFromUser:(CLLocationDistance)distance;
 
-//- (void)initCoordinateWithLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude;
-
-//- (MKMapItem*) mapItem;
-
 @end
-
-//@interface SourceStation : Station <MKAnnotation>
-//
-//@end
-//
-//@interface DestinationStation : Station <MKAnnotation>
-//
-//@end
-//
-//@interface AlternateStation : Station <MKAnnotation>
-//
-//@end

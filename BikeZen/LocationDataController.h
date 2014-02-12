@@ -32,7 +32,6 @@ typedef NS_ENUM(NSInteger, LocationDataSortMethod) {
 
 - (NSUInteger)countOfLocationList:(NSArray *)list;
 - (MyLocation *)objectInLocationList:(NSArray *)list atIndex:(NSUInteger)index;
-//- (MyLocation *)objectInSortedLocationListAtIndex:(NSUInteger)index;
 - (void)addLocationObject:(MyLocation *)location toList:(NSMutableArray *)list;
 - (void)addLocationObjectsFromArray:(NSArray *)locations toList:(NSMutableArray *)list;
 - (NSArray *)sortLocationList:(NSMutableArray *)list byMethod:(LocationDataSortMethod)method;
