@@ -346,10 +346,8 @@
 		CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */; };
 		CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartLogViewController.m */; };
 		CDA9550D176CC765003C49DF /* stationData.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDA9550C176CC765003C49DF /* stationData.plist */; };
-		CDA95510176CCE47003C49DF /* StationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA9550F176CCE47003C49DF /* StationDataController.m */; };
 		CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
-		CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */; };
 		CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CDC5C7C21870F63A0036BF18 /* Settings.bundle */; };
 		CDCCF6F4188B86B500295A35 /* bicycle_bell.wav in Resources */ = {isa = PBXBuildFile; fileRef = CDCCF6F3188B86B500295A35 /* bicycle_bell.wav */; };
 		CDCCF6F6188C6DC200295A35 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDCCF6F5188C6DC200295A35 /* AudioToolbox.framework */; };
@@ -719,13 +717,9 @@
 		CD5541E3177F997D00167D87 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = ../MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		CD6DCB26176AB54100133762 /* DockSmartDestinationsMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartDestinationsMasterViewController.h; sourceTree = "<group>"; };
 		CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartDestinationsMasterViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		CD6DCB29176AB7BA00133762 /* DockSmartDestinationsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartDestinationsDetailViewController.h; sourceTree = "<group>"; };
-		CD6DCB2A176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartDestinationsDetailViewController.m; sourceTree = "<group>"; };
 		CD76272F17516B6F00E22617 /* DockSmartLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartLogViewController.h; sourceTree = "<group>"; };
 		CD76273017516B7000E22617 /* DockSmartLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartLogViewController.m; sourceTree = "<group>"; };
 		CDA9550C176CC765003C49DF /* stationData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = stationData.plist; sourceTree = "<group>"; };
-		CDA9550E176CCE47003C49DF /* StationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StationDataController.h; sourceTree = "<group>"; };
-		CDA9550F176CCE47003C49DF /* StationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StationDataController.m; sourceTree = "<group>"; };
 		CDA95511176E729B003C49DF /* DockSmartStationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartStationDetailViewController.h; sourceTree = "<group>"; };
 		CDA95512176E729B003C49DF /* DockSmartStationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartStationDetailViewController.m; sourceTree = "<group>"; };
 		CDA95514176E72C4003C49DF /* DockSmartAddressDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartAddressDetailViewController.h; sourceTree = "<group>"; };
@@ -739,8 +733,6 @@
 		CDC5C7C21870F63A0036BF18 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		CDCCF6F3188B86B500295A35 /* bicycle_bell.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bicycle_bell.wav; sourceTree = "<group>"; };
 		CDCCF6F5188C6DC200295A35 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultsDetailViewController.h; sourceTree = "<group>"; };
-		CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultsDetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1119,8 +1111,6 @@
 		CD529EC01730B77F005420D6 /* DockSmart */ = {
 			isa = PBXGroup;
 			children = (
-				CD6DCB29176AB7BA00133762 /* DockSmartDestinationsDetailViewController.h */,
-				CD6DCB2A176AB7BA00133762 /* DockSmartDestinationsDetailViewController.m */,
 				CD529EC91730B77F005420D6 /* DockSmartAppDelegate.h */,
 				CD529ECA1730B77F005420D6 /* DockSmartAppDelegate.m */,
 				CD529ED21730B77F005420D6 /* MainStoryboard.storyboard */,
@@ -1142,8 +1132,6 @@
 				CD76273017516B7000E22617 /* DockSmartLogViewController.m */,
 				CD6DCB26176AB54100133762 /* DockSmartDestinationsMasterViewController.h */,
 				CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */,
-				CDA9550E176CCE47003C49DF /* StationDataController.h */,
-				CDA9550F176CCE47003C49DF /* StationDataController.m */,
 				CDA95511176E729B003C49DF /* DockSmartStationDetailViewController.h */,
 				CDA95512176E729B003C49DF /* DockSmartStationDetailViewController.m */,
 				CDA95514176E72C4003C49DF /* DockSmartAddressDetailViewController.h */,
@@ -1152,8 +1140,6 @@
 				CD39AD351778BA9B00446A9A /* LocationDataController.m */,
 				CD39AD371778C11100446A9A /* Address.h */,
 				CD39AD381778C11100446A9A /* Address.m */,
-				CDF8A4DA177BDE9A00063B07 /* SearchResultsDetailViewController.h */,
-				CDF8A4DB177BDE9A00063B07 /* SearchResultsDetailViewController.m */,
 				CDC5C7BF1870D75F0036BF18 /* DockSmartSettingsViewController.h */,
 				CDC5C7C01870D75F0036BF18 /* DockSmartSettingsViewController.m */,
 				CD00396A189DC52C00349A88 /* DSHTTPSessionManager.h */,
@@ -1690,13 +1676,11 @@
 				CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */,
 				CD00396C189DC52C00349A88 /* DSHTTPSessionManager.m in Sources */,
 				CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */,
-				CDA95510176CCE47003C49DF /* StationDataController.m in Sources */,
 				CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */,
 				CD39AD361778BA9B00446A9A /* LocationDataController.m in Sources */,
 				CD39AD391778C11100446A9A /* Address.m in Sources */,
 				CD5541E4177F997D00167D87 /* MBProgressHUD.m in Sources */,
 				CD1E6E4317E51052004C3C8D /* LocationController.m in Sources */,
-				CDC5C7C11870D75F0036BF18 /* DockSmartSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

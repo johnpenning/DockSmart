@@ -66,7 +66,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="653" y="-138"/>
+            <point key="canvasLocation" x="1655" y="983"/>
         </scene>
         <!--Dock Smart Destinations Master View Controller - Destinations-->
         <scene sceneID="Kak-id-ikg">
@@ -165,7 +165,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="1166" y="-792"/>
+            <point key="canvasLocation" x="1166" y="180"/>
         </scene>
         <!--Dock Smart Station Detail View Controller-->
         <scene sceneID="Ove-M5-017">
@@ -306,7 +306,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IR8-4e-6z2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1655" y="-792"/>
+            <point key="canvasLocation" x="1655" y="180"/>
         </scene>
         <!--Navigation Controller - Favorites-->
         <scene sceneID="P3O-Tb-iIG">
@@ -327,7 +327,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Qj-t2-Yhs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="653" y="-792"/>
+            <point key="canvasLocation" x="653" y="180"/>
         </scene>
         <!--Dock Smart Map View Controller - Map-->
         <scene sceneID="13">
@@ -452,7 +452,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="12" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="653" y="498"/>
+            <point key="canvasLocation" x="653" y="-634"/>
         </scene>
         <!--Dock Smart Log View Controller - Log-->
         <scene sceneID="x7W-iZ-B5L">
@@ -488,7 +488,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jce-o9-lTb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="653" y="1151"/>
+            <point key="canvasLocation" x="653" y="983"/>
         </scene>
         <!--Dock Smart Settings View Controller - Settings-->
         <scene sceneID="kFs-65-LVL">
@@ -507,7 +507,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pjs-8c-wQp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1201" y="1153"/>
+            <point key="canvasLocation" x="1166" y="983"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="15">
@@ -576,44 +576,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nDh-nY-MF8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1655" y="-69"/>
-        </scene>
-        <!--Search Results Detail View Controller-->
-        <scene sceneID="Fn4-zk-Hag">
-            <objects>
-                <tableViewController id="45Y-W2-UJr" customClass="SearchResultsDetailViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="XFj-pP-R01">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="kyp-C8-O6B" style="IBUITableViewCellStyleDefault" id="jnr-uq-4ld">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jnr-uq-4ld" id="rIC-0M-Rti">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kyp-C8-O6B">
-                                            <rect key="frame" x="15" y="0.0" width="290" height="43"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="45Y-W2-UJr" id="3Na-WS-Nvj"/>
-                            <outlet property="delegate" destination="45Y-W2-UJr" id="0no-SK-6bc"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="LwM-oa-uhd"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cYU-Tt-OUu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1655" y="612"/>
+            <point key="canvasLocation" x="2147" y="180"/>
         </scene>
     </scenes>
     <resources>

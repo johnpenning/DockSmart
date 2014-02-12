@@ -7,9 +7,6 @@
 //
 
 #import "DockSmartDestinationsMasterViewController.h"
-#import "DockSmartAddressDetailViewController.h"
-#import "DockSmartStationDetailViewController.h"
-#import "SearchResultsDetailViewController.h"
 #import "MyLocation.h"
 #import "Station.h"
 #import "Address.h"
