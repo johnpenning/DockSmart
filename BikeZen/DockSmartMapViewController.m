@@ -150,7 +150,6 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     }
     
     [self.mapView setCenterCoordinate:zoomLocation animated:YES];
-//    [self reverseGeocodeMapCenter];
 
     //Show the license agreement alert if this is the first time the app has been opened:
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -416,7 +415,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                                                    MKCoordinateSpanMake([coder decodeDoubleForKey:RegionSpanLatKey], [coder decodeDoubleForKey:RegionSpanLongKey])
                                                    ) animated:YES];
     self.needsNewCenter = NO; //Don't center on the user location once it's acquired
-    //    [self reverseGeocodeMapCenter];
     
     //TODO: perform geocode here? or does mapView:regionDidChange:animated: take care of that?
 
@@ -1144,16 +1142,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [[LocationController sharedInstance] stopAllRegionMonitoring];
 }
 
-//- (void)updateLocation:(NSNotification *)notif {
-//    
-//    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
-//}
-//
-//- (void)updateDistancesFromUserLocation:(CLLocation *)location
-//{
-//    
-//}
-
 - (void)registerForKVO {
 	for (NSString *keyPath in [self observableKeypaths]) {
 		[self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
@@ -1465,10 +1453,7 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 - (IBAction)updateLocationTapped:(id)sender
 {
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
-//    MKCoordinateRegion region = [self.mapView region];
-//    region.center = [[[LocationController sharedInstance] location] coordinate];
-//    region.center = [[self.mapView userLocation] coordinate];
-//    [self.mapView setRegion:region animated:YES];
+
     if ([[self.mapView userLocation] location])
     {
         [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate animated:YES];
@@ -1482,29 +1467,23 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     //pan to new user location if we said we needed to when the view loaded
     if (self.needsNewCenter)
     {
-//        [self.mapView setCenterCoordinate:[[[LocationController sharedInstance] location] coordinate] animated:YES];
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([[[LocationController sharedInstance] location] coordinate], 2*METERS_PER_MILE, 2*METERS_PER_MILE);
         
         [self.mapView setRegion:region animated:YES];
         //clear flag
         self.needsNewCenter = NO;
-        //reverse geocode this location for the destinationDetailText
-//        [self reverseGeocodeMapCenter];
-
     }
 
     if (self.bikingState != BikingStateActive)
     {
         [[LocationController sharedInstance] stopUpdatingCurrentLocation];
     }
-    //TODO: if biking state is active, get a bike data update, but make sure that a minute has passed since the last one (especially if we're in the background and using standard location svcs instead of significant change)... maybe check to see if the minuteTimer is running
-    //TODO: You can save the time the next station update should occur next when your App is going to the background and check if you should take action when the App comes back to the foreground. If we're entering a geofence, and it's not time to get new station data yet (unless we just want to force an update at those times anyway), perhaps turn the new stationError: code into a usePresentData: function and call that instead to figure out docking notifications?
+    //TODO: If we're entering a geofence, and we don't just want to force an update at those times, perhaps turn the new stationError: code into a usePresentData: function and call that instead to figure out docking notifications?
 }
 
 - (void)regionEntered:(NSNotification *)notif
 {
     //Mark the region that we just entered:
-//    self.regionIdentifier = [(CLRegion *)[[notif userInfo] valueForKey:kNewRegionKey] identifier];
     if (!self.regionIdentifierQueue)
     {
         //allocate for the queue if it is nil

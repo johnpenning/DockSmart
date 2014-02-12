@@ -15,7 +15,6 @@
 
 extern NSString *kLocationUpdateNotif;
 extern NSString *kNewLocationKey;
-//extern NSString *kRegionUpdateNotif;
 extern NSString *kRegionEntryNotif;
 extern NSString *kRegionExitNotif;
 extern NSString *kNewRegionKey;

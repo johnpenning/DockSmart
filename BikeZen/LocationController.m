@@ -13,7 +13,6 @@
 
 NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
 NSString *kNewLocationKey = @"NewLocationKey";
-//NSString *kRegionUpdateNotif = @"RegionUpdateNotif";
 NSString *kRegionEntryNotif = @"RegionEntryNotif";
 NSString *kRegionExitNotif = @"RegionExitNotif";
 NSString *kNewRegionKey = @"NewRegionKey";
@@ -64,12 +63,9 @@ NSString *kNewRegionKey = @"NewRegionKey";
     
     _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     _locationManager.distanceFilter = 5; //10.0f; // we don't need to be any more accurate than 10m
-    //        _locationManager.purpose = @"This will be used as part of the hint region for forward geocoding.";
     _locationManager.activityType = CLActivityTypeFitness;
     
     [_locationManager startUpdatingLocation];
-    
-    //    [self showCurrentLocationSpinner:YES];
 }
 
 - (void)stopUpdatingCurrentLocation
@@ -82,7 +78,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
                                                                                            forKey:kLogTextKey]];
     
     [_locationManager stopUpdatingLocation];
-    //    [self showCurrentLocationSpinner:NO];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
@@ -101,24 +96,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
     }
     
 }
-
-//- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-//{
-//    // if the location is older than 30s ignore
-//    if (fabs([newLocation.timestamp timeIntervalSinceDate:[NSDate date]]) > 30)
-//    {
-//        return;
-//    }
-//
-//    _selectedCoordinate = [newLocation coordinate];
-//
-//    // update the current location cells detail label with these coords
-//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
-//    cell.detailTextLabel.text = [NSString stringWithFormat:@"φ:%.4F, λ:%.4F", _selectedCoordinate.latitude, _selectedCoordinate.longitude];
-//
-//    // after recieving a location, stop updating
-//    [self stopUpdatingCurrentLocation];
-//}
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
@@ -141,40 +118,12 @@ NSString *kNewRegionKey = @"NewRegionKey";
         //store it in the singleton's location property
         self.location = location;
         
-//        DLog(@"New location: %@", location);
         //post notification
         [[NSNotificationCenter defaultCenter] postNotificationName:kLocationUpdateNotif
                                                             object:self
                                                           userInfo:[NSDictionary dictionaryWithObject:location forKey:kNewLocationKey]];
-        
-        //If we're not actively biking, stop updating location to save battery
-//        DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-//        if (controller.bikingState != BikingStateActive)
-//        {
-//            [self stopUpdatingCurrentLocation];
-//        }
     }
 }
-
-#if 0
-- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
-{
-    //For testing: local notification
-    UILocalNotification *locationUpdatesPausedNotification = [[UILocalNotification alloc] init];
-    [locationUpdatesPausedNotification setAlertBody:[NSString stringWithFormat:@"Location updates paused: %f, %f %@", _userCoordinate.latitude, _userCoordinate.longitude, [NSDate date]]];
-    [locationUpdatesPausedNotification setFireDate:[NSDate date]];
-    [[UIApplication sharedApplication] presentLocalNotificationNow:locationUpdatesPausedNotification];
-}
-
-- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager
-{
-    //For testing: local notification
-    UILocalNotification *locationUpdatesResumedNotification = [[UILocalNotification alloc] init];
-    [locationUpdatesResumedNotification setAlertBody:[NSString stringWithFormat:@"Location updates resumed: %f, %f %@", _userCoordinate.latitude, _userCoordinate.longitude, [NSDate date]]];
-    [locationUpdatesResumedNotification setFireDate:[NSDate date]];
-    [[UIApplication sharedApplication] presentLocalNotificationNow:locationUpdatesResumedNotification];
-}
-#endif
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
@@ -186,28 +135,10 @@ NSString *kNewRegionKey = @"NewRegionKey";
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
-    
-    
-    // stop updating if not actively biking
-//    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-//    if (controller.bikingState != BikingStateActive)
-//    {
-//        [self stopUpdatingCurrentLocation];
-//    }
-    // since we got an error, set selected location to invalid location
-//    _userCoordinate = kCLLocationCoordinate2DInvalid;
-    
-    // show the error alert
-    //    UIAlertView *alert = [[UIAlertView alloc] init];
-    //    alert.title = @"Error obtaining location";
-    //    alert.message = [error localizedDescription];
-    //    [alert addButtonWithTitle:@"OK"];
-    //    [alert show];
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
 {
-//    NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ %f, %f withError: %@", region.identifier, region.center.latitude, region.center.longitude, [error localizedDescription]];
     NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ withError: %@", region.identifier, [error localizedDescription]];
     DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
@@ -219,7 +150,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
-//    NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
     NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@", region.identifier];
     DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
@@ -234,7 +164,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
-//    NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@ %f, %f", region.identifier, region.center.latitude, region.center.longitude];
     NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@", region.identifier];
     DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
@@ -262,10 +191,6 @@ NSString *kNewRegionKey = @"NewRegionKey";
 
 - (BOOL)registerRegionWithCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius identifier:(NSString*)identifier accuracy:(CLLocationAccuracy)accuracy
 {
-    // Do not create regions if support is unavailable or disabled (deprecated)
-//    if ( ![CLLocationManager regionMonitoringAvailable])
-//        return NO;
-    
     // Check the authorization status
     if (([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) &&
         ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusNotDetermined))

@@ -31,8 +31,6 @@
     
     self.userCoordinate = kCLLocationCoordinate2DInvalid;
     
-//    [LocationController sharedInstance].delegate = self;
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateLocation:)
                                                  name:kLocationUpdateNotif

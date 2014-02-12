@@ -77,9 +77,6 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
                                              selector:@selector(updateLocation:)
                                                  name:kLocationUpdateNotif
                                                object:nil];
-    
-//    [LocationController sharedInstance].delegate = self;
-
 }
 
 - (void)viewDidLoad
@@ -219,7 +216,6 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 - (void)updateLocation:(NSNotification *)notif {
     
     self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
-//    [self updateDistancesFromUserLocation:[[notif userInfo] valueForKey:kNewLocationKey]];
 }
 
 - (void)addStations:(NSNotification *)notif {
@@ -671,8 +667,6 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     hud.labelText = @"Loading addresses...";
 
     //Create a hint region around the user's current location for the geocoder
-//    CLRegion *region = [[CLRegion alloc]
-//                        initCircularRegionWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
     CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:self.userCoordinate radius:5.0*METERS_PER_MILE identifier:@"Hint Region"];
     
     //Perform the geocode

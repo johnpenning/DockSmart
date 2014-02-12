@@ -166,15 +166,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
-//    //Stop standard location service:
-//    [[LocationController sharedInstance] stopUpdatingCurrentLocation];
-//    //Switch to significant change location service:
-//    //TODO: Change to use notifications/KVO?
-//    DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
-//    if (controller.bikingState == BikingStateActive)
-//    {
-//        [[LocationController sharedInstance].locationManager startMonitoringSignificantLocationChanges];
-//    }
     
     //Continue using standard location services if we are currently station tracking, else stop
     DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
@@ -195,17 +186,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
 
-    
-    //TODO: get rid of this and just keep significant location changes?  We don't need standard location service when we're in the foreground, since we have the minute timer running then.
-    // Stop significant location change updates
-//    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-//    if (controller.bikingState == BikingStateActive)
-//    {
-//        [[LocationController sharedInstance].locationManager stopMonitoringSignificantLocationChanges];
-//        // Start standard location service
-//        [[LocationController sharedInstance].locationManager startUpdatingLocation];
-//    }
-    
     //Start standard location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
 
@@ -221,15 +201,6 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
-
-//    // Stop significant location change updates
-//    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
-//    if (controller.bikingState == BikingStateActive)
-//    {
-//        [self.locationManager stopMonitoringSignificantLocationChanges];
-//        // Start standard location service
-//        [self.locationManager startUpdatingLocation];
-//    }
     
     //Start standard location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
