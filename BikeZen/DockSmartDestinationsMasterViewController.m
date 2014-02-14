@@ -157,6 +157,8 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 
     [super decodeRestorableStateWithCoder:coder];
     
+    DLog("Bundle version %@ at last state save", [coder decodeObjectForKey:UIApplicationStateRestorationBundleVersionKey]);
+
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
     

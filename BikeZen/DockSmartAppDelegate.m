@@ -54,11 +54,11 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    return YES;
-}
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+//    return YES;
+//}
+//
+//- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+//{
     // Override point for customization after application launch.
     
     //In case significant change location services were on from the last time we terminated, turn them off:
@@ -92,7 +92,7 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     UILocalNotification *triggeredNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     
     
-    NSString* logText = [NSString stringWithFormat:@"didFinishLaunchingWithOptions: startLocation %@ triggeredNotification %@ applicationState: %d", startLocation, [triggeredNotification alertBody], [application applicationState]];
+    NSString* logText = [NSString stringWithFormat:@"willFinishLaunchingWithOptions: startLocation %@ triggeredNotification %@ applicationState: %d", startLocation, [triggeredNotification alertBody], [application applicationState]];
     DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
@@ -247,6 +247,7 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     return YES;
 }
 
+#pragma mark - JSON Methods
 
 - (void)loadJSONCityData
 {

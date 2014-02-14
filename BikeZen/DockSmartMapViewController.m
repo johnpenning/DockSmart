@@ -132,7 +132,7 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     
     //Define the initial zoom location
     CLLocationCoordinate2D zoomLocation;
-    //TODO: if we have a mapView.userLocation.location != nil, use that as the center here. Else use a default location, set a flag, wait for it to update and then pan/zoom when we have the new location. If there's a location saved in state restoration, just use that one instead. Perform reverse geocode after settling on wherever we end up.
+    //If we have a mapView.userLocation.location != nil, use that as the center here. Else use a default location, set a flag, wait for it to update and then pan/zoom when we have the new location. If there's a location saved in state restoration, just use that one instead. Perform reverse geocode after settling on wherever we end up.
     if (self.mapView.userLocation.location)
     {
         zoomLocation = self.mapView.userLocation.location.coordinate;
@@ -237,47 +237,21 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     [super encodeRestorableStateWithCoder:coder];
     
-    //Register custom objects for state restoration:
-    //    if (self.sourceStation)
-    //        [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
-    //    if (self.finalDestination)
-    //        [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
-    //    if (self.currentDestinationStation)
-    //        [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
-    //    if (self.idealDestinationStation)
-    //        [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
-    
     //Encode objects:
     [coder encodeInteger:self.bikesDocksControl.selectedSegmentIndex forKey:BikesDocksControlKey];
     [coder encodeBool:self.bikesDocksControl.hidden forKey:BikesDocksControlHiddenKey];
-//    [coder encodeInteger:self.bikingState forKey:BikingStateKey];
-    
-//    //    [coder encodeObject:self.dataController forKey:DataControllerKey];
-//    [coder encodeObject:self.sourceStation forKey:SourceStationKey];
-//    [coder encodeObject:self.finalDestination forKey:FinalDestinationKey];
-//    [coder encodeObject:self.currentDestinationStation forKey:CurrentDestinationStationKey];
-//    [coder encodeObject:self.idealDestinationStation forKey:IdealDestinationStationKey];
-//    //    [coder encodeObject:self.closestStationsToDestination forKey:ClosestStationsToDestinationKey];
-//    NSUInteger idx = 0;
-//    for (Station *station in self.closestStationsToDestination)
-//    {
-//        [coder encodeObject:station forKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx]];
-//        idx++;
-//    }
-//    [coder encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
-
     [coder encodeBool:self.minuteTimer.isValid forKey:MinuteTimerValidKey];
     [coder encodeObject:self.startStopButton.title forKey:StartStopButtonTitleKey];
     [coder encodeObject:self.startStopButton.tintColor forKey:StartStopButtonTintColorKey];
     [coder encodeBool:self.startStopButton.enabled forKey:StartStopButtonEnabledKey];
     [coder encodeObject:self.destinationDetailLabel.text forKey:DestinationDetailLabelKey];
-//    [coder encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
     [coder encodeBool:self.cancelButton.enabled forKey:CancelButtonKey];
+    [coder encodeBool:self.updateLocationButton.enabled forKey:UpdateLocationButtonEnabledKey];
     [coder encodeDouble:[self.mapView region].center.latitude forKey:RegionCenterLatKey];
     [coder encodeDouble:[self.mapView region].center.longitude forKey:RegionCenterLongKey];
     [coder encodeDouble:[self.mapView region].span.latitudeDelta forKey:RegionSpanLatKey];
     [coder encodeDouble:[self.mapView region].span.longitudeDelta forKey:RegionSpanLongKey];
-    
+
     NSMutableData *data = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
@@ -290,16 +264,9 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [archiver encodeObject:self.currentDestinationStation forKey:CurrentDestinationStationKey];
     [archiver encodeObject:self.idealDestinationStation forKey:IdealDestinationStationKey];
     [archiver encodeObject:self.closestStationsToDestination forKey:ClosestStationsToDestinationKey];
-//    NSUInteger idx = 0;
-//    for (Station *station in self.closestStationsToDestination)
-//    {
-//        [archiver encodeObject:station forKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx]];
-//        idx++;
-//    }
     [archiver encodeObject:self.mapCenterAddress forKey:MapCenterAddressKey];
     [archiver encodeBool:self.bikeCrosshairImage.hidden forKey:BikeCrosshairImageKey];
     [archiver encodeObject:self.regionIdentifierQueue forKey:RegionIdentifierKey];
-    [archiver encodeBool:self.updateLocationButton.enabled forKey:UpdateLocationButtonEnabledKey];
     [archiver finishEncoding];
     
 //    NSString *filename = @"stationData.txt";
@@ -328,39 +295,17 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
     [super decodeRestorableStateWithCoder:coder];
     
-    //    //Register custom objects for state restoration:
-    //    [UIApplication registerObjectForStateRestoration:self.sourceStation restorationIdentifier:SourceStationID];
-    //    [UIApplication registerObjectForStateRestoration:self.finalDestination restorationIdentifier:FinalDestinationID];
-    //    [UIApplication registerObjectForStateRestoration:self.currentDestinationStation restorationIdentifier:CurrentDestinationStationID];
-    //    [UIApplication registerObjectForStateRestoration:self.idealDestinationStation restorationIdentifier:IdealDestinationStationID];
+    DLog("Bundle version %@ at last state save", [coder decodeObjectForKey:UIApplicationStateRestorationBundleVersionKey]);
     
     self.bikesDocksControl.selectedSegmentIndex = [coder decodeIntegerForKey:BikesDocksControlKey];
     self.bikesDocksControl.hidden = [coder decodeBoolForKey:BikesDocksControlHiddenKey];
-//    self.bikingState = [coder decodeIntegerForKey:BikingStateKey];
-    //    self.dataController = [coder decodeObjectForKey:DataControllerKey];
-//    self.sourceStation = [coder decodeObjectForKey:SourceStationKey];
-//    self.finalDestination = [coder decodeObjectForKey:FinalDestinationKey];
-//    self.currentDestinationStation = [coder decodeObjectForKey:CurrentDestinationStationKey];
-//    self.idealDestinationStation = [coder decodeObjectForKey:IdealDestinationStationKey];
-    //    self.closestStationsToDestination = [coder decodeObjectForKey:ClosestStationsToDestinationKey];
-//    NSUInteger idx = 0;
-//    for (idx = 0; idx < [self.closestStationsToDestination count]; idx++)
-//    {
-//        //        [coder encodeObject:station forKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx]];
-//        [self.closestStationsToDestination setObject:[coder decodeObjectForKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx] ] atIndexedSubscript:idx];
-//    }
-    //    self.mapCenterAddress = [coder decodeObjectForKey:MapCenterAddressKey];
-
-    
     self.startStopButton.title = [coder decodeObjectForKey:StartStopButtonTitleKey];
     self.startStopButton.tintColor = [coder decodeObjectForKey:StartStopButtonTintColorKey];
     self.startStopButton.enabled = [coder decodeBoolForKey:StartStopButtonEnabledKey];
     self.destinationDetailLabel.text = [coder decodeObjectForKey:DestinationDetailLabelKey];
-    //set hidden state in archiver? is not hidden when app launches in background
-//    self.bikeCrosshairImage.hidden = [coder decodeBoolForKey:BikeCrosshairImageKey];
     self.cancelButton.enabled = [coder decodeBoolForKey:CancelButtonKey];
-    
-    
+    self.updateLocationButton.enabled = [coder decodeBoolForKey:UpdateLocationButtonEnabledKey];
+
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"stationData.txt"];
 
@@ -374,16 +319,9 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     self.currentDestinationStation = [unarchiver decodeObjectForKey:CurrentDestinationStationKey];
     self.idealDestinationStation = [unarchiver decodeObjectForKey:IdealDestinationStationKey];
     self.closestStationsToDestination = [unarchiver decodeObjectForKey:ClosestStationsToDestinationKey];
-//    NSUInteger idx = 0;
-//    for (idx = 0; idx < [self.closestStationsToDestination count]; idx++)
-//    {
-//        [self.closestStationsToDestination setObject:[unarchiver decodeObjectForKey:[NSString stringWithFormat:@"%@%d", ClosestStationsToDestinationKey, idx] ] atIndexedSubscript:idx];
-//    }
     self.mapCenterAddress = [unarchiver decodeObjectForKey:MapCenterAddressKey];
     self.bikeCrosshairImage.hidden = [unarchiver decodeBoolForKey:BikeCrosshairImageKey];
     self.regionIdentifierQueue = [unarchiver decodeObjectForKey:RegionIdentifierKey];
-    //TODO: fix coder vs. unarchiver discrepancies (bools should be in the coder)
-    self.updateLocationButton.enabled = [unarchiver decodeBoolForKey:UpdateLocationButtonEnabledKey];
     self.lastDataUpdateTime = [unarchiver decodeObjectForKey:LastDataUpdateTimeKey];
     //restart timer or fire timer now, depending on what the fire date was
     if ([coder decodeBoolForKey:MinuteTimerValidKey])
@@ -563,7 +501,6 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                 annotationView.centerOffset = CGPointMake(0, 0);
             }
         }
-        //        }
         
         return annotationView;
     }
@@ -592,10 +529,9 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 - (void)reverseGeocodeMapCenter
 {
-    if (self.bikingState != BikingStateInactive)
+    if ((self.bikingState != BikingStateInactive) || self.needsNewCenter)
     {
-        //we only want to do this when the biking state is inactive
-        //TODO: also return if needsNewCenter? will need to set it to NO before setting the region in updateLocation
+        //we only want to do this when the biking state is inactive and once we have a starting center location
         return;
     }
     
