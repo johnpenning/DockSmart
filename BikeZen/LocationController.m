@@ -11,11 +11,11 @@
 
 //static LocationController* sharedCLDelegate = nil;
 
-NSString *kLocationUpdateNotif = @"LocationUpdateNotif";
-NSString *kNewLocationKey = @"NewLocationKey";
-NSString *kRegionEntryNotif = @"RegionEntryNotif";
-NSString *kRegionExitNotif = @"RegionExitNotif";
-NSString *kNewRegionKey = @"NewRegionKey";
+NSString * const kLocationUpdateNotif = @"LocationUpdateNotif";
+NSString * const kNewLocationKey = @"NewLocationKey";
+NSString * const kRegionEntryNotif = @"RegionEntryNotif";
+NSString * const kRegionExitNotif = @"RegionExitNotif";
+NSString * const kNewRegionKey = @"NewRegionKey";
 
 @implementation LocationController
 

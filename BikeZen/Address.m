@@ -44,7 +44,7 @@
 
 #pragma mark - State Restoration
 
-static NSString *PlacemarkKey = @"PlacemarkKey";
+static NSString * const PlacemarkKey = @"PlacemarkKey";
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {

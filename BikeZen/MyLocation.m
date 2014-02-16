@@ -9,11 +9,11 @@
 #import "MyLocation.h"
 
 // Reuse identifiers for MyLocation annotationIdentifer in the MapView
-NSString *kSourceStation = @"SourceStation";
-NSString *kDestinationLocation = @"DestinationLocation";
-NSString *kDestinationStation = @"DestinationStation";
-NSString *kAlternateStation = @"AlternateStation";
-NSString *kStation = @"Station";
+NSString * const kSourceStation = @"SourceStation";
+NSString * const kDestinationLocation = @"DestinationLocation";
+NSString * const kDestinationStation = @"DestinationStation";
+NSString * const kAlternateStation = @"AlternateStation";
+NSString * const kStation = @"Station";
 
 @implementation MyLocation
 
@@ -61,11 +61,11 @@ NSString *kStation = @"Station";
 
 #pragma mark - State Restoration
 
-static NSString *NameKey = @"NameKey";
-static NSString *CoordinateLatitudeKey = @"CoordinateLatitudeKey";
-static NSString *CoordinateLongitudeKey = @"CoordinateLongitudeKey";
-static NSString *DistanceFromUserKey = @"DistanceFromUserKey";
-static NSString *AnnotationIdentifierKey = @"AnnotationIdentifierKey";
+static NSString * const NameKey = @"NameKey";
+static NSString * const CoordinateLatitudeKey = @"CoordinateLatitudeKey";
+static NSString * const CoordinateLongitudeKey = @"CoordinateLongitudeKey";
+static NSString * const DistanceFromUserKey = @"DistanceFromUserKey";
+static NSString * const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {

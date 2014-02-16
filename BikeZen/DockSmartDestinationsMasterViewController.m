@@ -18,10 +18,10 @@
 
 
 // NSNotification name for informing the map view that we want to bike to a destination
-NSString *kStartBikingNotif = @"StartBikingNotif";
+NSString * const kStartBikingNotif = @"StartBikingNotif";
 
 // NSNotification userInfo for the MyLocation object to bike to
-NSString *kBikeDestinationKey = @"BikeDestinationKey";
+NSString * const kBikeDestinationKey = @"BikeDestinationKey";
 
 
 @interface DockSmartDestinationsMasterViewController ()
@@ -112,12 +112,15 @@ NSString *kBikeDestinationKey = @"BikeDestinationKey";
 
 #pragma mark - State Restoration
 
-static NSString *SearchLocationKey = @"SearchLocationKey";
-static NSString *SelectedLocationKey = @"SelectedLocationKey";
-static NSString *FilterResultsKey = @"FilterResultsKey";
-static NSString *GeocodeSearchResultsKey = @"GeocodeSearchResultsKey";
-static NSString *UserCoordinateLatitudeKey = @"UserCoordinateLatitudeKey";
-static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
+//Archive file name:
+static NSString * const kTableDataFile = @"tableData.txt";
+//Keys:
+static NSString * const SearchLocationKey = @"SearchLocationKey";
+static NSString * const SelectedLocationKey = @"SelectedLocationKey";
+static NSString * const FilterResultsKey = @"FilterResultsKey";
+static NSString * const GeocodeSearchResultsKey = @"GeocodeSearchResultsKey";
+static NSString * const UserCoordinateLatitudeKey = @"UserCoordinateLatitudeKey";
+static NSString * const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
 
 - (void) encodeRestorableStateWithCoder:(NSCoder *)coder
 {
@@ -134,7 +137,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     [archiver finishEncoding];
     
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:kTableDataFile];
     
     NSError *error;
 #ifdef DEBUG
@@ -160,7 +163,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     DLog("Bundle version %@ at last state save", [coder decodeObjectForKey:UIApplicationStateRestorationBundleVersionKey]);
 
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"tableData.txt"];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:kTableDataFile];
     
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
@@ -305,6 +308,10 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     return nil;
 }
 
+static NSString * const kSearchCell = @"SearchCell";
+static NSString * const kAddressCell = @"AddressCell";
+static NSString * const kStationCell = @"StationCell";
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
     // Configure the cell...
@@ -313,17 +320,17 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
         
     switch ([indexPath section]) {
         case DestinationTableSectionSearch:
-            CellIdentifier = @"SearchCell";
+            CellIdentifier = kSearchCell;
             break;
         case DestinationTableSectionSearchResults:
-            CellIdentifier = @"AddressCell";
+            CellIdentifier = kAddressCell;
             break;
         case DestinationTableSectionFavorites:
             break;
         case DestinationTableSectionRecents:
             break;
         case DestinationTableSectionStations:
-            CellIdentifier = @"StationCell";
+            CellIdentifier = kStationCell;
             break;
         default:
             break;
@@ -364,7 +371,7 @@ static NSString *UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey";
     }
     
     //Set main text label:
-    if ([CellIdentifier isEqualToString:@"SearchCell"])
+    if ([CellIdentifier isEqualToString:kSearchCell])
     {
         [[cell textLabel] setText:[NSString stringWithFormat:@"\"%@\"", locationAtIndex.name]];
     }

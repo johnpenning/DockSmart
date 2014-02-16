@@ -13,11 +13,11 @@
 #import "DockSmartMapViewController.h"
 #import "DockSmartLogViewController.h"
 
-extern NSString *kLocationUpdateNotif;
-extern NSString *kNewLocationKey;
-extern NSString *kRegionEntryNotif;
-extern NSString *kRegionExitNotif;
-extern NSString *kNewRegionKey;
+extern NSString * const kLocationUpdateNotif;
+extern NSString * const kNewLocationKey;
+extern NSString * const kRegionEntryNotif;
+extern NSString * const kRegionExitNotif;
+extern NSString * const kNewRegionKey;
 
 @interface LocationController : NSObject <CLLocationManagerDelegate>
 

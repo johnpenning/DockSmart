@@ -23,7 +23,8 @@
     NSString *str = [self objectForKey:@"name"];
 
     //Match the "<integer> - " pattern at the beginning of a station name, in case the name is prefixed with a station ID (we don't want to show these):
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9]+ - " options:NSRegularExpressionCaseInsensitive error:nil];
+    //Updated 2/16/14: Boston Hubway uses "M<integer> - " pattern, so also match for letter characters before the numbers
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[A-Z]*[0-9]+ - " options:NSRegularExpressionCaseInsensitive error:nil];
 
     NSRange matchRange = [regex rangeOfFirstMatchInString:str options:0 range:NSMakeRange(0, [str length])];
     

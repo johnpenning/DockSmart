@@ -15,20 +15,24 @@
 #import "NSDictionary+CityBikesAPI.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
+/* Notification keys */
 // NSNotification name for sending station data to the map view
-NSString *kAddStationsNotif = @"AddStationsNotif";
+NSString * const kAddStationsNotif = @"AddStationsNotif";
 // NSNotification userInfo key for obtaining the station data
-NSString *kStationResultsKey = @"StationResultsKey";
+NSString * const kStationResultsKey = @"StationResultsKey";
 // NSNotification name for reporting errors
-NSString *kStationErrorNotif = @"StationErrorNotif";
+NSString * const kStationErrorNotif = @"StationErrorNotif";
 // NSNotification userInfo key for obtaining the error message
-NSString *kStationsMsgErrorKey = @"StationsMsgErrorKey";
+NSString * const kStationsMsgErrorKey = @"StationsMsgErrorKey";
 
-NSString *kAutoCityPreference = @"auto_city_preference";
-NSString *kCityPreference = @"city_preference";
-NSString *kDisplayedVersion = @"displayed_version";
+/* Local static keys */
+//defaults keys
+static NSString * const kAutoCityPreference = @"AutoCityPreference";
+static NSString * const kCityPreference = @"CityPreference";
+static NSString * const kDisplayedVersion = @"DisplayedVersion";
 
-const NSString *stationErrorMessage = @"Information might not be up-to-date.";
+//Message to appear in AFNetworking error AlertView
+static NSString * const stationErrorMessage = @"Information might not be up-to-date.";
 
 #pragma mark DockSmartAppDelegate ()
 
@@ -324,24 +328,26 @@ const NSString *stationErrorMessage = @"Information might not be up-to-date.";
     //Find the distance from location to each network center and add that distance to new key-value pair in NSDictionary
     NSMutableArray *newCityData = [[NSMutableArray alloc] init];
     CLLocationDistance distanceToUser;
+    static NSString * const kUrl = @"url";
+    static NSString * const kDistance = @"distance";
     
     for (id item in networkData)
     {
         distanceToUser = MKMetersBetweenMapPoints(MKMapPointForCoordinate([location coordinate]), MKMapPointForCoordinate(CLLocationCoordinate2DMake([item lat], [item lng])));
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [dict setObject:[item url] forKey:@"url"];
-        [dict setObject:[NSNumber numberWithDouble:distanceToUser] forKey:@"distance"];
+        [dict setObject:[item url] forKey:kUrl];
+        [dict setObject:[NSNumber numberWithDouble:distanceToUser] forKey:kDistance];
         [newCityData addObject:dict];
     }
     
     //Sort newCityData using new key-value pair
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"distance" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kDistance ascending:YES];
     
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     NSArray *sortedArray = [newCityData sortedArrayUsingDescriptors:sortDescriptors];
     
     //Grab the top one and return the URL pointing towards the data for that network.
-    return [[sortedArray objectAtIndex:0] valueForKey:@"url"];
+    return [[sortedArray objectAtIndex:0] valueForKey:kUrl];
 }
 
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url

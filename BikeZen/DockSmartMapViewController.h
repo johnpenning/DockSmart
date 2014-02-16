@@ -10,8 +10,8 @@
 #import <MapKit/MapKit.h>
 #import "LocationController.h"
 
-extern NSString *kRefreshDataNotif;
-extern NSString *kStationList;
+extern NSString * const kRefreshDataNotif;
+extern NSString * const kStationList;
 
 typedef NS_ENUM(NSInteger, BikingStateType) {
     BikingStateInactive = 0,

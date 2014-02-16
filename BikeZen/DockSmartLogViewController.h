@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString *kLogToTextViewNotif;
-extern NSString *kLogTextKey;
+extern NSString * const kLogToTextViewNotif;
+extern NSString * const kLogTextKey;
 
 @interface DockSmartLogViewController : UIViewController
 

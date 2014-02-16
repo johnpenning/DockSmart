@@ -16,27 +16,25 @@
 #import "DockSmartAppDelegate.h"
 #import "MBProgressHUD.h"
 
+#pragma mark - Key Definitions
+
+// Global keys
+
 // NSNotification name for reporting that refresh was tapped
-NSString *kRefreshDataNotif = @"RefreshDataNotif";
-NSString *kStationList = @"stationList";
+NSString * const kRefreshDataNotif = @"RefreshDataNotif";
+NSString * const kStationList = @"stationList";
 
 // Key noting if user has seen the intro screen/alert
-NSString *kHasSeenIntro = @"has_seen_intro";
+NSString * const kHasSeenIntro = @"hasSeenIntro";
 
 // Region monitoring identifiers:
-NSString *kRegionMonitorTwoThirdsToGo = @"RegionMonitorTwoThirdsToGo";
-NSString *kRegionMonitorOneThirdToGo = @"RegionMonitorOneThirdToGo";
-NSString *kRegionMonitorStation1 = @"RegionMonitorStation1";
-NSString *kRegionMonitorStation2 = @"RegionMonitorStation2";
-NSString *kRegionMonitorStation3 = @"RegionMonitorStation3";
+NSString * const kRegionMonitorTwoThirdsToGo = @"RegionMonitorTwoThirdsToGo";
+NSString * const kRegionMonitorOneThirdToGo = @"RegionMonitorOneThirdToGo";
+NSString * const kRegionMonitorStation1 = @"RegionMonitorStation1";
+NSString * const kRegionMonitorStation2 = @"RegionMonitorStation2";
+NSString * const kRegionMonitorStation3 = @"RegionMonitorStation3";
 
-// Restoration IDs for custom objects:
-static NSString *SourceStationID = @"SourceStationID";
-static NSString *FinalDestinationID = @"FinalDestinationID";
-static NSString *CurrentDestinationStationID = @"CurrentDestinationStationID";
-static NSString *IdealDestinationStationID = @"IdealDestinationStationID";
-static NSString *ClosestStationsToDestinationID = @"ClosestStationsToDestinationID";
-static NSString *MapCenterAddressID = @"MapCenterAddressID";
+#pragma mark - Interface
 
 @interface DockSmartMapViewController ()
 - (IBAction)refreshTapped:(id)sender;
@@ -74,6 +72,8 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 @property (nonatomic) NSDate *lastDataUpdateTime;
 
 @end
+
+#pragma mark - Implementation
 
 @implementation DockSmartMapViewController
 
@@ -118,10 +118,10 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
     self.dataController = [[LocationDataController alloc] init];
     self.mapCenterAddress = [[Address alloc] init];
     self.closestStationsToDestination = [[NSMutableArray alloc] initWithCapacity:3];
-    self.sourceStation = [[Station alloc] init];
-    self.finalDestination = [[MyLocation alloc] init];
-    self.currentDestinationStation = [[Station alloc] init];
-    self.idealDestinationStation = [[Station alloc] init];
+//    self.sourceStation = [[Station alloc] init];
+//    self.finalDestination = [[MyLocation alloc] init];
+//    self.currentDestinationStation = [[Station alloc] init];
+//    self.idealDestinationStation = [[Station alloc] init];
     self.regionIdentifierQueue = [[NSMutableArray alloc] init];
     
     // KVO: listen for changes to our station data source for map view updates
@@ -207,31 +207,34 @@ static NSString *MapCenterAddressID = @"MapCenterAddressID";
 
 #pragma mark - State Restoration
 
-static NSString *BikesDocksControlKey = @"BikesDocksControlKey";
-static NSString *BikesDocksControlHiddenKey = @"BikesDocksControlHiddenKey";
-static NSString *BikingStateKey = @"BikingStateKey";
-static NSString *DataControllerKey = @"DataControllerKey";
-static NSString *SourceStationKey = @"SourceStationKey";
-static NSString *FinalDestinationKey = @"FinalDestinationKey";
-static NSString *CurrentDestinationStationKey = @"CurrentDestinationStationKey";
-static NSString *IdealDestinationStationKey = @"IdealDestinationStationKey";
-static NSString *ClosestStationsToDestinationKey = @"ClosestStationsToDestinationKey";
-static NSString *MinuteTimerValidKey = @"MinuteTimerValidKey";
-static NSString *MinuteTimerFireDateKey = @"MinuteTimerFireDateKey";
-static NSString *StartStopButtonTitleKey = @"StartStopButtonTitleKey";
-static NSString *StartStopButtonTintColorKey = @"StartStopButtonTintColorKey";
-static NSString *StartStopButtonEnabledKey = @"StartStopButtonEnabledKey";
-static NSString *DestinationDetailLabelKey = @"DestinationDetailLabelKey";
-static NSString *BikeCrosshairImageKey = @"BikeCrosshairImageKey";
-static NSString *CancelButtonKey = @"CancelButtonKey";
-static NSString *MapCenterAddressKey = @"MapCenterAddressKey";
-static NSString *RegionCenterLatKey = @"RegionCenterLatKey";
-static NSString *RegionCenterLongKey = @"RegionCenterLongKey";
-static NSString *RegionSpanLatKey = @"RegionSpanLatKey";
-static NSString *RegionSpanLongKey = @"RegionSpanLongKey";
-static NSString *RegionIdentifierKey = @"RegionIdentifierKey";
-static NSString *UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledKey";
-static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
+//Archive file name:
+static NSString * const kStationDataFile = @"stationData.txt";
+//Keys:
+static NSString * const BikesDocksControlKey = @"BikesDocksControlKey";
+static NSString * const BikesDocksControlHiddenKey = @"BikesDocksControlHiddenKey";
+static NSString * const BikingStateKey = @"BikingStateKey";
+static NSString * const DataControllerKey = @"DataControllerKey";
+static NSString * const SourceStationKey = @"SourceStationKey";
+static NSString * const FinalDestinationKey = @"FinalDestinationKey";
+static NSString * const CurrentDestinationStationKey = @"CurrentDestinationStationKey";
+static NSString * const IdealDestinationStationKey = @"IdealDestinationStationKey";
+static NSString * const ClosestStationsToDestinationKey = @"ClosestStationsToDestinationKey";
+static NSString * const MinuteTimerValidKey = @"MinuteTimerValidKey";
+static NSString * const MinuteTimerFireDateKey = @"MinuteTimerFireDateKey";
+static NSString * const StartStopButtonTitleKey = @"StartStopButtonTitleKey";
+static NSString * const StartStopButtonTintColorKey = @"StartStopButtonTintColorKey";
+static NSString * const StartStopButtonEnabledKey = @"StartStopButtonEnabledKey";
+static NSString * const DestinationDetailLabelKey = @"DestinationDetailLabelKey";
+static NSString * const BikeCrosshairImageKey = @"BikeCrosshairImageKey";
+static NSString * const CancelButtonKey = @"CancelButtonKey";
+static NSString * const MapCenterAddressKey = @"MapCenterAddressKey";
+static NSString * const RegionCenterLatKey = @"RegionCenterLatKey";
+static NSString * const RegionCenterLongKey = @"RegionCenterLongKey";
+static NSString * const RegionSpanLatKey = @"RegionSpanLatKey";
+static NSString * const RegionSpanLongKey = @"RegionSpanLongKey";
+static NSString * const RegionIdentifierKey = @"RegionIdentifierKey";
+static NSString * const UpdateLocationButtonEnabledKey = @"UpdateLocationButtonEnabledKey";
+static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 - (void) encodeRestorableStateWithCoder:(NSCoder *)coder
 {
@@ -269,9 +272,8 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [archiver encodeObject:self.regionIdentifierQueue forKey:RegionIdentifierKey];
     [archiver finishEncoding];
     
-//    NSString *filename = @"stationData.txt";
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"stationData.txt"];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:kStationDataFile];
     
     NSError *error;
 #ifdef DEBUG
@@ -307,7 +309,7 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     self.updateLocationButton.enabled = [coder decodeBoolForKey:UpdateLocationButtonEnabledKey];
 
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:@"stationData.txt"];
+    NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:kStationDataFile];
 
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
@@ -433,11 +435,11 @@ static NSString *LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         
         MKAnnotationView *annotationView;
         //Use a generic MKAnnotationView instead of a pin view so we can use our custom image
-        annotationView = [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier]; //location.annotationIdentifier];
+        annotationView = [self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
         
         if (annotationView == nil)
         {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];// location.annotationIdentifier];
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
             annotationView.enabled = YES;
             annotationView.canShowCallout = YES;
             annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];

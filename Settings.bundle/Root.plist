@@ -14,7 +14,7 @@
 			<key>DefaultValue</key>
 			<true/>
 			<key>Key</key>
-			<string>auto_city_preference</string>
+			<string>AutoCityPreference</string>
 			<key>Title</key>
 			<string>Detect City Automatically</string>
 			<key>Type</key>
@@ -26,12 +26,13 @@
 			<key>Title</key>
 			<string>City</string>
 			<key>Key</key>
-			<string>city_preference</string>
+			<string>CityPreference</string>
 			<key>DefaultValue</key>
 			<string>0</string>
 			<key>Titles</key>
 			<array>
 				<string>Barcelona, Spain</string>
+				<string>Boston, MA</string>
 				<string>Brussels, Belgium</string>
 				<string>Chicago, IL</string>
 				<string>Dublin, Ireland</string>
@@ -52,6 +53,7 @@
 			<key>Values</key>
 			<array>
 				<string>http://api.citybik.es/bicing.html</string>
+				<string>http://api.citybik.es/hubway.json</string>
 				<string>http://api.citybik.es/villo.json</string>
 				<string>http://api.citybik.es/divvybikes.json</string>
 				<string>http://api.citybik.es/dublin.json</string>
@@ -82,7 +84,7 @@
 			<key>Title</key>
 			<string>Version</string>
 			<key>Key</key>
-			<string>displayed_version</string>
+			<string>DisplayedVersion</string>
 			<key>DefaultValue</key>
 			<string>-</string>
 		</dict>

@@ -9,10 +9,10 @@
 #import "DockSmartLogViewController.h"
 
 // NSNotification name for sending a log to the text view
-NSString *kLogToTextViewNotif = @"LogToTextViewNotif";
+NSString * const kLogToTextViewNotif = @"LogToTextViewNotif";
 
 // NSNotification userInfo key for obtaining the log text
-NSString *kLogTextKey = @"LogTextKey";
+NSString * const kLogTextKey = @"LogTextKey";
 
 @interface DockSmartLogViewController ()
 

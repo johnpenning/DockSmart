@@ -54,16 +54,16 @@
 
 #pragma mark - State Restoration
 
-static NSString *StationIDKey = @"StationIDKey";
-static NSString *LatitudeKey = @"LatitudeKey";
-static NSString *LongitudeKey = @"LongitudeKey";
-static NSString *InstalledKey = @"InstalledKey";
-static NSString *LockedKey = @"LockedKey";
-static NSString *PubliclyViewableKey = @"PubliclyViewableKey";
-static NSString *NbBikesKey = @"NbBikesKey";
-static NSString *NbEmptyDocksKey = @"NbEmptyDocksKey";
-static NSString *LastStationUpdateKey = @"LastStationUpdateKey";
-static NSString *DistanceFromDestinationKey = @"DistanceFromDestinationKey";
+static NSString * const StationIDKey = @"StationIDKey";
+static NSString * const LatitudeKey = @"LatitudeKey";
+static NSString * const LongitudeKey = @"LongitudeKey";
+static NSString * const InstalledKey = @"InstalledKey";
+static NSString * const LockedKey = @"LockedKey";
+static NSString * const PubliclyViewableKey = @"PubliclyViewableKey";
+static NSString * const NbBikesKey = @"NbBikesKey";
+static NSString * const NbEmptyDocksKey = @"NbEmptyDocksKey";
+static NSString * const LastStationUpdateKey = @"LastStationUpdateKey";
+static NSString * const DistanceFromDestinationKey = @"DistanceFromDestinationKey";
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {

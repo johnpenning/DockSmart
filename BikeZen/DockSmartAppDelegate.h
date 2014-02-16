@@ -12,10 +12,10 @@
 #import "LocationController.h"
 #import "DSHTTPSessionManager.h"
 
-extern NSString *kAddStationsNotif;
-extern NSString *kStationResultsKey;
-extern NSString *kStationErrorNotif;
-extern NSString *kStationsMsgErrorKey;
+extern NSString * const kAddStationsNotif;
+extern NSString * const kStationResultsKey;
+extern NSString * const kStationErrorNotif;
+extern NSString * const kStationsMsgErrorKey;
 
 @class Station, DockSmartMapViewController;
 

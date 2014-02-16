@@ -11,11 +11,11 @@
 #import "DockSmartLogViewController.h"
 
 // Reuse identifiers for MyLocation annotations in the MapView
-extern NSString *kSourceStation;
-extern NSString *kDestinationLocation;
-extern NSString *kDestinationStation;
-extern NSString *kAlternateStation;
-extern NSString *kStation;
+extern NSString * const kSourceStation;
+extern NSString * const kDestinationLocation;
+extern NSString * const kDestinationStation;
+extern NSString * const kAlternateStation;
+extern NSString * const kStation;
 
 @interface MyLocation : NSObject <MKAnnotation, NSCoding, NSCopying>
 
