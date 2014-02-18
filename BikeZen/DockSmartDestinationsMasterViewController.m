@@ -28,14 +28,17 @@ NSString * const kBikeDestinationKey = @"BikeDestinationKey";
 
 //The station data controller, copied over from the MapView when this view appears.
 @property (nonatomic) LocationDataController *dataController;
-/*
- The searchResults array contains the content filtered as a result of a search.
- */
+//MyLocation object representing the user's current search entry
 @property (nonatomic) MyLocation *searchLocation;
+//The object that has been selected in the table view
 @property (nonatomic) MyLocation *selectedLocation;
+//contains the content filtered as a result of a search
 @property (nonatomic) NSMutableArray *filterResults;
+//contains the resulting Addresses returned after a geocode search
 @property (nonatomic) NSMutableArray *geocodeSearchResults;
+//user's current location
 @property (nonatomic) CLLocationCoordinate2D userCoordinate;
+//action sheet to present the user with the option to bike to a selected location
 @property (nonatomic, readwrite) UIActionSheet *navSheet;
 
 - (void)performStringGeocode:(NSString *)string;
@@ -148,7 +151,6 @@ static NSString * const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKe
 #endif
 }
 
-
 - (void) decodeRestorableStateWithCoder:(NSCoder *)coder
 {
     NSString* logText = [NSString stringWithFormat:@"destinationsMasterViewController decodeRestorableStateWithCoder called"];
@@ -162,6 +164,8 @@ static NSString * const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKe
     
     DLog("Bundle version %@ at last state save", [coder decodeObjectForKey:UIApplicationStateRestorationBundleVersionKey]);
 
+    //Decode objects:
+    
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:kTableDataFile];
     
@@ -193,11 +197,17 @@ static NSString * const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKe
 
 #pragma mark - KVO compliance
 
+/*
+ Notification callback when the CLLocationManager has updated the current user location.
+ */
 - (void)updateLocation:(NSNotification *)notif {
     
     self.userCoordinate = [(CLLocation *)[[notif userInfo] valueForKey:kNewLocationKey] coordinate];
 }
 
+/*
+ Notification callback that is received when we have new station data to add to the list
+ */
 - (void)addStations:(NSNotification *)notif {
     
     //This notification came from the parse operation telling us that a new station list has been posted.
@@ -206,7 +216,9 @@ static NSString * const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKe
     [self didChangeValueForKey:kStationList];
 }
 
-// listen for changes to the station list coming from our app delegate.
+/*
+ Listen for changes to the station list, and act upon them appropriately by reloading the table
+ */
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -241,7 +253,7 @@ static NSString * const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKe
             }
             return 0;
             break;
-        case DestinationTableSectionSearchResults:
+        case DestinationTableSectionSearchResults: //Geocode search results, if there are any
             if (tableView == self.searchDisplayController.searchResultsTableView)
             {
                 return [self.geocodeSearchResults count];
@@ -311,13 +323,16 @@ static NSString * const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKe
 static NSString * const kSearchCell = @"SearchCell";
 static NSString * const kAddressCell = @"AddressCell";
 static NSString * const kStationCell = @"StationCell";
-
+/*
+ Asks the data source for a cell to insert in a particular location of the table view.
+ */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
     // Configure the cell...
     
     static NSString *CellIdentifier;
-        
+    
+    //Decide what kind of cell this is based on the section of the table:
     switch ([indexPath section]) {
         case DestinationTableSectionSearch:
             CellIdentifier = kSearchCell;
@@ -336,20 +351,23 @@ static NSString * const kStationCell = @"StationCell";
             break;
     }
     
+    //Get a reusable cell of the appropriate type
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
+
+    //Figure out the MyLocation object we are using this cell to represent:
     MyLocation *locationAtIndex;
-    
     if (tableView == self.searchDisplayController.searchResultsTableView)
 	{
         switch ([indexPath section]) {
             case DestinationTableSectionSearch:
+                //This cell represents the searchLocation (text to geocode search for if selected)
                 if (self.searchLocation != nil)
                 {
                     locationAtIndex = self.searchLocation;
                 }
                 break;
             case DestinationTableSectionSearchResults:
+                //Cells in this section represent the geocode search results
                 locationAtIndex = [self.geocodeSearchResults objectAtIndex:indexPath.row];
                 break;
             case DestinationTableSectionFavorites:
@@ -359,6 +377,7 @@ static NSString * const kStationCell = @"StationCell";
                 //TODO
                 break;
             case DestinationTableSectionStations:
+                //Cells in this section represent the filtered station results
                 locationAtIndex = [self.filterResults objectAtIndex:indexPath.row];
                 break;
             default:
@@ -367,6 +386,7 @@ static NSString * const kStationCell = @"StationCell";
     }
 	else
 	{
+        //If we are not performing a search, this whole table is just comprised of cells representing the sortedStationList
         locationAtIndex = (Station*)[self.dataController objectInLocationList:self.dataController.sortedStationList atIndex:indexPath.row];
     }
     
@@ -448,6 +468,7 @@ static NSString * const kStationCell = @"StationCell";
             break;
         case DestinationTableSectionSearchResults:
         {
+            //Allow the user to navigate to the selected geocode result Address:
             self.selectedLocation = (MyLocation*)[[self geocodeSearchResults] objectAtIndex:[indexPath row]];
             [self showNavigateActions:self.selectedLocation.name];
             break;
@@ -501,6 +522,10 @@ static NSString * const kStationCell = @"StationCell";
 
 #pragma mark - Content Filtering
 
+/*
+ Updates the filtered search results when the search string and scope are changed.
+ NOTE: Scope filtering (typeName) is currently unused in this version, so typeName will always be nil.
+ */
 - (void)updateFilteredContentForLocationName:(NSString *)locationName type:(NSString *)typeName
 {
     //Remove old search object
@@ -603,7 +628,7 @@ static NSString * const kStationCell = @"StationCell";
     self.tableView.allowsSelection = !lock;
 }
 
-
+//Uses the search field contents to return new Address objects in the table view based on the results of a geocode
 - (void)performStringGeocode:(NSString *)string
 {
 //    // dismiss the keyboard if it's currently open

@@ -74,16 +74,19 @@
     return nil;
 }
 
+//Returns the count of a given list property
 - (NSUInteger)countOfLocationList:(NSArray *)list
 {
     return [list count];
 }
 
+//Returns the MyLocation object at a certain index in a given list property
 - (MyLocation *)objectInLocationList:(NSArray *)list atIndex:(NSUInteger)index
 {
     return [list objectAtIndex:index];
 }
 
+//Adds a MyLocation object to a list and updates the station distances from the user
 - (void)addLocationObject:(MyLocation *)location toList:(NSMutableArray *)list
 {
     [list addObject:location];
@@ -92,6 +95,7 @@
     [self updateDistancesFromUserLocation:[self userCoordinate]];
 }
 
+//Adds an array of MyLocations to a list and updates the station distances from the user
 - (void)addLocationObjectsFromArray:(NSArray *)locations toList:(NSMutableArray *)list
 {
     [list addObjectsFromArray:locations];
@@ -100,6 +104,7 @@
     [self updateDistancesFromUserLocation:[self userCoordinate]];
 }
 
+//Sorts a list by a given LocationDataSortMethod (by name, distance from user, distances from destination, number of bikes, or number of docks)
 - (NSArray *)sortLocationList:(NSMutableArray *)locations byMethod:(LocationDataSortMethod)method
 {
     for (MyLocation *location in locations)
@@ -147,6 +152,7 @@
     [self updateDistancesFromUserLocation:[self userCoordinate]];
 }
 
+//Updates station distances from the user
 - (void)updateDistancesFromUserLocation:(CLLocationCoordinate2D)coordinate
 {
     [self willChangeValueForKey:kStationList];

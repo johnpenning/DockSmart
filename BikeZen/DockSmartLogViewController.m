@@ -1,6 +1,8 @@
 //
-//  DockSmartSettingsViewController.m
+//  DockSmartLogViewController.m
 //  DockSmart
+//
+//  View to display a running debug log in the app, on a separate tab. Only for testing purposes.
 //
 //  Created by John Penning on 5/25/13.
 //  Copyright (c) 2013 John Penning. All rights reserved.
@@ -16,6 +18,7 @@ NSString * const kLogTextKey = @"LogTextKey";
 
 @interface DockSmartLogViewController ()
 
+//String to store text that needs to be logged in the text view as soon as the view is first loaded.
 @property (nonatomic, copy) NSString* preloadText;
 
 - (void)logToTextView:(NSNotification*)notif;
@@ -54,9 +57,11 @@ NSString * const kLogTextKey = @"LogTextKey";
 
 - (void)viewDidUnload {
     [self setSettingsTextView:nil];
+    [self setPreloadText:nil];
     [super viewDidUnload];
 }
 
+//Log text to the text view, adding it to the bottom of the text that has already been logged.
 - (void)logToTextView:(NSNotification*)notif
 {
     NSString *oldText = [self.settingsTextView text];

@@ -17,6 +17,8 @@ NSString * const kStation = @"Station";
 
 @implementation MyLocation
 
+/* Initialization methods */
+
 - (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude distanceFromUser:(CLLocationDistance)distance
 {
     
@@ -54,6 +56,7 @@ NSString * const kStation = @"Station";
     _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
 }
 
+//MKAnnotation protocol method to return the title for the annotation callout
 - (NSString *)title
 {
     return _name;
@@ -67,6 +70,7 @@ static NSString * const CoordinateLongitudeKey = @"CoordinateLongitudeKey";
 static NSString * const DistanceFromUserKey = @"DistanceFromUserKey";
 static NSString * const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 
+//Encode the necessary properties of this object
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.name forKey:NameKey];
@@ -76,6 +80,7 @@ static NSString * const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
     [aCoder encodeObject:self.annotationIdentifier forKey:AnnotationIdentifierKey];
 }
 
+//Decode the necessary properties of this object and use them to initialize it
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
@@ -101,6 +106,9 @@ static NSString * const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
                                                                                            forKey:kLogTextKey]];
 }
 
+#pragma mark - NSCopying
+
+//NSCopying protocol method
 - (id)copyWithZone:(NSZone *)zone
 {
     MyLocation *other = [[MyLocation alloc] initWithName:[self.name copyWithZone:zone] coordinate:self.coordinate distanceFromUser:self.distanceFromUser];

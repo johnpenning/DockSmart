@@ -23,6 +23,7 @@ extern NSString * const kStationsMsgErrorKey;
 
 @property (strong, nonatomic) UIWindow *window;
 
+//The URL corresponding to the JSON station data for the currently selected city.
 @property (nonatomic) NSString *currentCityUrl;
 
 @end

@@ -2,6 +2,8 @@
 //  NSDictionary+CityBikesAPI.m
 //  DockSmart
 //
+//  NSDictionary categories for the City Bikes API, to pull the proper data from the NSDictionary output of AFNetworking methods.
+//
 //  Created by John Penning on 12/14/13.
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
@@ -52,12 +54,14 @@
 
 -(CLLocationDegrees)lat
 {
+    //Latitude is represented in the JSON data as (degrees * 1e6); convert back
     CLLocationDegrees n = [[self objectForKey:@"lat"] integerValue]/1e6;
     return n;
 }
 
 -(CLLocationDegrees)lng
 {
+    //Longitude is represented in the JSON data as (degrees * 1e6); convert back
     CLLocationDegrees n = [[self objectForKey:@"lng"] integerValue]/1e6;
     return n;
 }
@@ -76,6 +80,7 @@
 
 -(NSDate *)timestamp
 {
+    //Convert textual data format to NSDate object
     NSString *str = [self objectForKey:@"timestamp"];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'.'SSSSSS"];

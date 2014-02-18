@@ -26,9 +26,13 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
+//LocationDataController object to keep track of all of our station lists
 @property (strong, nonatomic) LocationDataController *dataController;
+//Current biking trip state
 @property BikingStateType bikingState;
+//toolbar on top of the map... outlet for iOS7 compatibility
 @property (weak, nonatomic) IBOutlet UIToolbar *topMapToolbar;
+//Button that pans to the current user location on the map and updates the CLLocationManager location
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *updateLocationButton;
 
 @end

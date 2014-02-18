@@ -2,6 +2,8 @@
 //  Address.m
 //  DockSmart
 //
+//  A subclass of MyLocation that is meant to be used for a general addressable location on a map, not a bikeshare Station.
+//
 //  Created by John Penning on 6/24/13.
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
@@ -12,6 +14,7 @@
 
 @implementation Address
 
+//Initialization method
 - (id)initWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance
 {
     self = [super initWithName:[NSString stringWithFormat:@"%@%@%@%@%@%@%@", placemark.subThoroughfare ? placemark.subThoroughfare : @"", placemark.subThoroughfare ? @" " : @"", placemark.thoroughfare ? placemark.thoroughfare : @"", (placemark.subThoroughfare || placemark.thoroughfare) ? @", " : @"", placemark.locality ? placemark.locality : @"", (placemark.locality && placemark.administrativeArea) ? @", " : @"", placemark.administrativeArea ? placemark.administrativeArea : @""] coordinate:placemark.location.coordinate distanceFromUser:distance];
@@ -24,6 +27,7 @@
     return nil;
 }
 
+//Setter for MyLocation properties using the given placemark
 - (void)setNameAndCoordinateWithPlacemark:(CLPlacemark *)placemark distanceFromUser:(CLLocationDistance)distance
 {
     self.name = [NSString stringWithFormat:@"%@%@%@%@%@%@%@", placemark.subThoroughfare ? placemark.subThoroughfare : @"", placemark.subThoroughfare ? @" " : @"", placemark.thoroughfare ? placemark.thoroughfare : @"", (placemark.subThoroughfare || placemark.thoroughfare) ? @", " : @"", placemark.locality ? placemark.locality : @"", (placemark.locality && placemark.administrativeArea) ? @", " : @"", placemark.administrativeArea ? placemark.administrativeArea : @""];
@@ -32,6 +36,7 @@
     _placemark = placemark;
 }
 
+//MKAnnotation protocol method to return the subtitle for presentation in an annotation callout
 - (NSString *)subtitle
 {
     NSString* addressSummary;
@@ -46,6 +51,7 @@
 
 static NSString * const PlacemarkKey = @"PlacemarkKey";
 
+//Encode the necessary properties of this object
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
@@ -53,6 +59,7 @@ static NSString * const PlacemarkKey = @"PlacemarkKey";
     [aCoder encodeObject:_placemark forKey:PlacemarkKey];
 }
 
+//Decode the necessary properties of this object and use them to initialize it
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -64,6 +71,9 @@ static NSString * const PlacemarkKey = @"PlacemarkKey";
     return self;
 }
 
+#pragma mark - NSCopying
+
+//NSCopying protocol method
 - (id)copyWithZone:(NSZone *)zone
 {
     Address *other = [[Address alloc] initWithPlacemark:[_placemark copyWithZone:zone] distanceFromUser:self.distanceFromUser];

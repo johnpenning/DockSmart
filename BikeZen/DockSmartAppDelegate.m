@@ -56,13 +56,11 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
 
 @implementation DockSmartAppDelegate
 
+/*
+ Is called immediately before launch finishes.  Switched from using application:didFinishLaunchingWithOptions: for state restoration purposes.
+ */
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//    return YES;
-//}
-//
-//- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-//{
     // Override point for customization after application launch.
     
     //In case significant change location services were on from the last time we terminated, turn them off:
@@ -106,6 +104,9 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
     return YES;
 }
 
+/*
+ Called when the app receives a local notification, if the app is running.
+ */
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSString* logText = [NSString stringWithFormat:@"applicationDidReceiveLocalNotification: applicationState: %d", [application applicationState]];
@@ -247,15 +248,18 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
 
 -(BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder
 {
-    //TODO: remember to change this to NO for the first session after an app update
+    //TODO: remember to change this to NO for the first session after an app update, if the state restoration scheme changes
     return YES;
 }
 
 #pragma mark - JSON Methods
 
+/*
+ Loads a list of bikeshare networks from the CityBikes API, if needed.
+ */
 - (void)loadJSONCityData
 {
-    DockSmartMapViewController *controller = /*(UIViewController*)*/self.window.rootViewController.childViewControllers[0];
+    DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     NSString* logText = [NSString stringWithFormat:@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]];
@@ -350,6 +354,9 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
     return [[sortedArray objectAtIndex:0] valueForKey:kUrl];
 }
 
+/*
+ Loads station data from url.
+ */
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url
 {
     [[DSHTTPSessionManager sharedInstance] GET:url
@@ -387,6 +394,9 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
          }];
 }
 
+/*
+ NSNotificationCenter callback to tell us to reload the station data.
+ */
 - (void)refreshStationData:(NSNotification *)notif
 {
     //if data is currently loading, don't try to load it again
@@ -404,6 +414,9 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
     [self loadJSONCityData];
 }
 
+/*
+ Parses the AFNetworking output data into an array of Station objects.
+ */
 - (void)parseLiveData:(NSDictionary*)data
 {
     NSMutableArray *stations = [NSMutableArray array];

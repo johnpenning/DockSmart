@@ -12,6 +12,8 @@
 
 @implementation Station
 
+/* Initialization methods */
+
 - (id)init
 {
     self = [super init];
@@ -46,6 +48,7 @@
     return nil;
 }
 
+//MKAnnotation protocol method to return the subtitle for presentation in an annotation callout
 - (NSString *)subtitle
 {
     NSString* bikeSummary = [[NSString alloc] initWithFormat:@"Bikes: %i - Docks: %i - Dist: %2.2f mi", _nbBikes, _nbEmptyDocks, [super distanceFromUser]/METERS_PER_MILE];
@@ -65,6 +68,7 @@ static NSString * const NbEmptyDocksKey = @"NbEmptyDocksKey";
 static NSString * const LastStationUpdateKey = @"LastStationUpdateKey";
 static NSString * const DistanceFromDestinationKey = @"DistanceFromDestinationKey";
 
+//Encode the necessary properties of this object
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
@@ -81,6 +85,7 @@ static NSString * const DistanceFromDestinationKey = @"DistanceFromDestinationKe
     [aCoder encodeDouble:self.distanceFromDestination forKey:DistanceFromDestinationKey];
 }
 
+//Decode the necessary properties of this object and use them to initialize it
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -101,6 +106,9 @@ static NSString * const DistanceFromDestinationKey = @"DistanceFromDestinationKe
     return self;
 }
 
+#pragma mark - NSCopying
+
+//NSCopying protocol method
 - (id)copyWithZone:(NSZone *)zone
 {
     Station *other = [[Station alloc] init];

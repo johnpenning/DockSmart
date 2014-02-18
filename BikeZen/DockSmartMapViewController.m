@@ -22,6 +22,7 @@
 
 // NSNotification name for reporting that refresh was tapped
 NSString * const kRefreshDataNotif = @"RefreshDataNotif";
+// userInfo key for stationList data
 NSString * const kStationList = @"stationList";
 
 // Key noting if user has seen the intro screen/alert
@@ -43,10 +44,15 @@ NSString * const kRegionMonitorStation3 = @"RegionMonitorStation3";
 - (IBAction)bikesDocksToggled:(id)sender;
 - (IBAction)updateLocationTapped:(id)sender;
 
+//Button to set destination, start and stop station tracking
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *startStopButton;
+//Label that shows the address of the destination and details about start/end stations
 @property (weak, nonatomic) IBOutlet UILabel *destinationDetailLabel;
+//Image at center of map that points to where the user wants to set their destination
 @property (weak, nonatomic) IBOutlet UIImageView *bikeCrosshairImage;
+//Button to cancel out of the current route
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+//Toggle switch to alternate between showing the number of bikes and docks on the annotationView for each station
 @property (weak, nonatomic) IBOutlet UISegmentedControl *bikesDocksControl;
 
 //location property for the center of the map:
@@ -61,9 +67,11 @@ NSString * const kRegionMonitorStation3 = @"RegionMonitorStation3";
 @property (nonatomic) Station *currentDestinationStation;
 @property (nonatomic) Station *idealDestinationStation;
 @property (nonatomic) NSMutableArray *closestStationsToDestination;
+//Keep track of all geofences we've entered that we haven't processed yet:
 @property (nonatomic) NSMutableArray *regionIdentifierQueue;
 //the action sheet to show when making a user confirm their station destination
 @property (nonatomic, readwrite) UIActionSheet *navSheet;
+//The station that the user selected that they need to confirm in the navSheet
 @property (nonatomic) MyLocation *selectedLocation;
 
 //timer to refresh data:
@@ -240,7 +248,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     [super encodeRestorableStateWithCoder:coder];
     
-    //Encode objects:
+    //Encode view-related objects:
     [coder encodeInteger:self.bikesDocksControl.selectedSegmentIndex forKey:BikesDocksControlKey];
     [coder encodeBool:self.bikesDocksControl.hidden forKey:BikesDocksControlHiddenKey];
     [coder encodeBool:self.minuteTimer.isValid forKey:MinuteTimerValidKey];
@@ -255,6 +263,8 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [coder encodeDouble:[self.mapView region].span.latitudeDelta forKey:RegionSpanLatKey];
     [coder encodeDouble:[self.mapView region].span.longitudeDelta forKey:RegionSpanLongKey];
 
+    //Archive the state of the view controller:
+    
     NSMutableData *data = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
@@ -298,7 +308,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [super decodeRestorableStateWithCoder:coder];
     
     DLog("Bundle version %@ at last state save", [coder decodeObjectForKey:UIApplicationStateRestorationBundleVersionKey]);
-    
+
+    //Decode view-related objects:
+
     self.bikesDocksControl.selectedSegmentIndex = [coder decodeIntegerForKey:BikesDocksControlKey];
     self.bikesDocksControl.hidden = [coder decodeBoolForKey:BikesDocksControlHiddenKey];
     self.startStopButton.title = [coder decodeObjectForKey:StartStopButtonTitleKey];
@@ -307,6 +319,8 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     self.destinationDetailLabel.text = [coder decodeObjectForKey:DestinationDetailLabelKey];
     self.cancelButton.enabled = [coder decodeBoolForKey:CancelButtonKey];
     self.updateLocationButton.enabled = [coder decodeBoolForKey:UpdateLocationButtonEnabledKey];
+
+    //Unpack the state of the view controller:
 
     NSString *applicationDocumentsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [applicationDocumentsDir stringByAppendingPathComponent:kStationDataFile];
@@ -362,6 +376,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 #pragma mark - Timer Handling
 
+/*
+ Callback function when the minute timer fires. Refreshes the bike data if a refresh is needed.
+ */
 - (void)minuteTimerDidFire:(NSTimer *)timer
 {
     NSString* logText = [NSString stringWithFormat:@"Timer fired"];
@@ -377,6 +394,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 #pragma mark - Getting New Bike Data
 
+/*
+ If force is YES or if the data hasn't been updated in over 30 seconds, starts the station refresh process. Shows HUD when not actively biking.
+ */
 - (void)refreshBikeDataWithForce:(BOOL)force
 {
     if (!force && self.lastDataUpdateTime && (abs([self.lastDataUpdateTime timeIntervalSinceNow]) < 30))
@@ -403,6 +423,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                                                       userInfo:nil];
 }
 
+/*
+ Clears the current station annotations and replaces them with the new ones representing the Stations in stationList.
+ */
 - (void)plotStationPosition:(NSArray *)stationList {
     for (id<MKAnnotation> annotation in self.mapView.annotations) {
         if(![annotation isKindOfClass: [MKUserLocation class]])
@@ -420,6 +443,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 #pragma mark -
 #pragma mark MKMapViewDelegate
 
+/*
+ Returns the view associated with the specified annotation object.
+ */
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
     //TODO: place annotations on top of center bike image, if possible?
@@ -510,6 +536,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     return nil;
 }
 
+/*
+ Called if the region displayed by the map view is about to change.
+ */
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
 {
     if (animated == YES)
@@ -522,6 +551,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     }
 }
 
+/*
+ Called when the region displayed by the map view just changed.
+ */
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     [self.startStopButton setEnabled:YES];
@@ -529,6 +561,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self reverseGeocodeMapCenter];
 }
 
+/*
+ Reverse geocodes the coordinate at the center of the current map view, sets the mapCenterAddress object to this location, and shows the address of the location in destinationDetailLabel.
+ */
 - (void)reverseGeocodeMapCenter
 {
     if ((self.bikingState != BikingStateInactive) || self.needsNewCenter)
@@ -563,6 +598,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     }];
 }
 
+/*
+ Tells the delegate that the user tapped one of the annotation view’s accessory buttons.
+ */
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     MyLocation *location = (MyLocation*)view.annotation;
@@ -610,12 +648,18 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 #pragma mark -
 #pragma mark KVO support
 
+/*
+ Notification callback that is received when we have new station data to add to the list
+ */
 - (void)addStations:(NSNotification *)notif
 {
     //Transfer the notif data into the method that adds the stations to the stationList array
     [self insertStations:[[notif userInfo] valueForKey:kStationResultsKey]];
 }
 
+/*
+ There was an error in loading station data.  Handle it appropriately, usually just by using the last known data.
+ */
 - (void)stationError:(NSNotification*)notif
 {
     switch (self.bikingState) {
@@ -647,6 +691,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
+/*
+ Replaces the current stations in the stationList with the new array, and performs manual KVO compliance
+ */
 - (void)insertStations:(NSArray *)stations
 {
     // this will allow us as an observer to notified (see observeValueForKeyPath)
@@ -661,12 +708,18 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self didChangeValueForKey:kStationList];
 }
 
+/*
+ Notification callback that tells us we need to prepare a new bike route for a given destination.
+ */
 - (void)prepareNewBikeRoute:(NSNotification *)notif
 {
     //Set up a new route:
     [self prepareBikeRouteWithDestination:[[notif userInfo] valueForKey:kBikeDestinationKey] newDestination:YES];
 }
 
+/*
+ Gets the view ready to present a bike route overview.
+ */
 - (void)prepareBikeRouteWithDestination:(MyLocation *)dest newDestination:(BOOL)newDest
 {
     //Get ready to bike, set the new state and the final destination location
@@ -684,6 +737,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self refreshBikeDataWithForce:YES];
 }
 
+/*
+ Clears out the current bike route and returns the view to idle state, optionally refreshing the station data.
+ */
 - (void)clearBikeRouteWithRefresh:(BOOL)refresh
 {
     if (refresh)
@@ -721,6 +777,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     self.closestStationsToDestination = nil;
 }
 
+/*
+ Uses the newest station data to present the optimal bike route overview.
+ */
 - (void)updateActiveBikingViewWithNewDestination:(BOOL)newDest
 {
     //Calculate and store the distances from the destination to each station:
@@ -784,6 +843,8 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     }
     //increased edge padding so all relevant markers are visible
     [self.mapView setVisibleMapRect:zoomRect edgePadding:UIEdgeInsetsMake(104, 15, 104, 15) animated:YES];
+    
+    /* Determine annotation identifiers */
     
     //Change the annotation identifiers for the Station/MyLocation objects we want to view as annotations on the map:
     //i.e. change the pin color (other attributes?) for start, end and backup end stations
@@ -897,9 +958,11 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     }
 }
 
+/*
+ Begins the process of tracking the destination stations. Creates geofences, starts the minute refresh timer, starts location tracking and changes the bikingState.
+ */
 - (void)startStationTracking
 {
-
     //Create regions to monitor via geofencing app wakeups:
     //Concentric circles, getting closer to the final destination:
     
@@ -940,6 +1003,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
 }
 
+/*
+ Quits out of station tracking. Stops the timer and turns off geofences.
+ */
 - (void)stopStationTracking
 {
     //Stop timer:
@@ -950,23 +1016,34 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [[LocationController sharedInstance] stopAllRegionMonitoring];
 }
 
+/*
+ Registers the view controller for KVO
+ */
 - (void)registerForKVO {
 	for (NSString *keyPath in [self observableKeypaths]) {
 		[self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
 	}
 }
 
+/*
+ Unregisters the view controller from KVO
+ */
 - (void)unregisterFromKVO {
 	for (NSString *keyPath in [self observableKeypaths]) {
 		[self removeObserver:self forKeyPath:keyPath];
 	}
 }
 
+/*
+ Returns the list of keypaths for the view controller to observe
+ */
 - (NSArray *)observableKeypaths {
 	return [NSArray arrayWithObjects:kAddStationsNotif, kStationList, nil];
 }
 
-// listen for changes to the station list coming from our app delegate.
+/*
+ Listen for changes to the station list, and act upon them appropriately, alerting the user as needed when stations fill up or open up or when they are at their destination.
+ */
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -978,7 +1055,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                                                         object:self
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
-    
+    //Set the last time we got a fresh set of station data
     self.lastDataUpdateTime = [NSDate date];
 
     switch (self.bikingState) {
@@ -997,19 +1074,21 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
             NSString *newlyFullStationName = nil;
             NSMutableArray *regionIdentifiersToCheck = [self.regionIdentifierQueue copy];
             
-            //Do not reload the map view at all, unless the app is coming back into the foreground.  Just check to see if we need to send a notification based on nbEmptyDocks for our current goal station
+            //Loop through all the stations in stationList and determine if we need to send a notification based on its previous and current nbEmptyDocks count, and if a geofence told us that we are actually at that location
             for (Station *station in self.dataController.stationList)
             {
                 if (station.stationID == self.sourceStation.stationID)
                 {
+                    //Reassign sourceStation pointer to new Station object that represents the station we started at
                     self.sourceStation = station;
                 }
                 
+                //Check to see if this station is one that we determined to be closest to the destination:
                 NSUInteger stationIndex = [self.closestStationsToDestination indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
                     Station *stationObj = (Station *)obj;
                     return (stationObj.stationID == station.stationID);
                 }];
-                
+                //If so, reassign the pointer in the array:
                 if (stationIndex != NSNotFound)
                 {
                     //switch out old array objects with the new data
@@ -1082,6 +1161,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                     }
                     else
                     {
+                        //Just reassign the pointer
                         self.currentDestinationStation = station;
                     }
                 }
@@ -1110,6 +1190,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                     break;
                 }
             }
+            //If we haven't told the user to dock yet, and the currentDestinationStation had just filled up, alert the user
             if (!endTracking && newlyFullStationName != nil)
             {
                 UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
@@ -1119,6 +1200,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                 [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
             }
             
+            //Update the view if we're still biking
             if (!endTracking)
             {
                 for (id<MKAnnotation> annotation in self.mapView.annotations) {
@@ -1172,6 +1254,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self refreshBikeDataWithForce:YES];
 }
 
+/*
+ The user just tapped the cancel button, handle it by resetting the view to idle
+ */
 - (IBAction)cancelTapped:(id)sender
 {
     //log it for debugging
@@ -1186,6 +1271,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self clearBikeRouteWithRefresh:YES];
 }
 
+/*
+ The user just tapped the start/stop button, handle it based on the current bikingState
+ */
 - (IBAction)startStopTapped:(UIButton *)sender
 {
     switch (self.bikingState) {
@@ -1225,6 +1313,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self plotStationPosition:self.dataController.stationList];
 }
 
+//Location button was just tapped. Pan to the current user location on the map and update the CLLocationManager location
 - (IBAction)updateLocationTapped:(id)sender
 {
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
@@ -1237,6 +1326,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     //TODO: map sometimes doesn't update? specifically if biking state is active and zoomed in on destination bikes, and/or if wifi is off
 }
 
+/*
+ Notification callback when the CLLocationManager has updated the current user location.
+ */
 - (void)updateLocation:(NSNotification *)notif
 {
     //pan to new user location if we said we needed to when the view loaded
@@ -1256,6 +1348,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     //TODO: If we're entering a geofence, and we don't just want to force an update at those times, perhaps turn the new stationError: code into a usePresentData: function and call that instead to figure out docking notifications?
 }
 
+/*
+ Notification callback when the CLLocationManager has determined that we have entered a geofence.
+ */
 - (void)regionEntered:(NSNotification *)notif
 {
     //Mark the region that we just entered:
@@ -1270,6 +1365,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     [self refreshBikeDataWithForce:YES];
 }
 
+/*
+ Notification callback when the CLLocationManager has determined that we have exited a geofence.
+ */
 - (void)regionExited:(NSNotification *)notif
 {
     //Get another bike data update

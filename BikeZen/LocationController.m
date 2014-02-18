@@ -2,6 +2,8 @@
 //  LocationController.m
 //  DockSmart
 //
+//  Singleton CLLocationManagerDelegate class.
+//
 //  Created by John Penning on 9/14/13.
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //  (With help from Jinru Liu: http://jinru.wordpress.com/2010/08/15/singletons-in-objective-c-an-example-of-cllocationmanager/ )
@@ -9,12 +11,15 @@
 
 #import "LocationController.h"
 
-//static LocationController* sharedCLDelegate = nil;
-
+//Notification key for location updates
 NSString * const kLocationUpdateNotif = @"LocationUpdateNotif";
+//userInfo key for new location data
 NSString * const kNewLocationKey = @"NewLocationKey";
+//Notification key for geofence entry
 NSString * const kRegionEntryNotif = @"RegionEntryNotif";
+//Notification key for geofence exit
 NSString * const kRegionExitNotif = @"RegionExitNotif";
+//userInfo key for geofence data
 NSString * const kNewRegionKey = @"NewRegionKey";
 
 @implementation LocationController
@@ -35,6 +40,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
 
 #pragma mark - CLLocationManagerDelegate
 
+//Starts location updates
 - (void)startUpdatingCurrentLocation
 {
     // if location services are restricted do nothing
@@ -68,6 +74,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
     [_locationManager startUpdatingLocation];
 }
 
+//Stops location updates
 - (void)stopUpdatingCurrentLocation
 {
     NSString* logText = [NSString stringWithFormat:@"stopUpdatingCurrentLocation"];
@@ -80,6 +87,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
     [_locationManager stopUpdatingLocation];
 }
 
+//delegate method that informs us if the location services authorization for this app has changed
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     //Make current location button inactive on mapview if location services are disabled
@@ -97,6 +105,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
     
 }
 
+//delegate method that informs us if the CLLocationManager updated the user location
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     // If it's a relatively recent event, turn off updates to save power
@@ -125,6 +134,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
     }
 }
 
+//delegate method that informs us that the location update failed
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     DLog(@"%@", error);
@@ -137,6 +147,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
                                                                                            forKey:kLogTextKey]];
 }
 
+//delegate method that informs us that geofence monitoring failed for a particular region
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
 {
     NSString* logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ withError: %@", region.identifier, [error localizedDescription]];
@@ -148,6 +159,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
 
 }
 
+//delegate method that informs us that we entered a geofence
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
     NSString* logText = [NSString stringWithFormat:@"didEnterRegion: %@", region.identifier];
@@ -162,6 +174,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
                                                       userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
 }
 
+//delegate method that informs us that we exited a geofence
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
     NSString* logText = [NSString stringWithFormat:@"didExitRegion: %@", region.identifier];
@@ -189,6 +202,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
 
 #pragma mark - Region monitoring support
 
+//Register a geofence
 - (BOOL)registerRegionWithCoordinate:(CLLocationCoordinate2D)coordinate radius:(CLLocationDistance)radius identifier:(NSString*)identifier accuracy:(CLLocationAccuracy)accuracy
 {
     // Check the authorization status
@@ -218,6 +232,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
     return YES;
 }
 
+//Turn off all geofences
 - (void)stopAllRegionMonitoring
 {
     // Clear out all old regions when we are done monitoring them.
