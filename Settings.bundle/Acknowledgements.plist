@@ -24,12 +24,6 @@
 			<key>FooterText</key>
 			<string>Acknowledgements3</string>
 		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>FooterText</key>
-			<string>Acknowledgements4</string>
-		</dict>
 	</array>
 </dict>
 </plist>
