@@ -345,6 +345,8 @@
 		CD5541E5177F997D00167D87 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5541E3177F997D00167D87 /* MBProgressHUD.m */; };
 		CD6DCB28176AB54100133762 /* DockSmartDestinationsMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */; };
 		CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartLogViewController.m */; };
+		CDA161F518B5BE3C00C252C1 /* DockSmartGrayLaunchImage-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDA161F418B5BE3C00C252C1 /* DockSmartGrayLaunchImage-568h@2x.png */; };
+		CDA161F718B5C0D700C252C1 /* DockSmartGrayLaunchImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDA161F618B5C0D700C252C1 /* DockSmartGrayLaunchImage@2x.png */; };
 		CDA9550D176CC765003C49DF /* stationData.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDA9550C176CC765003C49DF /* stationData.plist */; };
 		CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
@@ -719,6 +721,8 @@
 		CD6DCB27176AB54100133762 /* DockSmartDestinationsMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartDestinationsMasterViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD76272F17516B6F00E22617 /* DockSmartLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartLogViewController.h; sourceTree = "<group>"; };
 		CD76273017516B7000E22617 /* DockSmartLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartLogViewController.m; sourceTree = "<group>"; };
+		CDA161F418B5BE3C00C252C1 /* DockSmartGrayLaunchImage-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DockSmartGrayLaunchImage-568h@2x.png"; sourceTree = "<group>"; };
+		CDA161F618B5C0D700C252C1 /* DockSmartGrayLaunchImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DockSmartGrayLaunchImage@2x.png"; sourceTree = "<group>"; };
 		CDA9550C176CC765003C49DF /* stationData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = stationData.plist; sourceTree = "<group>"; };
 		CDA95511176E729B003C49DF /* DockSmartStationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartStationDetailViewController.h; sourceTree = "<group>"; };
 		CDA95512176E729B003C49DF /* DockSmartStationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartStationDetailViewController.m; sourceTree = "<group>"; };
@@ -1195,6 +1199,8 @@
 		CD89114D17AD91FE00F32D53 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CDA161F618B5C0D700C252C1 /* DockSmartGrayLaunchImage@2x.png */,
+				CDA161F418B5BE3C00C252C1 /* DockSmartGrayLaunchImage-568h@2x.png */,
 				CD529ECC1730B77F005420D6 /* Default.png */,
 				CD529ECE1730B77F005420D6 /* Default@2x.png */,
 				CD529ED01730B77F005420D6 /* Default-568h@2x.png */,
@@ -1395,6 +1401,7 @@
 				CD444A711887851400719C9B /* station_pin_green_29@2x.png in Resources */,
 				CD444B0B1887851400719C9B /* station_pin_red_83@2x.png in Resources */,
 				CD444A3D1887851400719C9B /* station_pin_blue_77@2x.png in Resources */,
+				CDA161F718B5C0D700C252C1 /* DockSmartGrayLaunchImage@2x.png in Resources */,
 				CD444A581887851400719C9B /* station_pin_green_04@2x.png in Resources */,
 				CD4449F31887851400719C9B /* station_pin_blue_03@2x.png in Resources */,
 				CD444A7C1887851400719C9B /* station_pin_green_40@2x.png in Resources */,
@@ -1591,6 +1598,7 @@
 				CD444AD11887851400719C9B /* station_pin_red_25@2x.png in Resources */,
 				CD444A351887851400719C9B /* station_pin_blue_69@2x.png in Resources */,
 				CD444A061887851400719C9B /* station_pin_blue_22@2x.png in Resources */,
+				CDA161F518B5BE3C00C252C1 /* DockSmartGrayLaunchImage-568h@2x.png in Resources */,
 				CD444A5D1887851400719C9B /* station_pin_green_09@2x.png in Resources */,
 				CD444A4A1887851400719C9B /* station_pin_blue_90@2x.png in Resources */,
 				CD444ABA1887851400719C9B /* station_pin_red_02@2x.png in Resources */,

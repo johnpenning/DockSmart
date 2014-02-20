@@ -117,6 +117,8 @@ NSString * const kRegionMonitorStation3 = @"RegionMonitorStation3";
 
 - (void)viewDidLoad
 {
+    DLog(@"viewDidLoad");
+    
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
@@ -179,6 +181,8 @@ NSString * const kRegionMonitorStation3 = @"RegionMonitorStation3";
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    DLog(@"viewWillAppear");
+
     //Make sure the user has enabled location services before attempting to get the location
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
         [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ||
