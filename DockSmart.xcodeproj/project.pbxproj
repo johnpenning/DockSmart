@@ -330,9 +330,6 @@
 		CD529EC51730B77F005420D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD529EC31730B77F005420D6 /* InfoPlist.strings */; };
 		CD529EC71730B77F005420D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EC61730B77F005420D6 /* main.m */; };
 		CD529ECB1730B77F005420D6 /* DockSmartAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529ECA1730B77F005420D6 /* DockSmartAppDelegate.m */; };
-		CD529ECD1730B77F005420D6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ECC1730B77F005420D6 /* Default.png */; };
-		CD529ECF1730B77F005420D6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ECE1730B77F005420D6 /* Default@2x.png */; };
-		CD529ED11730B77F005420D6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED01730B77F005420D6 /* Default-568h@2x.png */; };
 		CD529ED41730B77F005420D6 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD529ED21730B77F005420D6 /* MainStoryboard.storyboard */; };
 		CD529EDE1730B77F005420D6 /* DockSmartMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD529EDD1730B77F005420D6 /* DockSmartMapViewController.m */; };
 		CD529EEA1730B77F005420D6 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD529EE91730B77F005420D6 /* SenTestingKit.framework */; };
@@ -699,9 +696,6 @@
 		CD529EC81730B77F005420D6 /* DockSmart-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "DockSmart-Prefix.pch"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD529EC91730B77F005420D6 /* DockSmartAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD529ECA1730B77F005420D6 /* DockSmartAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		CD529ECC1730B77F005420D6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
-		CD529ECE1730B77F005420D6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
-		CD529ED01730B77F005420D6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		CD529ED31730B77F005420D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		CD529ED51730B77F005420D6 /* DockSmartFavoritesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DockSmartFavoritesViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD529ED61730B77F005420D6 /* DockSmartFavoritesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DockSmartFavoritesViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -1201,9 +1195,6 @@
 			children = (
 				CDA161F618B5C0D700C252C1 /* DockSmartGrayLaunchImage@2x.png */,
 				CDA161F418B5BE3C00C252C1 /* DockSmartGrayLaunchImage-568h@2x.png */,
-				CD529ECC1730B77F005420D6 /* Default.png */,
-				CD529ECE1730B77F005420D6 /* Default@2x.png */,
-				CD529ED01730B77F005420D6 /* Default-568h@2x.png */,
 				CD4448AF1887851300719C9B /* New Station Icons */,
 				CD444B211887A12300719C9B /* bikepointer3@2x.png */,
 				CD4448A01887851300719C9B /* DockSmartAppIcon3@2x.png */,
@@ -1297,9 +1288,6 @@
 				CD444A451887851400719C9B /* station_pin_blue_85@2x.png in Resources */,
 				CD444AE81887851400719C9B /* station_pin_red_48@2x.png in Resources */,
 				CD444AA21887851400719C9B /* station_pin_green_78@2x.png in Resources */,
-				CD529ECD1730B77F005420D6 /* Default.png in Resources */,
-				CD529ECF1730B77F005420D6 /* Default@2x.png in Resources */,
-				CD529ED11730B77F005420D6 /* Default-568h@2x.png in Resources */,
 				CD444AFA1887851400719C9B /* station_pin_red_66@2x.png in Resources */,
 				CD444B041887851400719C9B /* station_pin_red_76@2x.png in Resources */,
 				CD529ED41730B77F005420D6 /* MainStoryboard.storyboard in Resources */,
