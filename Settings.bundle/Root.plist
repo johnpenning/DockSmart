@@ -66,8 +66,8 @@
 				<string>http://api.citybik.es/citibikenyc.json</string>
 				<string>http://api.citybik.es/ottawa.json</string>
 				<string>http://api.citybik.es/velib.json</string>
-				<string>http://staging.citybik.es/v1/bay-area-bike-share.json</string>
-				<string>http://api2.citybik.es/toronto.json</string>
+				<string>http://api.citybik.es/bay-area-bike-share.json</string>
+				<string>http://api.citybik.es/bixi-toronto.json</string>
 				<string>http://api.citybik.es/valenbisi.json</string>
 				<string>http://api.citybik.es/capitalbikeshare.json</string>
 			</array>

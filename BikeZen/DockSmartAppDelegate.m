@@ -439,8 +439,16 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
         
         [tempStation initCoordinateWithLatitude:tempStation.latitude longitude:tempStation.longitude];
         
-        //add the Station object to the array
-        [stations addObject:tempStation];
+        if (CLLocationCoordinate2DIsValid(tempStation.coordinate))
+        {
+            //add the Station object to the array if its coordinate is valid
+            [stations addObject:tempStation];
+        }
+        else
+        {
+            //otherwise just log an error and go to the next station
+            DLog("Invalid station coordinate: stationID %d, %@, coord %f, %f", tempStation.stationID, tempStation.name, tempStation.latitude, tempStation.longitude);
+        }
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kAddStationsNotif
