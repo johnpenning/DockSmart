@@ -25,12 +25,12 @@ NSString * const kStationErrorNotif = @"StationErrorNotif";
 // NSNotification userInfo key for obtaining the error message
 NSString * const kStationsMsgErrorKey = @"StationsMsgErrorKey";
 
-/* Local static keys */
 //defaults keys
-static NSString * const kAutoCityPreference = @"AutoCityPreference";
-static NSString * const kCityPreference = @"CityPreference";
-static NSString * const kDisplayedVersion = @"DisplayedVersion";
+NSString * const kAutoCityPreference = @"AutoCityPreference";
+NSString * const kCityPreference = @"CityPreference";
+NSString * const kDisplayedVersion = @"DisplayedVersion";
 
+/* Local static keys */
 //Message to appear in AFNetworking error AlertView
 static NSString * const stationErrorMessage = @"Information might not be up-to-date.";
 
@@ -262,7 +262,7 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
     DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSString* logText = [NSString stringWithFormat:@"Auto city: %d city value: %@", [defaults boolForKey:kAutoCityPreference], [defaults valueForKey:kCityPreference]];
+    NSString* logText = [NSString stringWithFormat:@"Auto city: %d", [defaults boolForKey:kAutoCityPreference]];
     DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
@@ -273,11 +273,19 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
     self.isHTTPRequestInProcess = YES;
     
     /*
-     If auto city detection is off, or if we're already on a bike route, do not load the list of networks to determine which city we're in.
+     If auto city detection is off, or if we're already on a bike route, or we don't have a current location,
+     do not load the list of networks to determine which city we're in.
      Just load the current city's data.
      */
-    if ((controller.bikingState != BikingStateInactive) || ([defaults boolForKey:kAutoCityPreference] == NO))
+    if ((controller.bikingState != BikingStateInactive) || ([defaults boolForKey:kAutoCityPreference] == NO) || ([[LocationController sharedInstance] location] == nil))
     {
+        NSString* logText = [NSString stringWithFormat:@"Skipping auto city detection"];
+        DLog(@"%@",logText);
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                            object:self
+                                                          userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                               forKey:kLogTextKey]];
+
         [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
         return;
     }
@@ -290,12 +298,16 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
              
              NSDictionary *networkData = (NSDictionary *)responseObject;
              
-             //Find the closest network to the current user location:
-             self.currentCityUrl = [self closestBikeshareNetworkToLocation:[[LocationController sharedInstance] location] withData:networkData];
-             
-             //Save the URL for the current city in NSUserDefaults:
-             [defaults setObject:self.currentCityUrl forKey:kCityPreference];
-             [defaults synchronize];
+             //Find the closest network to the current user location, if we have determined a location:
+             if ([[LocationController sharedInstance] location])
+             {
+                 self.currentCityUrl = [self closestBikeshareNetworkToLocation:[[LocationController sharedInstance] location] withData:networkData];
+
+                 //Save the URL for the current city in NSUserDefaults:
+                 [defaults setObject:self.currentCityUrl forKey:kCityPreference];
+                 [defaults synchronize];
+
+             }
              
              //Load this city's bike data:
              [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
@@ -359,6 +371,13 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
  */
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url
 {
+    NSString* logText = [NSString stringWithFormat:@"loadJSONBikeDataForCityWithUrl: %@", url];
+    DLog(@"%@",logText);
+    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
+                                                        object:self
+                                                      userInfo:[NSDictionary dictionaryWithObject:logText
+                                                                                           forKey:kLogTextKey]];
+
     [[DSHTTPSessionManager sharedInstance] GET:url
       parameters:nil
          success:^(NSURLSessionTask *task, id responseObject) {

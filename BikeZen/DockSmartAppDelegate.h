@@ -17,6 +17,10 @@ extern NSString * const kStationResultsKey;
 extern NSString * const kStationErrorNotif;
 extern NSString * const kStationsMsgErrorKey;
 
+extern NSString * const kAutoCityPreference;
+extern NSString * const kCityPreference;
+extern NSString * const kDisplayedVersion;
+
 @class Station, DockSmartMapViewController;
 
 @interface DockSmartAppDelegate : UIResponder <UIApplicationDelegate, UIStateRestoring>

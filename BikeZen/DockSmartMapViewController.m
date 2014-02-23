@@ -1341,6 +1341,14 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([[[LocationController sharedInstance] location] coordinate], 2*METERS_PER_MILE, 2*METERS_PER_MILE);
         
         [self.mapView setRegion:region animated:YES];
+        
+        //get new station data for this location if auto city detection is on
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if ([defaults boolForKey:kAutoCityPreference] == YES)
+        {
+            [self refreshBikeDataWithForce:YES];
+        }
+        
         //clear flag
         self.needsNewCenter = NO;
     }
