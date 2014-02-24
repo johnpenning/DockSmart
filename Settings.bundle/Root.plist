@@ -31,6 +31,7 @@
 			<string>0</string>
 			<key>Titles</key>
 			<array>
+				<string>Austin, TX</string>
 				<string>Barcelona, Spain</string>
 				<string>Boston, MA</string>
 				<string>Brussels, Belgium</string>
@@ -52,24 +53,25 @@
 			</array>
 			<key>Values</key>
 			<array>
-				<string>http://api.citybik.es/bicing.html</string>
+				<string>http://api.citybik.es/austin.json</string>
+				<string>http://api.citybik.es/bicing.json</string>
 				<string>http://api.citybik.es/hubway.json</string>
 				<string>http://api.citybik.es/villo.json</string>
-				<string>http://api.citybik.es/divvybikes.json</string>
-				<string>http://api.citybik.es/dublin.json</string>
-				<string>http://api.citybik.es/goteborg.html</string>
-				<string>http://api.citybik.es/barclays.json</string>
+				<string>http://api.citybik.es/divvy.json</string>
+				<string>http://api.citybik.es/dublinbikes.json</string>
+				<string>http://api.citybik.es/goeteborg.json</string>
+				<string>http://api.citybik.es/barclays-cycle-hire.json</string>
 				<string>http://api.citybik.es/ecobici.json</string>
-				<string>http://api2.citybik.es/decobike.json</string>
-				<string>http://api.citybik.es/niceride.json</string>
-				<string>http://api.citybik.es/bixi.json</string>
-				<string>http://api.citybik.es/citibikenyc.json</string>
-				<string>http://api.citybik.es/ottawa.json</string>
+				<string>http://api.citybik.es/decobike-miami-beach.json</string>
+				<string>http://api.citybik.es/nice-ride.json</string>
+				<string>http://api.citybik.es/bixi-montreal.json</string>
+				<string>http://api.citybik.es/citi-bike-nyc.json</string>
+				<string>http://api.citybik.es/capital-bixi.json</string>
 				<string>http://api.citybik.es/velib.json</string>
 				<string>http://api.citybik.es/bay-area-bike-share.json</string>
 				<string>http://api.citybik.es/bixi-toronto.json</string>
 				<string>http://api.citybik.es/valenbisi.json</string>
-				<string>http://api.citybik.es/capitalbikeshare.json</string>
+				<string>http://api.citybik.es/capital-bikeshare.json</string>
 			</array>
 		</dict>
 		<dict>
