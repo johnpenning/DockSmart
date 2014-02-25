@@ -3,9 +3,9 @@
 
 *.xcbkptlist
 
-BikeZen/getimgs.py
+DockSmart/getimgs.py
 
-BikeZen/Images/bikepointer.xcf
+DockSmart/Images/bikepointer.xcf
 
 *.xcscheme
 
