@@ -358,7 +358,7 @@
 			containerPortal = CD529EAF1730B77F005420D6 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = CD529EB61730B77F005420D6;
-			remoteInfo = BikeZen;
+			remoteInfo = DockSmart;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1144,7 +1144,7 @@
 				CD00396B189DC52C00349A88 /* DSHTTPSessionManager.m */,
 			);
 			name = DockSmart;
-			path = BikeZen;
+			path = DockSmart;
 			sourceTree = "<group>";
 		};
 		CD529EC11730B77F005420D6 /* Supporting Files */ = {
@@ -1169,7 +1169,7 @@
 				CD529EF01730B77F005420D6 /* Supporting Files */,
 			);
 			name = DockSmartTests;
-			path = BikeZenTests;
+			path = DockSmartTests;
 			sourceTree = "<group>";
 		};
 		CD529EF01730B77F005420D6 /* Supporting Files */ = {
@@ -1227,7 +1227,7 @@
 			dependencies = (
 			);
 			name = DockSmart;
-			productName = BikeZen;
+			productName = DockSmart;
 			productReference = CD529EB71730B77F005420D6 /* DockSmart.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -1246,7 +1246,7 @@
 				CD529EEE1730B77F005420D6 /* PBXTargetDependency */,
 			);
 			name = DockSmartTests;
-			productName = BikeZenTests;
+			productName = DockSmartTests;
 			productReference = CD529EE81730B77F005420D6 /* DockSmartTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
@@ -1793,8 +1793,8 @@
 			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
-				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";
+				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
+				INFOPLIST_FILE = "DockSmart/DockSmart-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = DockSmart;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1807,8 +1807,8 @@
 			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BikeZen/DockSmart-Prefix.pch";
-				INFOPLIST_FILE = "BikeZen/DockSmart-Info.plist";
+				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
+				INFOPLIST_FILE = "DockSmart/DockSmart-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = DockSmart;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1819,14 +1819,14 @@
 		CD529EFE1730B77F005420D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BikeZen.app/BikeZen";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/DockSmart.app/DockSmart";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
-				INFOPLIST_FILE = "BikeZenTests/DockSmartTests-Info.plist";
+				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
+				INFOPLIST_FILE = "DockSmartTests/DockSmartTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = DockSmartTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1837,14 +1837,14 @@
 		CD529EFF1730B77F005420D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BikeZen.app/BikeZen";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/DockSmart.app/DockSmart";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BikeZen/BikeZen-Prefix.pch";
-				INFOPLIST_FILE = "BikeZenTests/DockSmartTests-Info.plist";
+				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
+				INFOPLIST_FILE = "DockSmartTests/DockSmartTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = DockSmartTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
