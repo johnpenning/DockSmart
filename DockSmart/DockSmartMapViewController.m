@@ -128,10 +128,6 @@ NSString * const kRegionMonitorStation3 = @"RegionMonitorStation3";
     self.dataController = [[LocationDataController alloc] init];
     self.mapCenterAddress = [[Address alloc] init];
     self.closestStationsToDestination = [[NSMutableArray alloc] initWithCapacity:3];
-//    self.sourceStation = [[Station alloc] init];
-//    self.finalDestination = [[MyLocation alloc] init];
-//    self.currentDestinationStation = [[Station alloc] init];
-//    self.idealDestinationStation = [[Station alloc] init];
     self.regionIdentifierQueue = [[NSMutableArray alloc] init];
     
     // KVO: listen for changes to our station data source for map view updates
