@@ -28,7 +28,7 @@ Bike share systems supported include:
 - Vélib (Paris, France)
 - And lots more, in 18 countries around the world
 
-DockSmart uses the independent, open source CityBikes API for worldwide station data. Check [www.citybik.es](http://www.citybik.es) for more information, including a full list of cities.
+DockSmart uses the independent, open source CityBikes API for worldwide station data. Visit [www.citybik.es](http://www.citybik.es) for more information, including a full list of cities.
 
 Note: DockSmart requires iOS 7. The station tracking feature requires enabling both Location Services and Background App Refresh.
 
@@ -44,7 +44,7 @@ DockSmart uses the CityBikes API for worldwide live station data. Visit [api.cit
 
 #### AFNetworking
 
-Copyright (c) 2013 AFNetworking (http://afnetworking.com/)
+Copyright (c) 2013 [AFNetworking](http://afnetworking.com/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -64,9 +64,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
+#### MediaLoot
+Station icons courtesy of [MediaLoot](http://medialoot.com).
+
 #### Ionicons
 
-Copyright (c) 2013 Drifty (http://drifty.com/)
+Copyright (c) 2013 [Drifty](http://drifty.com/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

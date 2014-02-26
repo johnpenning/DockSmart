@@ -41,7 +41,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationUsageDescription</key>
-	<string>DockSmart requires your location in order to determine your current city, tell you from which station to pick up a bike, and to retrieve live station data while you&apos;re biking.</string>
+	<string>DockSmart requires your location in order to determine your current city, tell you from which station to pick up a bike, and to retrieve live station data while you're biking.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

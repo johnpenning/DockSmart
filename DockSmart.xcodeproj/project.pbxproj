@@ -344,7 +344,6 @@
 		CD76273117516B7000E22617 /* DockSmartLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD76273017516B7000E22617 /* DockSmartLogViewController.m */; };
 		CDA161F518B5BE3C00C252C1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDA161F418B5BE3C00C252C1 /* Default-568h@2x.png */; };
 		CDA161F718B5C0D700C252C1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDA161F618B5C0D700C252C1 /* Default@2x.png */; };
-		CDA9550D176CC765003C49DF /* stationData.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDA9550C176CC765003C49DF /* stationData.plist */; };
 		CDC3BC84185D1C67007C73BF /* NSDictionary+CityBikesAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC3BC83185D1C67007C73BF /* NSDictionary+CityBikesAPI.m */; };
 		CDC454001736D7BF008E2966 /* Station.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC453FF1736D7BF008E2966 /* Station.m */; };
 		CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CDC5C7C21870F63A0036BF18 /* Settings.bundle */; };
@@ -717,7 +716,6 @@
 		CD76273017516B7000E22617 /* DockSmartLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartLogViewController.m; sourceTree = "<group>"; };
 		CDA161F418B5BE3C00C252C1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		CDA161F618B5C0D700C252C1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		CDA9550C176CC765003C49DF /* stationData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = stationData.plist; sourceTree = "<group>"; };
 		CDA95511176E729B003C49DF /* DockSmartStationDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartStationDetailViewController.h; sourceTree = "<group>"; };
 		CDA95512176E729B003C49DF /* DockSmartStationDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockSmartStationDetailViewController.m; sourceTree = "<group>"; };
 		CDA95514176E72C4003C49DF /* DockSmartAddressDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockSmartAddressDetailViewController.h; sourceTree = "<group>"; };
@@ -1155,7 +1153,6 @@
 				CD529EC31730B77F005420D6 /* InfoPlist.strings */,
 				CD529EC61730B77F005420D6 /* main.m */,
 				CD529EC81730B77F005420D6 /* DockSmart-Prefix.pch */,
-				CDA9550C176CC765003C49DF /* stationData.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1298,7 +1295,6 @@
 				CD444B141887851400719C9B /* station_pin_red_92@2x.png in Resources */,
 				CD444AED1887851400719C9B /* station_pin_red_53@2x.png in Resources */,
 				CD444B191887851400719C9B /* station_pin_red_97@2x.png in Resources */,
-				CDA9550D176CC765003C49DF /* stationData.plist in Resources */,
 				CD444A971887851400719C9B /* station_pin_green_67@2x.png in Resources */,
 				CD444A551887851400719C9B /* station_pin_green_01@2x.png in Resources */,
 				CD444A601887851400719C9B /* station_pin_green_12@2x.png in Resources */,
