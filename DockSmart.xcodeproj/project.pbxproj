@@ -1257,6 +1257,11 @@
 				CLASSPREFIX = DockSmart;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "John Penning";
+				TargetAttributes = {
+					CD529EB61730B77F005420D6 = {
+						DevelopmentTeam = SDRKXFSGFJ;
+					};
+				};
 			};
 			buildConfigurationList = CD529EB21730B77F005420D6 /* Build configuration list for PBXProject "DockSmart" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1790,6 +1795,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "DockSmart/DockSmart-Info.plist";
@@ -1804,6 +1810,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "DockSmart/DockSmart-Info.plist";
