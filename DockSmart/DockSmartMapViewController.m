@@ -804,7 +804,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         {
             if (self.sourceStation && (self.sourceStation.stationID != station.stationID))
             {
-                //TODO if we previously had a different non-nil sourceStation, should we alert the user that the closest station with a bike has changed?
+                //TODO: if we previously had a different non-nil sourceStation, should we alert the user that the closest station with a bike has changed?
             }
             self.sourceStation = station;
             break;
@@ -1070,10 +1070,162 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         case BikingStateActive:
         {
             BOOL notifSent = NO;
+            BOOL currentStationTried = NO;
             BOOL endTracking = NO;
             NSString *newlyFullStationName = nil;
             NSMutableArray *regionIdentifiersToCheck = [self.regionIdentifierQueue copy];
             
+            
+                /***** PSEUDOCODE *****
+                 
+                 re-sort new station list by distance from destination
+                 for (station in stations)
+                 {
+                    if (station != current station && station has > 0 docks && !notifSent)
+                    {
+                        go to this station instead;
+                        if (!current station tried)
+                        {
+                            if (geofence tells us we are at station)
+                            {
+                                alert user to dock happy;
+                            }
+                            else
+                            {
+                                alert user to redirect happy;
+                            }
+                        }
+                        else
+                        {
+                            if (geofence tells us we are at station)
+                            {
+                                alert user to dock sad;
+                            }
+                            else
+                            {
+                                alert user to redirect sad;
+                            }
+                        }
+                        notifSent = true;
+                    }
+                    else if (station == current station && station has 0 docks && !notifSent)
+                    {
+                        current station tried = true;
+                    }
+                 }
+                 
+                 ***** END PSEUDOCODE ******/
+
+            //Figure out the three closest stations to the destination:
+            //Sort by distance from destination:
+            //TODO: will this mess with table view order if it happens while we're in that view?
+            [self.dataController setSortedStationList:[self.dataController sortLocationList:[self.dataController stationList] byMethod:LocationDataSortByDistanceFromDestination]];
+            //Then grab the top 3 to display on the map:
+            self.closestStationsToDestination = [[self.dataController.sortedStationList objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)]] mutableCopy];
+            
+            //Loop through all the stations in sortedStationList and determine if we need to send a notification based on its dock availability and if a geofence told us that we are actually at that location
+            for (Station *station in self.dataController.sortedStationList)
+            {
+                //reassign pointers:
+                if (station.stationID == self.idealDestinationStation.stationID)
+                {
+                    self.idealDestinationStation = station;
+                }
+//                if (station.stationID == self.currentDestinationStation.stationID)
+//                {
+//                    self.currentDestinationStation = station;
+//					//TODO: change annotationIdentifier?
+//                }
+                if (station.stationID == self.sourceStation.stationID)
+                {
+					//Reassign sourceStation pointer to new Station object that represents the station we started at
+                    self.sourceStation = station;
+                }
+                
+                //notification logic: if we didn't already notify the user about a dock change, check if this is a station we aren't heading to that has > 0 docks available
+                if ((station.stationID != self.currentDestinationStation.stationID) && (station.nbEmptyDocks > 0) && !notifSent)
+                {
+                    if (!currentStationTried)
+                    {
+                        //There is a station closer to our finalDestination than our currentDestinationStation with > 0 empty docks. We should go there instead.
+						
+						//Check geofences:
+						for (NSString *identifier in regionIdentifiersToCheck)
+						{
+							if ([identifier isEqualToString:kRegionMonitorStation1])
+							{
+								//A geofence tells us we are at the station we need to dock at; alert the user:
+								[self notifyUserToDockAtStation:station.name ideal:(station.stationID == self.idealDestinationStation.stationID)];
+								notifSent = YES;
+								//Set flag to end station tracking
+								endTracking = YES;
+								break;
+							}
+                        }
+                        if (!notifSent)
+                        {
+							//We're not where we need to be yet. Alert the user to redirect towards the closer station:
+                            [self notifyUserToRedirectFromStation:self.currentDestinationStation.name toStation:station.name closer:YES];
+                        }
+						
+						//reassign pointer:
+						self.currentDestinationStation.annotationIdentifier = kAlternateStation;
+						self.currentDestinationStation = station;
+						self.currentDestinationStation.annotationIdentifier = kDestinationStation;
+
+                    }
+                    else
+                    {
+                        //Our currentDestinationStation has filled up, but there is a station further away from our finalDestination that is available. Bike there instead
+						
+						//Check geofences:
+						for (NSString *identifier in regionIdentifiersToCheck)
+						{
+							if ([identifier isEqualToString:kRegionMonitorStation1])
+							{
+								//A geofence tells us we are at the station we need to dock at; alert the user:
+								[self notifyUserToDockAtStation:station.name ideal:(station.stationID == self.idealDestinationStation.stationID)];
+								notifSent = YES;
+								//Set flag to end station tracking
+								endTracking = YES;
+								break;
+							}
+                        }
+                        if (!notifSent)
+                        {
+							//Alert the user to redirect towards the further away station:
+							[self notifyUserToRedirectFromStation:self.currentDestinationStation.name toStation:station.name closer:NO];
+                        }
+						
+						//reassign pointer:
+						//TODO: change annotationIdentifier?
+						self.currentDestinationStation.annotationIdentifier = kAlternateStation;
+						self.currentDestinationStation = station;
+						self.currentDestinationStation.annotationIdentifier = kDestinationStation;
+
+                    }
+					//Set to YES for the redirect cases above
+					notifSent = YES;
+                }
+				else if (station.stationID == self.currentDestinationStation.stationID)
+				{
+					if ((station.nbEmptyDocks == 0) && !notifSent)
+					{
+						//The currentDestinationStation just filled up; we need to set this flag so we know to tell the user to go to the next available station as we continue looping.
+						currentStationTried = YES;
+					}
+					else
+					{
+						//Normal case, where your current station still has >= 1 dock open.
+						//reassign pointer
+						//TODO: change annotationIdentifier?
+						self.currentDestinationStation = station;
+					}
+				}
+            }
+            
+
+#if 0
             //Loop through all the stations in stationList and determine if we need to send a notification based on its previous and current nbEmptyDocks count, and if a geofence told us that we are actually at that location
             for (Station *station in self.dataController.stationList)
             {
@@ -1199,11 +1351,12 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                 [bikeToNextBestStationNotification setFireDate:[NSDate date]];
                 [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
             }
-            
+#endif
             //Update the view if we're still biking
             if (!endTracking)
             {
-                for (id<MKAnnotation> annotation in self.mapView.annotations) {
+                for (id<MKAnnotation> annotation in self.mapView.annotations)
+				{
                     if(![annotation isKindOfClass: [MKUserLocation class]])
                         [self.mapView removeAnnotation:annotation];
                 }
@@ -1380,6 +1533,44 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     //Get another bike data update
     [self refreshBikeDataWithForce:NO];
+}
+						 
+#pragma mark - Sending Local Notifications
+						 
+- (void)notifyUserToDockAtStation:(NSString*)stationName ideal:(BOOL)ideal
+{
+	UILocalNotification *notif = [[UILocalNotification alloc] init];
+	
+	if (ideal)
+	{
+		[notif setAlertBody:[NSString stringWithFormat:@"Dock here! You have reached the station closest to your destination with an empty dock, %@. Station tracking will end.", stationName]];
+	}
+	else
+	{
+		[notif setAlertBody:[NSString stringWithFormat:@"Dock here! You have reached the station closest to your destination, %@. Station tracking will end.", stationName]];
+	}
+	
+	notif.soundName = @"bicycle_bell.wav";
+	[notif setFireDate:[NSDate date]];
+	[[UIApplication sharedApplication] scheduleLocalNotification:notif];
+}
+
+- (void)notifyUserToRedirectFromStation:(NSString*)oldStationName toStation:(NSString*)newStationName closer:(BOOL)closer
+{
+	UILocalNotification *notif = [[UILocalNotification alloc] init];
+
+	if (closer)
+	{
+		[notif setAlertBody:[NSString stringWithFormat:@"A dock has opened up at %@! Bike there instead!", newStationName]];
+	}
+	else
+	{
+		[notif setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.", oldStationName, newStationName]];
+	}
+	
+	notif.soundName = @"bicycle_bell.wav";
+	[notif setFireDate:[NSDate date]];
+	[[UIApplication sharedApplication] scheduleLocalNotification:notif];
 }
 
 #pragma mark - UIBarPositioningDelegate

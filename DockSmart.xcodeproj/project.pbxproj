@@ -1252,6 +1252,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = DockSmart;
+				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "John Penning";
 				TargetAttributes = {
