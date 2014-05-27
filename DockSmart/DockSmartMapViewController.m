@@ -483,12 +483,12 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
             if (self.sourceStation && (station.stationID == self.sourceStation.stationID))
             {
                 //Use green icons to denote a starting point, and show the number of bikes in the start station:
-                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_green_%02d.png", (station.nbBikes <= 99 ? station.nbBikes : 99)]];
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_green_%02ld.png", (long)(station.nbBikes <= 99 ? station.nbBikes : 99)]];
             }
             else if (self.currentDestinationStation && (station.stationID == self.currentDestinationStation.stationID))
             {
                 //Use red icons to denote destinations, and show the number of empty docks:
-                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_red_%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+                annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_red_%02ld.png", (long)(station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
             }
             else
             {
@@ -498,7 +498,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                     if (station.stationID == closeStation.stationID)
                     {
                         //Use blue icons to denote alternate stations:
-                        annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02d.png", (station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
+                        annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02ld.png", (long)(station.nbEmptyDocks <= 99 ? station.nbEmptyDocks : 99)]];
                         isClosestStation = YES;
                         break;
                     }
@@ -507,7 +507,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                 {
                     //Use blue icons for generic stations in Inactive state as well, but switch between showing the number of bikes or docks based on the toggle control:
                     NSInteger numberToShow = ([self.bikesDocksControl selectedSegmentIndex] == 0) ? station.nbBikes : station.nbEmptyDocks;
-                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02d.png", (numberToShow <= 99 ? numberToShow : 99)]];
+                    annotationView.image = [UIImage imageNamed:[NSString stringWithFormat:@"station_pin_blue_%02ld.png", (long)(numberToShow <= 99 ? numberToShow : 99)]];
                 }
                 
             }
@@ -927,7 +927,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     else
     {
         //Change label to show where to pick up and drop off your bike:
-        [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", self.sourceStation.name, self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
+        [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %ld bike%@ available\nBike to %@ - %ld empty dock%@", self.sourceStation.name, (long)self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, (long)self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
     }
     
     //Hide the annotations for all other stations.
@@ -1049,7 +1049,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    NSString* logText = [NSString stringWithFormat:@"NEW STATION DATA: bikingState: %d", self.bikingState];
+    NSString* logText = [NSString stringWithFormat:@"NEW STATION DATA: bikingState: %ld", self.bikingState];
     DLog(@"%@",logText);
     [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
                                                         object:self
@@ -1072,7 +1072,9 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
             BOOL notifSent = NO;
             BOOL currentStationTried = NO;
             BOOL endTracking = NO;
+#if 0
             NSString *newlyFullStationName = nil;
+#endif
             NSMutableArray *regionIdentifiersToCheck = [self.regionIdentifierQueue copy];
             
             
@@ -1362,7 +1364,7 @@ static NSString * const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                 }
                 
                 //Change buttons and label:
-                [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %d bike%@ available\nBike to %@ - %d empty dock%@", self.sourceStation.name, self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
+                [self.destinationDetailLabel setText:[NSString stringWithFormat:@"Pick up bike at %@ - %ld bike%@ available\nBike to %@ - %ld empty dock%@", self.sourceStation.name, (long)self.sourceStation.nbBikes, (self.sourceStation.nbBikes > 1) ? @"s" : @"", self.currentDestinationStation.name, (long)self.currentDestinationStation.nbEmptyDocks, (self.currentDestinationStation.nbEmptyDocks > 1) ? @"s" : @""]];
                 
                 //Add new annotations.
                 //TODO: pull this into its own method for code reuse
