@@ -120,7 +120,7 @@ NSString * const kNewRegionKey = @"NewRegionKey";
                                                       userInfo:[NSDictionary dictionaryWithObject:logText
                                                                                            forKey:kLogTextKey]];
     
-    if (abs(howRecent) < 15.0)
+    if (fabs(howRecent) < 15.0)
     {
         // If the event is recent, do something with it.
         

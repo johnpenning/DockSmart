@@ -402,7 +402,7 @@ static NSString * const kStationCell = @"StationCell";
     if ([locationAtIndex isKindOfClass:[Station class]])
     {
         Station *stationAtIndex = (Station *)locationAtIndex;
-        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %d Docks: %d Distance: %2.2f mi", stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks, stationAtIndex.distanceFromUser/METERS_PER_MILE]];
+        [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %ld Docks: %ld Distance: %2.2f mi", stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks, stationAtIndex.distanceFromUser/METERS_PER_MILE]];
     }
     else if ([locationAtIndex isKindOfClass:[Address class]])
     {

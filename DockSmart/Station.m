@@ -51,7 +51,7 @@
 //MKAnnotation protocol method to return the subtitle for presentation in an annotation callout
 - (NSString *)subtitle
 {
-    NSString* bikeSummary = [[NSString alloc] initWithFormat:@"Bikes: %i - Docks: %i - Dist: %2.2f mi", _nbBikes, _nbEmptyDocks, [super distanceFromUser]/METERS_PER_MILE];
+    NSString* bikeSummary = [[NSString alloc] initWithFormat:@"Bikes: %li - Docks: %li - Dist: %2.2f mi", (long)_nbBikes, (long)_nbEmptyDocks, [super distanceFromUser]/METERS_PER_MILE];
     return bikeSummary;
 }
 
