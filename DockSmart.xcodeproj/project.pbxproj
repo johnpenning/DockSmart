@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44D5914B240349EBA5C27A30 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47E2CC56A7754EEA88180D42 /* libPods.a */; };
 		CD00396C189DC52C00349A88 /* DSHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CD00396B189DC52C00349A88 /* DSHTTPSessionManager.m */; };
 		CD0344331730D01400682A78 /* MyLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0344321730D01400682A78 /* MyLocation.m */; };
 		CD0344351730DC9D00682A78 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0344341730DC9D00682A78 /* CoreLocation.framework */; };
@@ -349,6 +348,7 @@
 		CDC5C7C31870F63A0036BF18 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CDC5C7C21870F63A0036BF18 /* Settings.bundle */; };
 		CDCCF6F4188B86B500295A35 /* bicycle_bell.wav in Resources */ = {isa = PBXBuildFile; fileRef = CDCCF6F3188B86B500295A35 /* bicycle_bell.wav */; };
 		CDCCF6F6188C6DC200295A35 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDCCF6F5188C6DC200295A35 /* AudioToolbox.framework */; };
+		CE027A3EB868D06591C7D158 /* libPods-DockSmart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F13E6C532A82612583517C /* libPods-DockSmart.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -362,8 +362,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		47E2CC56A7754EEA88180D42 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		090DE90741EF7ABF12BA7D00 /* Pods-DockSmart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DockSmart.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DockSmart/Pods-DockSmart.debug.xcconfig"; sourceTree = "<group>"; };
+		3A756E67EFE6FCB322236805 /* Pods-DockSmart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DockSmart.release.xcconfig"; path = "Pods/Target Support Files/Pods-DockSmart/Pods-DockSmart.release.xcconfig"; sourceTree = "<group>"; };
+		84F13E6C532A82612583517C /* libPods-DockSmart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DockSmart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD00396A189DC52C00349A88 /* DSHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSHTTPSessionManager.h; sourceTree = "<group>"; };
 		CD00396B189DC52C00349A88 /* DSHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSHTTPSessionManager.m; sourceTree = "<group>"; };
 		CD0344311730D01400682A78 /* MyLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyLocation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -742,7 +743,7 @@
 				CD529EBB1730B77F005420D6 /* UIKit.framework in Frameworks */,
 				CD529EBD1730B77F005420D6 /* Foundation.framework in Frameworks */,
 				CD529EBF1730B77F005420D6 /* CoreGraphics.framework in Frameworks */,
-				44D5914B240349EBA5C27A30 /* libPods.a in Frameworks */,
+				CE027A3EB868D06591C7D158 /* libPods-DockSmart.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1078,7 +1079,7 @@
 				CD529EEF1730B77F005420D6 /* DockSmartTests */,
 				CD529EB91730B77F005420D6 /* Frameworks */,
 				CD529EB81730B77F005420D6 /* Products */,
-				30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */,
+				FF0691282A5A71F143EBF5CA /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1099,7 +1100,7 @@
 				CD529EBC1730B77F005420D6 /* Foundation.framework */,
 				CD529EBE1730B77F005420D6 /* CoreGraphics.framework */,
 				CD529EE91730B77F005420D6 /* SenTestingKit.framework */,
-				47E2CC56A7754EEA88180D42 /* libPods.a */,
+				84F13E6C532A82612583517C /* libPods-DockSmart.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1204,6 +1205,15 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		FF0691282A5A71F143EBF5CA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				090DE90741EF7ABF12BA7D00 /* Pods-DockSmart.debug.xcconfig */,
+				3A756E67EFE6FCB322236805 /* Pods-DockSmart.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1211,11 +1221,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD529EFA1730B77F005420D6 /* Build configuration list for PBXNativeTarget "DockSmart" */;
 			buildPhases = (
-				4F1EEA741D7844B0897F9982 /* Check Pods Manifest.lock */,
+				972C327712635DCF5C3C6007 /* [CP] Check Pods Manifest.lock */,
 				CD529EB31730B77F005420D6 /* Sources */,
 				CD529EB41730B77F005420D6 /* Frameworks */,
 				CD529EB51730B77F005420D6 /* Resources */,
-				B2140967C2AF49E493AB8AD2 /* Copy Pods Resources */,
+				803A92EE51FF1BA3B7945F13 /* [CP] Embed Pods Frameworks */,
+				982A9A85952A9090BA24DCC0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1613,34 +1624,52 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4F1EEA741D7844B0897F9982 /* Check Pods Manifest.lock */ = {
+		803A92EE51FF1BA3B7945F13 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DockSmart/Pods-DockSmart-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B2140967C2AF49E493AB8AD2 /* Copy Pods Resources */ = {
+		972C327712635DCF5C3C6007 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DockSmart-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		982A9A85952A9090BA24DCC0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DockSmart/Pods-DockSmart-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CD529EE61730B77F005420D6 /* ShellScript */ = {
@@ -1789,7 +1818,7 @@
 		};
 		CD529EFB1730B77F005420D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
+			baseConfigurationReference = 090DE90741EF7ABF12BA7D00 /* Pods-DockSmart.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: John Penning (5AQS3SG84K)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1805,7 +1834,7 @@
 		};
 		CD529EFC1730B77F005420D6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30F3A1CC3AAF46E6B1C4F2A5 /* Pods.xcconfig */;
+			baseConfigurationReference = 3A756E67EFE6FCB322236805 /* Pods-DockSmart.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: John Penning (SDRKXFSGFJ)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
