@@ -18,7 +18,7 @@
 #define SF_LONG         -122.4167
 
 //city URLs
-#define CITY_URL_DC @"http://api.citybik.es/capital-bikeshare.json"
-#define CITY_URL_SF @"http://api.citybik.es/bay-area-bike-share.json"
+#define CITY_URL_DC @"https://api.citybik.es/capital-bikeshare.json"
+#define CITY_URL_SF @"https://api.citybik.es/bay-area-bike-share.json"
 
 #endif

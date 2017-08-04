@@ -292,7 +292,7 @@ static NSString * const stationErrorMessage = @"Information might not be up-to-d
     
     /* Otherwise continue with auto city detection. Load the full list of bikeshare networks. */
     
-    [[DSHTTPSessionManager sharedInstance] GET:[NSString stringWithFormat:@"http://api.citybik.es/networks.json"]
+    [[DSHTTPSessionManager sharedInstance] GET:[NSString stringWithFormat:@"https://api.citybik.es/networks.json"]
       parameters:nil
          success:^(NSURLSessionTask *task, id responseObject) {
              
