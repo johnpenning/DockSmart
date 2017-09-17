@@ -75,7 +75,6 @@ NSString *const kRegionMonitorStation3 = @"RegionMonitorStation3";
 // Keep track of all geofences we've entered that we haven't processed yet:
 @property(nonatomic) NSMutableArray *regionIdentifierQueue;
 // the action sheet to show when making a user confirm their station destination
-@property(nonatomic, readwrite) UIActionSheet *navSheet;
 // The station that the user selected that they need to confirm in the navSheet
 @property(nonatomic) MyLocation *selectedLocation;
 
@@ -646,7 +645,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 }
 
 #pragma mark -
-#pragma mark UIActionSheet implementation
+#pragma mark UIAlertController implementation
 
 - (void)showNavigateActions:(NSString *)title
 {
@@ -657,29 +656,27 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     // confirm.
     // TODO: Present more options here (to add/delete to/from Favorites, for
     // example).
-    self.navSheet = [[UIActionSheet alloc] initWithTitle:title
-                                                delegate:self
-                                       cancelButtonTitle:cancelButtonTitle
-                                  destructiveButtonTitle:nil
-                                       otherButtonTitles:navigateHereTitle, nil];
-    [self.navSheet showFromTabBar:self.tabBarController.tabBar];
-}
+    UIAlertController *navSheet =
+        [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0) {
-        /*
-     Inform the map view that the user chose to navigate to this destination.
-     */
-        [[NSNotificationCenter defaultCenter]
-            postNotificationName:kStartBikingNotif
-                          object:self
-                        userInfo:[NSDictionary dictionaryWithObject:self.selectedLocation forKey:kBikeDestinationKey]];
-    }
-    // else cancel was pressed, just go back to the mapView
-
-    self.selectedLocation = nil;
-    self.navSheet = nil;
+    [navSheet
+        addAction:[UIAlertAction actionWithTitle:navigateHereTitle
+                                           style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertAction *action) {
+                                             [[NSNotificationCenter defaultCenter]
+                                                 postNotificationName:kStartBikingNotif
+                                                               object:self
+                                                             userInfo:[NSDictionary
+                                                                          dictionaryWithObject:_selectedLocation
+                                                                                        forKey:kBikeDestinationKey]];
+                                             _selectedLocation = nil;
+                                         }]];
+    [navSheet addAction:[UIAlertAction actionWithTitle:cancelButtonTitle
+                                                 style:UIAlertActionStyleCancel
+                                               handler:^(UIAlertAction *action) {
+                                                   _selectedLocation = nil;
+                                               }]];
+    [self presentViewController:navSheet animated:YES completion:nil];
 }
 
 #pragma mark -

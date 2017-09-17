@@ -314,6 +314,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 
     [[DSHTTPSessionManager sharedInstance] GET:[NSString stringWithFormat:@"https://api.citybik.es/networks.json"]
         parameters:nil
+        progress:nil
         success:^(NSURLSessionTask *task, id responseObject) {
 
             NSDictionary *networkData = (NSDictionary *)responseObject;
@@ -416,6 +417,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 
     [[DSHTTPSessionManager sharedInstance] GET:url
         parameters:nil
+        progress:nil
         success:^(NSURLSessionTask *task, id responseObject) {
 
             // Reset flag

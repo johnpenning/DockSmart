@@ -38,8 +38,6 @@ NSString *const kBikeDestinationKey = @"BikeDestinationKey";
 @property(nonatomic) NSMutableArray *geocodeSearchResults;
 // user's current location
 @property(nonatomic) CLLocationCoordinate2D userCoordinate;
-// action sheet to present the user with the option to bike to a selected location
-@property(nonatomic, readwrite) UIActionSheet *navSheet;
 
 - (void)performStringGeocode:(NSString *)string;
 - (void)showNavigateActions:(NSString *)title;
@@ -700,49 +698,48 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 #pragma mark -
-#pragma mark UIActionSheet implementation
+#pragma mark UIAlertController implementation
 
 - (void)showNavigateActions:(NSString *)title
 {
-
     NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
     NSString *navigateHereTitle = NSLocalizedString(@"Navigate Here", @"Navigate Here button title");
 
-    // If the user taps a destination to navigate to, present an action sheet to confirm.
-    // TODO: Present more options here (to add/delete to/from Favorites, for example).
-    self.navSheet = [[UIActionSheet alloc] initWithTitle:title
-                                                delegate:self
-                                       cancelButtonTitle:cancelButtonTitle
-                                  destructiveButtonTitle:nil
-                                       otherButtonTitles:navigateHereTitle, nil];
-    [self.navSheet showFromTabBar:self.tabBarController.tabBar];
-}
+    // If the user taps a destination to navigate to, present an action sheet to
+    // confirm.
+    // TODO: Present more options here (to add/delete to/from Favorites, for
+    // example).
+    UIAlertController *navSheet =
+        [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-
-    if (buttonIndex == 0) {
-        /*
-         Inform the map view that the user chose to navigate to this destination.
-         */
-        [[NSNotificationCenter defaultCenter]
-            postNotificationName:kStartBikingNotif
-                          object:self
-                        userInfo:[NSDictionary dictionaryWithObject:self.selectedLocation forKey:kBikeDestinationKey]];
-        // Switch over to the map view //TODO: Change from hardcoded 0 to enum?
-        [self.tabBarController setSelectedIndex:0];
-    } else // cancel was pressed
-    {
-        // clear out the selected destination object
-        self.selectedLocation = nil;
-
-        // deselect the last row selected
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-    self.selectedLocation = nil;
-    self.navSheet = nil;
+    [navSheet
+        addAction:[UIAlertAction actionWithTitle:navigateHereTitle
+                                           style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertAction *action) {
+                                             /*
+                                              Inform the map view that the user chose to navigate to this destination.
+                                              */
+                                             [[NSNotificationCenter defaultCenter]
+                                                 postNotificationName:kStartBikingNotif
+                                                               object:self
+                                                             userInfo:[NSDictionary
+                                                                          dictionaryWithObject:self.selectedLocation
+                                                                                        forKey:kBikeDestinationKey]];
+                                             // Switch over to the map view //TODO: Change from hardcoded 0 to enum?
+                                             [self.tabBarController setSelectedIndex:0];
+                                             self.selectedLocation = nil;
+                                         }]];
+    [navSheet addAction:[UIAlertAction actionWithTitle:cancelButtonTitle
+                                                 style:UIAlertActionStyleCancel
+                                               handler:^(UIAlertAction *action) {
+                                                   // clear out the selected destination object
+                                                   self.selectedLocation = nil;
+                                                   // deselect the last row selected
+                                                   [self.tableView
+                                                       deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow]
+                                                                     animated:YES];
+                                               }]];
+    [self presentViewController:navSheet animated:YES completion:nil];
 }
 
 @end
