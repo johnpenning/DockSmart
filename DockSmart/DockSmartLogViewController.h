@@ -11,13 +11,13 @@
 #import <UIKit/UIKit.h>
 
 // NSNotification name for sending a log to the text view
-extern NSString * const kLogToTextViewNotif;
+extern NSString *const kLogToTextViewNotif;
 // NSNotification userInfo key for obtaining the log text
-extern NSString * const kLogTextKey;
+extern NSString *const kLogTextKey;
 
 @interface DockSmartLogViewController : UIViewController
 
-//text view where log data is displayed
-@property (weak, nonatomic) IBOutlet UITextView *settingsTextView;
+// text view where log data is displayed
+@property(weak, nonatomic) IBOutlet UITextView *settingsTextView;
 
 @end

@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 John Penning. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
 #import "LocationController.h"
+#import <MapKit/MapKit.h>
+#import <UIKit/UIKit.h>
 
-extern NSString * const kRefreshDataNotif;
-extern NSString * const kStationList;
+extern NSString *const kRefreshDataNotif;
+extern NSString *const kStationList;
 
 typedef NS_ENUM(NSInteger, BikingStateType) {
     BikingStateInactive = 0,
@@ -24,15 +24,15 @@ typedef NS_ENUM(NSInteger, BikingStateType) {
 
 @interface DockSmartMapViewController : UIViewController <MKMapViewDelegate, UIToolbarDelegate, UIActionSheetDelegate>
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property(weak, nonatomic) IBOutlet MKMapView *mapView;
 
-//LocationDataController object to keep track of all of our station lists
-@property (strong, nonatomic) LocationDataController *dataController;
-//Current biking trip state
+// LocationDataController object to keep track of all of our station lists
+@property(strong, nonatomic) LocationDataController *dataController;
+// Current biking trip state
 @property BikingStateType bikingState;
-//toolbar on top of the map... outlet for iOS7 compatibility
-@property (weak, nonatomic) IBOutlet UIToolbar *topMapToolbar;
-//Button that pans to the current user location on the map and updates the CLLocationManager location
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *updateLocationButton;
+// toolbar on top of the map... outlet for iOS7 compatibility
+@property(weak, nonatomic) IBOutlet UIToolbar *topMapToolbar;
+// Button that pans to the current user location on the map and updates the CLLocationManager location
+@property(weak, nonatomic) IBOutlet UIBarButtonItem *updateLocationButton;
 
 @end

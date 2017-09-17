@@ -32,12 +32,12 @@
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-//    [self.navigationItem.backBarButtonItem initWithTitle:@"Destinations" style:UIBarButtonItemStylePlain target:<#(id)#> action:<#(SEL)#>
-//    [self.stationDetailNavigationItem setHidesBackButton:NO];
+
+    //    [self.navigationItem.backBarButtonItem initWithTitle:@"Destinations" style:UIBarButtonItemStylePlain
+    //    target:<#(id)#> action:<#(SEL)#> [self.stationDetailNavigationItem setHidesBackButton:NO];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlack];
     [self configureView];
 }
@@ -59,8 +59,8 @@
 {
     if (_station != station) {
         _station = station;
-        
-        //Update the view.
+
+        // Update the view.
         [self configureView];
     }
 }
@@ -69,21 +69,20 @@
 {
     // Update the user interface for the detail item.
     Station *theStation = self.station;
-    
-//    static NSDateFormatter *formatter = nil;
-//    
-//    if (formatter == nil) {
-//        formatter = [[NSDateFormatter alloc] init];
-//        [formatter setDateStyle:NSDateFormatterMediumStyle];
-//    }
-    
+
+    //    static NSDateFormatter *formatter = nil;
+    //
+    //    if (formatter == nil) {
+    //        formatter = [[NSDateFormatter alloc] init];
+    //        [formatter setDateStyle:NSDateFormatterMediumStyle];
+    //    }
+
     if (theStation) {
         self.stationLabel.text = theStation.name;
         self.bikesLabel.text = [NSString stringWithFormat:@"%i", theStation.nbBikes];
         self.docksLabel.text = [NSString stringWithFormat:@"%i", theStation.nbEmptyDocks];
-//        self.distanceLabel.text = TODO
+        //        self.distanceLabel.text = TODO
     }
-    
 }
 
 //- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -104,9 +103,9 @@
 //{
 //    static NSString *CellIdentifier = @"Cell";
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-//    
+//
 //    // Configure the cell...
-//    
+//
 //    return cell;
 //}
 
@@ -121,21 +120,23 @@
 
 /*
 // Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
+    }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    }
 }
 */
 
 /*
 // Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath
+*)toIndexPath
 {
 }
 */
@@ -155,20 +156,22 @@
 {
     // Navigation logic may go here. Create and push another view controller.
     /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>"
+     bundle:nil];
      // ...
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload
+{
     [self setStationLabel:nil];
     [self setBikesLabel:nil];
     [self setDocksLabel:nil];
     [self setDistanceLabel:nil];
-//    [self setDestinationsButton:nil];
-//    [self setStationDetailNavigationItem:nil];
+    //    [self setDestinationsButton:nil];
+    //    [self setStationDetailNavigationItem:nil];
     [super viewDidUnload];
 }
 @end

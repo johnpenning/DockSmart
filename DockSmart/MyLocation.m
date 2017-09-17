@@ -9,39 +9,42 @@
 #import "MyLocation.h"
 
 // Reuse identifiers for MyLocation annotationIdentifer in the MapView
-NSString * const kSourceStation = @"SourceStation";
-NSString * const kDestinationLocation = @"DestinationLocation";
-NSString * const kDestinationStation = @"DestinationStation";
-NSString * const kAlternateStation = @"AlternateStation";
-NSString * const kStation = @"Station";
+NSString *const kSourceStation = @"SourceStation";
+NSString *const kDestinationLocation = @"DestinationLocation";
+NSString *const kDestinationStation = @"DestinationStation";
+NSString *const kAlternateStation = @"AlternateStation";
+NSString *const kStation = @"Station";
 
 @implementation MyLocation
 
 /* Initialization methods */
 
-- (id)initWithName:(NSString *)name latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude distanceFromUser:(CLLocationDistance)distance
+- (id)initWithName:(NSString *)name
+            latitude:(CLLocationDegrees)latitude
+           longitude:(CLLocationDegrees)longitude
+    distanceFromUser:(CLLocationDistance)distance
 {
-    
+
     self = [super init];
-    
-    if (self)
-    {
+
+    if (self) {
         _name = name;
         _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
         _distanceFromUser = distance;
-        
+
         return self;
     }
     return nil;
 }
 
-- (id)initWithName:(NSString *)name coordinate:(CLLocationCoordinate2D)coordinate distanceFromUser:(CLLocationDistance)distance
+- (id)initWithName:(NSString *)name
+          coordinate:(CLLocationCoordinate2D)coordinate
+    distanceFromUser:(CLLocationDistance)distance
 {
-    
+
     self = [super init];
-    
-    if (self)
-    {
+
+    if (self) {
         _name = name;
         _coordinate = coordinate;
         _distanceFromUser = distance;
@@ -56,7 +59,7 @@ NSString * const kStation = @"Station";
     _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
 }
 
-//MKAnnotation protocol method to return the title for the annotation callout
+// MKAnnotation protocol method to return the title for the annotation callout
 - (NSString *)title
 {
     return _name;
@@ -64,13 +67,13 @@ NSString * const kStation = @"Station";
 
 #pragma mark - State Restoration
 
-static NSString * const NameKey = @"NameKey";
-static NSString * const CoordinateLatitudeKey = @"CoordinateLatitudeKey";
-static NSString * const CoordinateLongitudeKey = @"CoordinateLongitudeKey";
-static NSString * const DistanceFromUserKey = @"DistanceFromUserKey";
-static NSString * const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
+static NSString *const NameKey = @"NameKey";
+static NSString *const CoordinateLatitudeKey = @"CoordinateLatitudeKey";
+static NSString *const CoordinateLongitudeKey = @"CoordinateLongitudeKey";
+static NSString *const DistanceFromUserKey = @"DistanceFromUserKey";
+static NSString *const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 
-//Encode the necessary properties of this object
+// Encode the necessary properties of this object
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.name forKey:NameKey];
@@ -80,15 +83,15 @@ static NSString * const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
     [aCoder encodeObject:self.annotationIdentifier forKey:AnnotationIdentifierKey];
 }
 
-//Decode the necessary properties of this object and use them to initialize it
+// Decode the necessary properties of this object and use them to initialize it
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
-    
-    if (self)
-    {
+
+    if (self) {
         self.name = [aDecoder decodeObjectForKey:NameKey];
-        _coordinate = CLLocationCoordinate2DMake([aDecoder decodeDoubleForKey:CoordinateLatitudeKey], [aDecoder decodeDoubleForKey:CoordinateLongitudeKey]);
+        _coordinate = CLLocationCoordinate2DMake([aDecoder decodeDoubleForKey:CoordinateLatitudeKey],
+                                                 [aDecoder decodeDoubleForKey:CoordinateLongitudeKey]);
         self.distanceFromUser = [aDecoder decodeDoubleForKey:DistanceFromUserKey];
         self.annotationIdentifier = [aDecoder decodeObjectForKey:AnnotationIdentifierKey];
     }
@@ -97,23 +100,25 @@ static NSString * const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 
 - (void)applicationFinishedRestoringState
 {
-    //Called on restored view controllers after other object decoding is complete.
-    NSString* logText = [NSString stringWithFormat:@"finished restoring MyLocation"];
-    DLog(@"%@",logText);
-    [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif
-                                                        object:self
-                                                      userInfo:[NSDictionary dictionaryWithObject:logText
-                                                                                           forKey:kLogTextKey]];
+    // Called on restored view controllers after other object decoding is complete.
+    NSString *logText = [NSString stringWithFormat:@"finished restoring MyLocation"];
+    DLog(@"%@", logText);
+    [[NSNotificationCenter defaultCenter]
+        postNotificationName:kLogToTextViewNotif
+                      object:self
+                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 }
 
 #pragma mark - NSCopying
 
-//NSCopying protocol method
+// NSCopying protocol method
 - (id)copyWithZone:(NSZone *)zone
 {
-    MyLocation *other = [[MyLocation alloc] initWithName:[self.name copyWithZone:zone] coordinate:self.coordinate distanceFromUser:self.distanceFromUser];
+    MyLocation *other = [[MyLocation alloc] initWithName:[self.name copyWithZone:zone]
+                                              coordinate:self.coordinate
+                                        distanceFromUser:self.distanceFromUser];
     other.annotationIdentifier = [self.annotationIdentifier copyWithZone:zone];
-    
+
     return other;
 }
 

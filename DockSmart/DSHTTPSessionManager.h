@@ -12,6 +12,6 @@
 
 @interface DSHTTPSessionManager : AFHTTPSessionManager
 
-+ (DSHTTPSessionManager *)sharedInstance; //Singleton method
++ (DSHTTPSessionManager *)sharedInstance; // Singleton method
 
 @end
