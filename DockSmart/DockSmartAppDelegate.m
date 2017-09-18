@@ -126,14 +126,14 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
                     userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     NSString *notificationMessage = [notification alertBody];
-    UIAlertView *alertView =
-        [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Station Update", @"Title for alert displayed when "
-                                                                                @"bike destination change message "
-                                                                                @"appears.")
-                                   message:notificationMessage
-                                  delegate:nil
-                         cancelButtonTitle:@"OK"
-                         otherButtonTitles:nil];
+    UIAlertController *alertView = [UIAlertController
+        alertControllerWithTitle:NSLocalizedString(@"Station Update", @"Title for alert displayed when "
+                                                                      @"bike destination change message "
+                                                                      @"appears.")
+                         message:notificationMessage
+                  preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+    [alertView addAction:defaultAction];
 
     if ([application applicationState] == UIApplicationStateActive) {
         // If we aren't entering the app from a local notification that already
@@ -150,7 +150,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     }
 
     // Show the alert
-    [alertView show];
+    [self.window.rootViewController presentViewController:alertView animated:YES completion:nil];
 
     // TODO: Reload mapView w/ new icon colors
 }
@@ -353,19 +353,23 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
             // just means they have to wait for the next time we refresh the data
             if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
 #ifdef DEBUG
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data"
-                                                             message:[NSString stringWithFormat:@"%@", error]
-                                                            delegate:nil
-                                                   cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:nil];
+                UIAlertController *alertView =
+                    [UIAlertController alertControllerWithTitle:@"Error Retrieving Network Data"
+                                                        message:[NSString stringWithFormat:@"%@", error]
+                                                 preferredStyle:UIAlertControllerStyleAlert];
+
 #else
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Network Data"
-                                                             message:(NSString *)stationErrorMessage
-                                                            delegate:nil
-                                                   cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:nil];
+                UIAlertController *alertView =
+                    [UIAlertController alertControllerWithTitle:@"Error Retrieving Network Data"
+                                                        message:stationErrorMessage
+                                                 preferredStyle:UIAlertControllerStyleAlert];
+
 #endif
-                [av show];
+                UIAlertAction *defaultAction =
+                    [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                [alertView addAction:defaultAction];
+
+                [self.window.rootViewController presentViewController:alertView animated:YES completion:nil];
             }
         }];
 }
@@ -442,19 +446,23 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
             // just means they have to wait for the next time we refresh the data
             if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
 #ifdef DEBUG
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data"
-                                                             message:[NSString stringWithFormat:@"%@", error]
-                                                            delegate:nil
-                                                   cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:nil];
+                UIAlertController *alertView =
+                    [UIAlertController alertControllerWithTitle:@"Error Retrieving Network Data"
+                                                        message:[NSString stringWithFormat:@"%@", error]
+                                                 preferredStyle:UIAlertControllerStyleAlert];
+
 #else
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Station Data"
-                                                             message:(NSString *)stationErrorMessage
-                                                            delegate:nil
-                                                   cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:nil];
+                UIAlertController *alertView =
+                    [UIAlertController alertControllerWithTitle:@"Error Retrieving Network Data"
+                                                        message:stationErrorMessage
+                                                 preferredStyle:UIAlertControllerStyleAlert];
+
 #endif
-                [av show];
+                UIAlertAction *defaultAction =
+                    [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                [alertView addAction:defaultAction];
+
+                [self.window.rootViewController presentViewController:alertView animated:YES completion:nil];
             }
         }];
 }

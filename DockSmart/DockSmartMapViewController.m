@@ -157,25 +157,6 @@ NSString *const kRegionMonitorStation3 = @"RegionMonitorStation3";
     }
 
     [self.mapView setCenterCoordinate:zoomLocation animated:YES];
-
-    // Show the license agreement alert if this is the first time the app has been
-    // opened:
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (![defaults boolForKey:kHasSeenIntro]) {
-        [defaults setBool:YES forKey:kHasSeenIntro];
-        [defaults synchronize];
-
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Welcome to DockSmart!"
-                                                     message:@"By using this app, you agree to be legally bound "
-                                                             @"by all the terms of the License Agreement located "
-                                                             @"by exiting the app and selecting Settings -> "
-                                                             @"DockSmart -> License Agreement.\n\nDon't use the "
-                                                             @"app while biking, and ride safely!"
-                                                    delegate:nil
-                                           cancelButtonTitle:@"OK"
-                                           otherButtonTitles:nil];
-        [av show];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -200,6 +181,33 @@ NSString *const kRegionMonitorStation3 = @"RegionMonitorStation3";
     }
 
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    // Show the license agreement alert if this is the first time the app has been
+    // opened:
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (![defaults boolForKey:kHasSeenIntro]) {
+        [defaults setBool:YES forKey:kHasSeenIntro];
+        [defaults synchronize];
+
+        UIAlertController *av =
+            [UIAlertController alertControllerWithTitle:@"Welcome to DockSmart!"
+                                                message:@"By using this app, you agree to be legally bound "
+                                                        @"by all the terms of the License Agreement located "
+                                                        @"by exiting the app and selecting Settings -> "
+                                                        @"DockSmart -> License Agreement.\n\nDon't use the "
+                                                        @"app while biking, and ride safely!"
+                                         preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *defaultAction =
+            [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [av addAction:defaultAction];
+        DLog(@"showing intro");
+        [self presentViewController:av animated:YES completion:nil];
+    }
+
+    [super viewDidAppear:animated];
 }
 
 - (void)viewDidUnload
@@ -944,11 +952,9 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         // Walk alert if the app stops tracking, either manually or automatically,
         // when the user gets to their destination)
         if (newDest) {
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Walk to your destination!"
-                                                         message:nil
-                                                        delegate:nil
-                                               cancelButtonTitle:@"OK"
-                                               otherButtonTitles:nil];
+            UIAlertController *av = [UIAlertController alertControllerWithTitle:@"Walk to your destination!"
+                                                                        message:nil
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
             if (self.idealDestinationStation.stationID ==
                 [[self.dataController.sortedStationList objectAtIndex:0] stationID]) {
                 [av setMessage:@"The destination station is also the closest one to "
@@ -965,7 +971,10 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                                @"both out of the way. Perhaps it's best to just "
                                @"walk."];
             }
-            [av show];
+            UIAlertAction *defaultAction =
+                [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [av addAction:defaultAction];
+            [self presentViewController:av animated:YES completion:nil];
 
             // return to idle
             [self clearBikeRouteWithRefresh:NO];
