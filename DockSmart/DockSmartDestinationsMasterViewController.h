@@ -24,7 +24,6 @@ extern NSString *const kStartBikingNotif;
 extern NSString *const kBikeDestinationKey;
 
 @interface DockSmartDestinationsMasterViewController
-    : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchBarDelegate,
-                             UIActionSheetDelegate>
+    : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

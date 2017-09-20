@@ -55,20 +55,8 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Destinations" id="7"/>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="g17-yM-JHM" id="vUi-QE-BM4"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="10" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="g17-yM-JHM">
-                    <connections>
-                        <outlet property="delegate" destination="2" id="JEE-cY-7UY"/>
-                        <outlet property="searchBar" destination="BzB-U7-hhr" id="pjk-fi-pCh"/>
-                        <outlet property="searchContentsController" destination="2" id="Cr3-7e-Bo9"/>
-                        <outlet property="searchResultsDataSource" destination="2" id="Dsa-1k-XX3"/>
-                        <outlet property="searchResultsDelegate" destination="2" id="lil-Xw-FW8"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1655" y="983"/>
         </scene>
@@ -157,20 +145,8 @@
                         </prototypes>
                     </tableView>
                     <navigationItem key="navigationItem" title="Destinations" id="B1h-zV-4Gz"/>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="Fwm-Ua-gda" id="mBA-pv-MCc"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="St8-ds-Q0H" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="Fwm-Ua-gda">
-                    <connections>
-                        <outlet property="delegate" destination="kjC-Hl-9fH" id="eQW-pD-O0Q"/>
-                        <outlet property="searchBar" destination="WjL-JQ-SzA" id="Bvc-Np-yNe"/>
-                        <outlet property="searchContentsController" destination="kjC-Hl-9fH" id="d29-ft-gnb"/>
-                        <outlet property="searchResultsDataSource" destination="kjC-Hl-9fH" id="gUC-IT-qKJ"/>
-                        <outlet property="searchResultsDelegate" destination="kjC-Hl-9fH" id="riv-M6-lC5"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1166" y="180"/>
         </scene>

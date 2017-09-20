@@ -24,7 +24,8 @@ NSString *const kStartBikingNotif = @"StartBikingNotif";
 NSString *const kBikeDestinationKey = @"BikeDestinationKey";
 
 
-@interface DockSmartDestinationsMasterViewController ()
+@interface DockSmartDestinationsMasterViewController () <UISearchControllerDelegate, UISearchBarDelegate,
+                                                         UISearchResultsUpdating>
 
 // The station data controller, copied over from the MapView when this view appears.
 @property(nonatomic) LocationDataController *dataController;
@@ -38,6 +39,8 @@ NSString *const kBikeDestinationKey = @"BikeDestinationKey";
 @property(nonatomic) NSMutableArray *geocodeSearchResults;
 // user's current location
 @property(nonatomic) CLLocationCoordinate2D userCoordinate;
+// Search controller for searching through destinations
+@property(strong, nonatomic) UISearchController *searchController;
 
 - (void)performStringGeocode:(NSString *)string;
 - (void)showNavigateActions:(NSString *)title;
@@ -80,9 +83,6 @@ NSString *const kBikeDestinationKey = @"BikeDestinationKey";
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-
     // KVO: listen for changes to our station data source for map view updates
     [self addObserver:self forKeyPath:kStationList options:0 context:NULL];
 
@@ -94,6 +94,14 @@ NSString *const kBikeDestinationKey = @"BikeDestinationKey";
     // Create geocode search results mutable array.
     self.geocodeSearchResults = [[NSMutableArray alloc] init];
     self.selectedLocation = [[MyLocation alloc] init];
+
+    // searchController setup
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.delegate = self;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    self.definesPresentationContext = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -251,7 +259,7 @@ static NSString *const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey
 
     switch (section) {
         case DestinationTableSectionSearch: // Search cell
-            if (tableView == self.searchDisplayController.searchResultsTableView) {
+            if (_searchController.isActive) {
                 if (self.searchLocation == nil)
                     return 0;
                 else
@@ -260,7 +268,7 @@ static NSString *const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey
             return 0;
             break;
         case DestinationTableSectionSearchResults: // Geocode search results, if there are any
-            if (tableView == self.searchDisplayController.searchResultsTableView) {
+            if (_searchController.isActive) {
                 return [self.geocodeSearchResults count];
             }
             return 0;
@@ -278,7 +286,7 @@ static NSString *const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey
              If the requesting table view is the search display controller's table view, return the count of
              the filtered list, otherwise return the count of the main list.
              */
-            if (tableView == self.searchDisplayController.searchResultsTableView) {
+            if (_searchController.isActive) {
                 return [self.filterResults count];
             } else {
                 return [self.dataController countOfLocationList:self.dataController.sortedStationList];
@@ -356,7 +364,7 @@ static NSString *const kStationCell = @"StationCell";
 
     // Figure out the MyLocation object we are using this cell to represent:
     MyLocation *locationAtIndex;
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
+    if (_searchController.isActive) {
         switch ([indexPath section]) {
             case DestinationTableSectionSearch:
                 // This cell represents the searchLocation (text to geocode search for if selected)
@@ -410,47 +418,6 @@ static NSString *const kStationCell = @"StationCell";
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
-forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath
-*)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -482,7 +449,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             break;
         }
         case DestinationTableSectionStations: {
-            if (tableView == self.searchDisplayController.searchResultsTableView) {
+            if (_searchController.isActive) {
                 // Use filtered station results if in search results view
                 self.selectedLocation = (MyLocation *)[[self filterResults] objectAtIndex:[indexPath row]];
                 [self showNavigateActions:self.selectedLocation.name];
@@ -566,48 +533,21 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
-
-#pragma mark - UISearchDisplayController Delegate Methods
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller
-    shouldReloadTableForSearchString:(NSString *)searchString
-{
-    NSString *scope = nil;
-
-    //    NSInteger selectedScopeButtonIndex = [self.searchDisplayController.searchBar selectedScopeButtonIndex];
-    //    if (selectedScopeButtonIndex > 0)
-    //    {
-    //        scope = [[APLProduct deviceTypeNames] objectAtIndex:(selectedScopeButtonIndex - 1)];
-    //    }
-
-    [self updateFilteredContentForLocationName:searchString type:scope];
-
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
-}
-
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller
-    shouldReloadTableForSearchScope:(NSInteger)searchOption
-{
-    NSString *searchString = [self.searchDisplayController.searchBar text];
-    NSString *scope = nil;
-
-    //    if (searchOption > 0)
-    //    {
-    //        scope = [[APLProduct deviceTypeNames] objectAtIndex:(searchOption - 1)];
-    //    }
-
-    [self updateFilteredContentForLocationName:searchString type:scope];
-
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
-}
+#pragma mark - UISearchBarDelegate
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     // perform the Geocode
     [self performStringGeocode:[searchBar text]];
+}
+
+#pragma mark - UISearchResultsUpdating
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    NSString *searchString = searchController.searchBar.text;
+    [self updateFilteredContentForLocationName:searchString type:nil];
+    [self.tableView reloadData];
 }
 
 #pragma mark - CLGeocoder methods
@@ -629,10 +569,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
     [self lockUI:YES];
 
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    CLGeocoder *geocoder = [CLGeocoder new];
 
     if (!self.geocodeSearchResults) {
-        self.geocodeSearchResults = [[NSMutableArray alloc] init];
+        self.geocodeSearchResults = [NSMutableArray new];
     }
 
     // Remove previous geocode results:
@@ -663,7 +603,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
                      DLog(@"Received placemarks: %@", placemarks);
 
-                     // place them at the top of the searchResults list in searchDisplayController instead of segueing
+                     // place them at the top of the searchResults list in searchController instead of segueing
                      // to new view:
                      for (CLPlacemark *placemark in placemarks) {
                          DLog(@"Placemark name: %@ subthoroughfare: %@ thoroughfare: %@ sublocality: %@ locality: %@ "
@@ -690,15 +630,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
                      [MBProgressHUD hideHUDForView:self.view animated:YES];
 
                      // reload the data
-                     [self.searchDisplayController.searchResultsTableView reloadData];
 
                      // unlock the UI
                      [self lockUI:NO];
+                     [self.tableView reloadData];
                  }];
 }
 
-#pragma mark -
-#pragma mark UIAlertController implementation
+#pragma mark - UIAlertController implementation
 
 - (void)showNavigateActions:(NSString *)title
 {
