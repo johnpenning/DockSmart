@@ -1268,6 +1268,7 @@
 				TargetAttributes = {
 					CD529EB61730B77F005420D6 = {
 						DevelopmentTeam = SDRKXFSGFJ;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -1821,12 +1822,15 @@
 			baseConfigurationReference = 090DE90741EF7ABF12BA7D00 /* Pods-DockSmart.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: John Penning (5AQS3SG84K)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SDRKXFSGFJ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "DockSmart/DockSmart-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				PRODUCT_NAME = DockSmart;
-				PROVISIONING_PROFILE = "847760E4-F187-448F-BF9D-10BE6E8E2F81";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1837,12 +1841,15 @@
 			baseConfigurationReference = 3A756E67EFE6FCB322236805 /* Pods-DockSmart.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: John Penning (SDRKXFSGFJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SDRKXFSGFJ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DockSmart/DockSmart-Prefix.pch";
 				INFOPLIST_FILE = "DockSmart/DockSmart-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				PRODUCT_NAME = DockSmart;
-				PROVISIONING_PROFILE = "362238E3-059E-4BF3-8691-CFE07B62B3A9";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
