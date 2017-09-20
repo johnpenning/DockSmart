@@ -584,7 +584,7 @@ static NSString *const kStationCell = @"StationCell";
 
     // Create a hint region around the user's current location for the geocoder
     CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:self.userCoordinate
-                                                                 radius:5.0 * METERS_PER_MILE
+                                                                 radius:10.0 * METERS_PER_MILE
                                                              identifier:@"Hint Region"];
 
     // Perform the geocode
