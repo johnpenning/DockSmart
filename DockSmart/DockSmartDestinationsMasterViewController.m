@@ -592,12 +592,25 @@ static NSString *const kStationCell = @"StationCell";
                           inRegion:region
                  completionHandler:^(NSArray *placemarks, NSError *error) {
 
+                     // unlock the UI
+                     [self lockUI:NO];
+
                      if (error) {
                          DLog(@"Geocode failed with error: %@", error);
                          //                [self displayError:error];
                          // Hide the HUD
                          // TODO: add "No results found" text and delay?
                          [MBProgressHUD hideHUDForView:self.view animated:YES];
+                         [self cancelLocationSelection];
+                         UIAlertController *alertView =
+                             [UIAlertController alertControllerWithTitle:@"Error"
+                                                                 message:@"Sorry, we could not find that location."
+                                                          preferredStyle:UIAlertControllerStyleAlert];
+                         UIAlertAction *defaultAction =
+                             [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                         [alertView addAction:defaultAction];
+                         [self presentViewController:alertView animated:YES completion:nil];
+
                          return;
                      }
 
@@ -630,9 +643,6 @@ static NSString *const kStationCell = @"StationCell";
                      [MBProgressHUD hideHUDForView:self.view animated:YES];
 
                      // reload the data
-
-                     // unlock the UI
-                     [self lockUI:NO];
                      [self.tableView reloadData];
                  }];
 }
@@ -671,14 +681,19 @@ static NSString *const kStationCell = @"StationCell";
     [navSheet addAction:[UIAlertAction actionWithTitle:cancelButtonTitle
                                                  style:UIAlertActionStyleCancel
                                                handler:^(UIAlertAction *action) {
-                                                   // clear out the selected destination object
-                                                   self.selectedLocation = nil;
-                                                   // deselect the last row selected
-                                                   [self.tableView
-                                                       deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow]
-                                                                     animated:YES];
+                                                   [self cancelLocationSelection];
                                                }]];
     [self presentViewController:navSheet animated:YES completion:nil];
+}
+
+#pragma mark - Helpers
+
+- (void)cancelLocationSelection
+{
+    // clear out the selected destination object
+    self.selectedLocation = nil;
+    // deselect the last row selected
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 @end
