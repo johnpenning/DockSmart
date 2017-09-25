@@ -28,8 +28,6 @@ extern NSString *const kNewRegionKey;
 
 @interface LocationController : NSObject <CLLocationManagerDelegate>
 
-// CLLocationManager object
-@property(nonatomic, strong) CLLocationManager *locationManager;
 // current user location
 @property(nonatomic, strong) CLLocation *location;
 // delegate for the CLLocationManagerDelegate protocol methods
@@ -39,6 +37,10 @@ extern NSString *const kNewRegionKey;
 - (void)startUpdatingCurrentLocation;
 // Stops location updates
 - (void)stopUpdatingCurrentLocation;
+// Starts significant location change monitoring
+- (void)startMonitoringSignificantLocationChanges;
+// Stops significant location change monitoring
+- (void)stopMonitoringSignificantLocationChanges;
 // Register a geofence
 - (BOOL)registerRegionWithCoordinate:(CLLocationCoordinate2D)coordinate
                               radius:(CLLocationDistance)radius

@@ -1468,7 +1468,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     // pan to new user location if we said we needed to when the view loaded
     if (self.needsNewCenter) {
         MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(
-            [[[LocationController sharedInstance] location] coordinate], 2 * METERS_PER_MILE, 2 * METERS_PER_MILE);
+            [LocationController sharedInstance].location.coordinate, 2 * METERS_PER_MILE, 2 * METERS_PER_MILE);
 
         [self.mapView setRegion:region animated:YES];
 

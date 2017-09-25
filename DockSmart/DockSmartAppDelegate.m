@@ -65,7 +65,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 
     // In case significant change location services were on from the last time we
     // terminated, turn them off:
-    [[LocationController sharedInstance].locationManager stopMonitoringSignificantLocationChanges];
+    [[LocationController sharedInstance] stopMonitoringSignificantLocationChanges];
     // Begin standard location service:
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
 
@@ -254,7 +254,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     // Switch to significant change location service:
     DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
     if (controller.bikingState == BikingStateActive) {
-        [[LocationController sharedInstance].locationManager startMonitoringSignificantLocationChanges];
+        [[LocationController sharedInstance] startMonitoringSignificantLocationChanges];
     }
 }
 

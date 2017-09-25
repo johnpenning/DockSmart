@@ -23,29 +23,52 @@ NSString *const kRegionExitNotif = @"RegionExitNotif";
 // userInfo key for geofence data
 NSString *const kNewRegionKey = @"NewRegionKey";
 
+
+@interface LocationController ()
+
+// CLLocationManager object
+@property(nonatomic, strong) CLLocationManager *locationManager;
+
+@end
+
 @implementation LocationController
 
 - (id)init
 {
     self = [super init];
     if (self != nil) {
-        self.locationManager = [[CLLocationManager alloc] init];
-        self.locationManager.delegate = self;
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        self.locationManager.pausesLocationUpdatesAutomatically = NO;
-        self.locationManager.activityType = CLActivityTypeFitness;
+        if (!_locationManager) {
+            _locationManager = [[CLLocationManager alloc] init];
+        }
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        _locationManager.pausesLocationUpdatesAutomatically = NO;
+        _locationManager.activityType = CLActivityTypeFitness;
+        _locationManager.distanceFilter = 5;
     }
     return self;
 }
 
-#pragma mark - CLLocationManagerDelegate
+#pragma mark - Singleton implementation in ARC
+
++ (LocationController *)sharedInstance
+{
+    static LocationController *sharedLocationControllerInstance = nil;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        sharedLocationControllerInstance = [[self alloc] init];
+    });
+    return sharedLocationControllerInstance;
+}
+
+#pragma mark - Location interface
 
 // Starts location updates
 - (void)startUpdatingCurrentLocation
 {
+    CLAuthorizationStatus status = [self requestAlwaysAuthorization];
     // if location services are restricted do nothing
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
-        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ||
+    if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted ||
         [CLLocationManager locationServicesEnabled] == NO) {
         return;
     }
@@ -56,18 +79,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
         postNotificationName:kLogToTextViewNotif
                       object:self
                     userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
-
-
-    // if locationManager does not currently exist, create it
-    if (!_locationManager) {
-        _locationManager = [[CLLocationManager alloc] init];
-    }
-
-    [_locationManager setDelegate:self];
-
-    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    _locationManager.distanceFilter = 5; // 10.0f; // we don't need to be any more accurate than 10m
-    _locationManager.activityType = CLActivityTypeFitness;
 
     [_locationManager startUpdatingLocation];
 }
@@ -85,18 +96,51 @@ NSString *const kNewRegionKey = @"NewRegionKey";
     [_locationManager stopUpdatingLocation];
 }
 
+- (void)startMonitoringSignificantLocationChanges
+{
+    [_locationManager startMonitoringSignificantLocationChanges];
+}
+
+- (void)stopMonitoringSignificantLocationChanges
+{
+    [_locationManager stopMonitoringSignificantLocationChanges];
+}
+
+#pragma mark - Location Authorization
+
+- (CLAuthorizationStatus)requestWhenInUseAuthorization
+{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusNotDetermined) {
+        [_locationManager requestWhenInUseAuthorization];
+    }
+    return status;
+}
+
+- (CLAuthorizationStatus)requestAlwaysAuthorization
+{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if (status == kCLAuthorizationStatusNotDetermined ||
+        (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"11.0") && status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+        [_locationManager requestAlwaysAuthorization];
+    }
+    return status;
+}
+
+#pragma mark - CLLocationManagerDelegate
+
 // delegate method that informs us if the location services authorization for this app has changed
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     // Make current location button inactive on mapview if location services are disabled
     DockSmartMapViewController *controller =
         [[[[UIApplication sharedApplication] delegate] window] rootViewController].childViewControllers[0];
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
-        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted ||
+    if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted ||
         [CLLocationManager locationServicesEnabled] == NO) {
         [controller.updateLocationButton setEnabled:NO];
     } else {
         [controller.updateLocationButton setEnabled:YES];
+        [self startUpdatingCurrentLocation];
     }
 }
 
@@ -189,17 +233,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
                     userInfo:[NSDictionary dictionaryWithObject:region forKey:kNewRegionKey]];
 }
 
-#pragma mark - Singleton implementation in ARC
-+ (LocationController *)sharedInstance
-{
-    static LocationController *sharedLocationControllerInstance = nil;
-    static dispatch_once_t predicate;
-    dispatch_once(&predicate, ^{
-        sharedLocationControllerInstance = [[self alloc] init];
-    });
-    return sharedLocationControllerInstance;
-}
-
 #pragma mark - Region monitoring support
 
 // Register a geofence
@@ -209,7 +242,7 @@ NSString *const kNewRegionKey = @"NewRegionKey";
                             accuracy:(CLLocationAccuracy)accuracy
 {
     // Check the authorization status
-    if (([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) &&
+    if (([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways) &&
         ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusNotDetermined))
         return NO;
 
