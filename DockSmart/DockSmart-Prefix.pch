@@ -20,7 +20,11 @@
     // DLog(@"value: %d", x);
     // Unfortunately this doesn't work DLog(aStringVariable); you have to do this instead DLog(@"%@", aStringVariable);
     #ifdef DEBUG
-    #	define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+    #	define DLog(fmt, ...) { \
+        NSString *s = [NSString stringWithFormat:(@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__];\
+        NSLog(@"%@", s); \
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLogToTextViewNotif \
+        object:self userInfo:[NSDictionary dictionaryWithObject:s forKey:kLogTextKey]];}
     #else
     #	define DLog(...)
     #endif

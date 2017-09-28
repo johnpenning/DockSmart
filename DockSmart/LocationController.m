@@ -75,10 +75,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
 
     NSString *logText = [NSString stringWithFormat:@"startUpdatingCurrentLocation"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [_locationManager startUpdatingLocation];
 }
@@ -88,10 +84,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
 {
     NSString *logText = [NSString stringWithFormat:@"stopUpdatingCurrentLocation"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [_locationManager stopUpdatingLocation];
 }
@@ -154,10 +146,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
 
     NSString *logText = [NSString stringWithFormat:@"didUpdateLocations: location: %@", location];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     if (fabs(howRecent) < 15.0) {
         // If the event is recent, do something with it.
@@ -181,10 +169,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
     NSString *logText =
         [NSString stringWithFormat:@"locationManagerDidFailWithError: %@", [error localizedDescription]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 }
 
 // delegate method that informs us that geofence monitoring failed for a particular region
@@ -195,10 +179,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
     NSString *logText = [NSString stringWithFormat:@"monitoringDidFailForRegion: %@ withError: %@", region.identifier,
                                                    [error localizedDescription]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 }
 
 // delegate method that informs us that we entered a geofence
@@ -206,10 +186,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
 {
     NSString *logText = [NSString stringWithFormat:@"didEnterRegion: %@", region.identifier];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [[NSNotificationCenter defaultCenter]
         postNotificationName:kRegionEntryNotif
@@ -222,10 +198,6 @@ NSString *const kNewRegionKey = @"NewRegionKey";
 {
     NSString *logText = [NSString stringWithFormat:@"didExitRegion: %@", region.identifier];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [[NSNotificationCenter defaultCenter]
         postNotificationName:kRegionExitNotif

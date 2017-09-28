@@ -314,14 +314,10 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     NSString *logText = [NSString stringWithFormat:@"mapViewController decodeRestorableStateWithCoder called"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [super decodeRestorableStateWithCoder:coder];
 
-    DLog("Bundle version %@ at last state save",
+    DLog(@"Bundle version %@ at last state save",
          [coder decodeObjectForKey:UIApplicationStateRestorationBundleVersionKey]);
 
     // Decode view-related objects:
@@ -389,10 +385,6 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     // complete.
     NSString *logText = [NSString stringWithFormat:@"finished restoring MapViewController"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [self refreshBikeDataWithForce:NO];
 }
@@ -407,10 +399,6 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     NSString *logText = [NSString stringWithFormat:@"Timer fired"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [self refreshBikeDataWithForce:NO];
 }
@@ -430,10 +418,6 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         NSString *logText = [NSString stringWithFormat:@"Unforced data refresh blocked, last data was %f seconds ago",
                                                        fabs([self.lastDataUpdateTime timeIntervalSinceNow])];
         DLog(@"%@", logText);
-        [[NSNotificationCenter defaultCenter]
-            postNotificationName:kLogToTextViewNotif
-                          object:self
-                        userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
         return;
     }
 
@@ -1083,10 +1067,6 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
     NSString *logText = [NSString stringWithFormat:@"Starting minute timer"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60
                                                         target:self
@@ -1156,10 +1136,6 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     NSString *logText = [NSString stringWithFormat:@"NEW STATION DATA: bikingState: %ld", self.bikingState];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
     // Set the last time we got a fresh set of station data
     self.lastDataUpdateTime = [NSDate date];
 
@@ -1391,10 +1367,6 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
     // log it for debugging
     NSString *logText = [NSString stringWithFormat:@"cancelTapped"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     // reset to inactive
     [self clearBikeRouteWithRefresh:YES];

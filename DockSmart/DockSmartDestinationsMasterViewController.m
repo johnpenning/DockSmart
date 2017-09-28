@@ -165,14 +165,10 @@ static NSString *const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey
     NSString *logText =
         [NSString stringWithFormat:@"destinationsMasterViewController decodeRestorableStateWithCoder called"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [super decodeRestorableStateWithCoder:coder];
 
-    DLog("Bundle version %@ at last state save",
+    DLog(@"Bundle version %@ at last state save",
          [coder decodeObjectForKey:UIApplicationStateRestorationBundleVersionKey]);
 
     // Decode objects:
@@ -196,10 +192,6 @@ static NSString *const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey
     // Called on restored view controllers after other object decoding is complete.
     NSString *logText = [NSString stringWithFormat:@"finished restoring DestinationsMasterViewController"];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     // Pointing to the map view controller's data keeps us from having to store twice as many lists...
     self.dataController = [self.tabBarController.childViewControllers[0] dataController];

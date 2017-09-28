@@ -104,11 +104,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
                                    @"triggeredNotification %@ applicationState: %ld",
                                    startLocation, [triggeredNotification alertBody], [application applicationState]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
-
     return YES;
 }
 
@@ -120,10 +115,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     NSString *logText = [NSString stringWithFormat:@"applicationDidReceiveLocalNotification: applicationState: %ld",
                                                    [application applicationState]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     NSString *notificationMessage = [notification alertBody];
     UIAlertController *alertView = [UIAlertController
@@ -166,10 +157,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     NSString *logText = [NSString
         stringWithFormat:@"applicationWillResignActive: applicationState: %ld", [application applicationState]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -183,10 +170,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     NSString *logText = [NSString
         stringWithFormat:@"applicationDidEnterBackground: applicationState: %ld", [application applicationState]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     // Continue using standard location services if we are currently station
     // tracking, else stop
@@ -204,10 +187,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     NSString *logText = [NSString
         stringWithFormat:@"applicationWillEnterForeground: applicationState: %ld", [application applicationState]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     // Start standard location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
@@ -222,10 +201,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     NSString *logText = [NSString
         stringWithFormat:@"applicationDidBecomeActive: applicationState: %ld", [application applicationState]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     // Start standard location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
@@ -246,10 +221,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     NSString *logText =
         [NSString stringWithFormat:@"applicationWillTerminate: applicationState: %ld", [application applicationState]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     // Switch to significant change location service:
     DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
@@ -284,10 +255,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 
     NSString *logText = [NSString stringWithFormat:@"Auto city: %d", [defaults boolForKey:kAutoCityPreference]];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     // Set a flag saying we are currently loading data:
     self.isHTTPRequestInProcess = YES;
@@ -300,10 +267,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
         ([[LocationController sharedInstance] location] == nil)) {
         NSString *logText = [NSString stringWithFormat:@"Skipping auto city detection"];
         DLog(@"%@", logText);
-        [[NSNotificationCenter defaultCenter]
-            postNotificationName:kLogToTextViewNotif
-                          object:self
-                        userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
         [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
         return;
@@ -414,10 +377,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 {
     NSString *logText = [NSString stringWithFormat:@"loadJSONBikeDataForCityWithUrl: %@", url];
     DLog(@"%@", logText);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:kLogToTextViewNotif
-                      object:self
-                    userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
 
     [[DSHTTPSessionManager sharedInstance] GET:url
         parameters:nil
@@ -476,10 +435,6 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     if (self.isHTTPRequestInProcess) {
         NSString *logText = [NSString stringWithFormat:@"HTTP request in process, overlapping request blocked"];
         DLog(@"%@", logText);
-        [[NSNotificationCenter defaultCenter]
-            postNotificationName:kLogToTextViewNotif
-                          object:self
-                        userInfo:[NSDictionary dictionaryWithObject:logText forKey:kLogTextKey]];
         return;
     }
     // Start loading
@@ -515,7 +470,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
             [stations addObject:tempStation];
         } else {
             // otherwise just log an error and go to the next station
-            DLog("Invalid station coordinate: stationID %ld, %@, coord %f, %f", (long)tempStation.stationID,
+            DLog(@"Invalid station coordinate: stationID %ld, %@, coord %f, %f", (long)tempStation.stationID,
                  tempStation.name, tempStation.latitude, tempStation.longitude);
         }
     }
