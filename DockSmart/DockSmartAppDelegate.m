@@ -14,6 +14,7 @@
 #import "NSDictionary+CityBikesAPI.h"
 #import "Station.h"
 #import "define.h"
+@import UserNotifications;
 
 /* Notification keys */
 // NSNotification name for sending station data to the map view
@@ -37,7 +38,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 #pragma mark DockSmartAppDelegate ()
 
 // forward declarations
-@interface DockSmartAppDelegate ()
+@interface DockSmartAppDelegate () <UNUserNotificationCenterDelegate>
 
 // Flag that tells us if a data load is in process
 @property BOOL isHTTPRequestInProcess;
@@ -92,58 +93,25 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 
     [defaults synchronize];
 
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    UNAuthorizationOptions options = UNAuthorizationOptionAlert + UNAuthorizationOptionSound;
+    [center requestAuthorizationWithOptions:options
+                          completionHandler:^(BOOL granted, NSError *_Nullable error) {
+                              if (!granted) {
+                                  DLog(@"Notification permissions not granted");
+                              }
+                          }];
+    center.delegate = self;
+
     // Recall current city URL from NSUserDefaults:
     self.currentCityUrl = [defaults stringForKey:kCityPreference];
 
     NSNumber *startLocation = [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey];
-    UILocalNotification *triggeredNotification =
-        [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-
-    NSString *logText =
-        [NSString stringWithFormat:@"willFinishLaunchingWithOptions: startLocation %@ "
-                                   @"triggeredNotification %@ applicationState: %ld",
-                                   startLocation, [triggeredNotification alertBody], [application applicationState]];
+    NSString *logText = [NSString stringWithFormat:@"willFinishLaunchingWithOptions: startLocation %@ "
+                                                   @"applicationState: %ld",
+                                                   startLocation, [application applicationState]];
     DLog(@"%@", logText);
     return YES;
-}
-
-/*
- Called when the app receives a local notification, if the app is running.
- */
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    NSString *logText = [NSString stringWithFormat:@"applicationDidReceiveLocalNotification: applicationState: %ld",
-                                                   [application applicationState]];
-    DLog(@"%@", logText);
-
-    NSString *notificationMessage = [notification alertBody];
-    UIAlertController *alertView = [UIAlertController
-        alertControllerWithTitle:NSLocalizedString(@"Station Update", @"Title for alert displayed when "
-                                                                      @"bike destination change message "
-                                                                      @"appears.")
-                         message:notificationMessage
-                  preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-    [alertView addAction:defaultAction];
-
-    if ([application applicationState] == UIApplicationStateActive) {
-        // If we aren't entering the app from a local notification that already
-        // played an alert sound and vibrated:
-        // Play the alert sound
-        SystemSoundID soundFileObject;
-        CFBundleRef mainBundle = CFBundleGetMainBundle();
-        CFURLRef soundFileURLRef = CFBundleCopyResourceURL(mainBundle, CFSTR("bicycle_bell"), CFSTR("wav"), NULL);
-        AudioServicesCreateSystemSoundID(soundFileURLRef, &soundFileObject);
-        AudioServicesPlaySystemSound(soundFileObject);
-
-        // Vibrate the phone
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-    }
-
-    // Show the alert
-    [self.window.rootViewController presentViewController:alertView animated:YES completion:nil];
-
-    // TODO: Reload mapView w/ new icon colors
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -479,6 +447,28 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
         postNotificationName:kAddStationsNotif
                       object:self
                     userInfo:[NSDictionary dictionaryWithObject:stations forKey:kStationResultsKey]];
+}
+
+#pragma mark - UNUserNotificationCenterDelegate
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+{
+    DLog(@"userNotificationCenter:willPresentNotification: %@", notification);
+
+    UNNotificationPresentationOptions options =
+        UNNotificationPresentationOptionAlert + UNNotificationPresentationOptionSound;
+    completionHandler(options);
+    // TODO: Reload mapView w/ new icon colors
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+    didReceiveNotificationResponse:(UNNotificationResponse *)response
+             withCompletionHandler:(void (^)())completionHandler
+{
+    DLog(@"userNotificationCenter:didReceiveNotificationResponse: %@", response);
+    completionHandler();
 }
 
 @end

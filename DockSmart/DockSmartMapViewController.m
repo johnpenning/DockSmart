@@ -16,6 +16,7 @@
 #import "MBProgressHUD.h"
 #import "Station.h"
 #import "define.h"
+@import UserNotifications;
 
 #pragma mark - Key Definitions
 
@@ -35,6 +36,12 @@ NSString *const kRegionMonitorOneThirdToGo = @"RegionMonitorOneThirdToGo";
 NSString *const kRegionMonitorStation1 = @"RegionMonitorStation1";
 NSString *const kRegionMonitorStation2 = @"RegionMonitorStation2";
 NSString *const kRegionMonitorStation3 = @"RegionMonitorStation3";
+
+// Notification identifiers:
+NSString *const kNotificationIdentifierDockAtIdeal = @"kNotificationIdentifierDockAtIdeal";
+NSString *const kNotificationIdentifierSwitchToIdeal = @"kNotificationIdentifierSwitchToIdeal";
+NSString *const kNotificationIdentifierDockAtAlternate = @"kNotificationIdentifierDockAtAlternate";
+NSString *const kNotificationIdentifierSwitchToAlternate = @"kNotificationIdentifierSwitchToAlternate";
 
 #pragma mark - Interface
 
@@ -1190,17 +1197,20 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                             self.currentDestinationStation = station;
                             self.currentDestinationStation.annotationIdentifier = kDestinationStation;
 
-                            UILocalNotification *stopAtIdealStationNotification = [[UILocalNotification alloc] init];
-                            [stopAtIdealStationNotification
-                                setAlertBody:[NSString stringWithFormat:@"Dock here! You have reached the "
-                                                                        @"station closest to your "
-                                                                        @"destination, %@. Station "
-                                                                        @"tracking will end.",
-                                                                        self.idealDestinationStation.name]];
-                            stopAtIdealStationNotification.soundName = @"bicycle_bell.wav";
-                            [stopAtIdealStationNotification setFireDate:[NSDate date]];
-                            [[UIApplication sharedApplication]
-                                scheduleLocalNotification:stopAtIdealStationNotification];
+                            UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+                            content.title = @"Dock here!";
+                            content.subtitle = _idealDestinationStation.name;
+                            content.body =
+                                @"You have reached the station closest to your destination. Station tracking will end.";
+                            content.sound = [UNNotificationSound soundNamed:@"bicycle_bell.wav"];
+                            UNNotificationRequest *request =
+                                [UNNotificationRequest requestWithIdentifier:kNotificationIdentifierDockAtIdeal
+                                                                     content:content
+                                                                     trigger:nil];
+                            UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+
+                            DLog(@"UNUserNotificationCenter addNotificationRequest: %@", request);
+                            [center addNotificationRequest:request withCompletionHandler:nil];
 
                             // Set flags
                             notifSent = YES;
@@ -1217,13 +1227,21 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                         self.currentDestinationStation = station;
                         self.currentDestinationStation.annotationIdentifier = kDestinationStation;
 
-                        UILocalNotification *bikeToIdealStationNotification = [[UILocalNotification alloc] init];
-                        [bikeToIdealStationNotification
-                            setAlertBody:[NSString stringWithFormat:@"A dock has opened up at %@! Bike there instead!",
-                                                                    self.currentDestinationStation.name]];
-                        bikeToIdealStationNotification.soundName = @"bicycle_bell.wav";
-                        [bikeToIdealStationNotification setFireDate:[NSDate date]];
-                        [[UIApplication sharedApplication] scheduleLocalNotification:bikeToIdealStationNotification];
+                        UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+                        content.title = @"A closer dock has opened!";
+                        content.subtitle = _currentDestinationStation.name;
+                        content.body =
+                            [NSString stringWithFormat:@"Bike to %@ instead to end up closer to your destination!",
+                                                       self.currentDestinationStation.name];
+                        content.sound = [UNNotificationSound soundNamed:@"bicycle_bell.wav"];
+                        UNNotificationRequest *request =
+                            [UNNotificationRequest requestWithIdentifier:kNotificationIdentifierSwitchToIdeal
+                                                                 content:content
+                                                                 trigger:nil];
+                        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+
+                        DLog(@"UNUserNotificationCenter addNotificationRequest: %@", request);
+                        [center addNotificationRequest:request withCompletionHandler:nil];
 
                         notifSent = YES;
                     }
@@ -1271,17 +1289,20 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                     // We've reached an alternate station. if we've reached this point, no
                     // docks have opened up at the ideal station, so just dock here and
                     // walk the rest of the way
-                    UILocalNotification *stopAtCurrentStationNotification = [[UILocalNotification alloc] init];
-                    [stopAtCurrentStationNotification
-                        setAlertBody:[NSString stringWithFormat:@"Dock here! You have reached "
-                                                                @"the station closest to your "
-                                                                @"destination with an empty "
-                                                                @"dock, %@. Station tracking "
-                                                                @"will end.",
-                                                                self.currentDestinationStation.name]];
-                    stopAtCurrentStationNotification.soundName = @"bicycle_bell.wav";
-                    [stopAtCurrentStationNotification setFireDate:[NSDate date]];
-                    [[UIApplication sharedApplication] scheduleLocalNotification:stopAtCurrentStationNotification];
+                    UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+                    content.title = @"Dock here!";
+                    content.subtitle = _currentDestinationStation.name;
+                    content.body = @"You have reached the station closest to your destination with an empty dock. "
+                                   @"Station tracking will end.";
+                    content.sound = [UNNotificationSound soundNamed:@"bicycle_bell.wav"];
+                    UNNotificationRequest *request =
+                        [UNNotificationRequest requestWithIdentifier:kNotificationIdentifierDockAtAlternate
+                                                             content:content
+                                                             trigger:nil];
+                    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+
+                    DLog(@"UNUserNotificationCenter addNotificationRequest: %@", request);
+                    [center addNotificationRequest:request withCompletionHandler:nil];
 
                     // Set flag
                     endTracking = YES;
@@ -1291,13 +1312,19 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
             // If we haven't told the user to dock yet, and the
             // currentDestinationStation had just filled up, alert the user
             if (!endTracking && newlyFullStationName != nil) {
-                UILocalNotification *bikeToNextBestStationNotification = [[UILocalNotification alloc] init];
-                [bikeToNextBestStationNotification
-                    setAlertBody:[NSString stringWithFormat:@"The station at %@ has filled up. Bike to %@ instead.",
-                                                            newlyFullStationName, self.currentDestinationStation.name]];
-                bikeToNextBestStationNotification.soundName = @"bicycle_bell.wav";
-                [bikeToNextBestStationNotification setFireDate:[NSDate date]];
-                [[UIApplication sharedApplication] scheduleLocalNotification:bikeToNextBestStationNotification];
+                UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+                content.title = @"Destination change alert!";
+                content.subtitle = [NSString stringWithFormat:@"%@ has filled up.", newlyFullStationName];
+                content.body = [NSString stringWithFormat:@"Bike to %@ instead!", self.currentDestinationStation.name];
+                content.sound = [UNNotificationSound soundNamed:@"bicycle_bell.wav"];
+                UNNotificationRequest *request =
+                    [UNNotificationRequest requestWithIdentifier:kNotificationIdentifierSwitchToAlternate
+                                                         content:content
+                                                         trigger:nil];
+                UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+
+                DLog(@"UNUserNotificationCenter addNotificationRequest: %@", request);
+                [center addNotificationRequest:request withCompletionHandler:nil];
             }
 
             // Update the view if we're still biking
