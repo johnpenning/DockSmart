@@ -9,17 +9,9 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons</key>
-	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>DockSmartSettingsIcon3</string>
-				<string>DockSmartSpotlightIcon3</string>
-				<string>DockSmartAppIcon3</string>
-			</array>
-		</dict>
-	</dict>
+	<dict/>
+	<key>CFBundleIcons~ipad</key>
+	<dict/>
 	<key>CFBundleIdentifier</key>
 	<string>com.johnpenning.${PRODUCT_NAME:rfc1034identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -49,40 +41,19 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>DockSmart needs to access your location in the background to retrieve live station data while you're biking.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>DockSmart requires your location in order to determine your current city and tell you from which station to pick up a bike, and to retrieve live station data while you're biking.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>DockSmart requires your location when using the app in order to determine your current city and tell you from which station to pick up a bike.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>DockSmart requires your location in order to determine your current city and tell you from which station to pick up a bike, and to retrieve live station data while you&apos;re biking.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>DockSmart needs to access your location in the background to retrieve live station data while you&apos;re biking.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>location</string>
 	</array>
-	<key>UILaunchImages</key>
-	<array>
-		<dict>
-			<key>UILaunchImageMinimumOSVersion</key>
-			<string>7.0</string>
-			<key>UILaunchImageName</key>
-			<string>Default</string>
-			<key>UILaunchImageOrientation</key>
-			<string>Portrait</string>
-			<key>UILaunchImageSize</key>
-			<string>{320, 568}</string>
-		</dict>
-		<dict>
-			<key>UILaunchImageMinimumOSVersion</key>
-			<string>7.0</string>
-			<key>UILaunchImageName</key>
-			<string>Default</string>
-			<key>UILaunchImageOrientation</key>
-			<string>Portrait</string>
-			<key>UILaunchImageSize</key>
-			<string>{320, 480}</string>
-		</dict>
-	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>MainStoryboard</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
