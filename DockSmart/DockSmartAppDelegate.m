@@ -465,7 +465,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
     didReceiveNotificationResponse:(UNNotificationResponse *)response
-             withCompletionHandler:(void (^)())completionHandler
+             withCompletionHandler:(void (^)(void))completionHandler
 {
     DLog(@"userNotificationCenter:didReceiveNotificationResponse: %@", response);
     completionHandler();
