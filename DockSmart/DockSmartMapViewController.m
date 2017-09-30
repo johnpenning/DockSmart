@@ -319,8 +319,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 {
-    NSString *logText = [NSString stringWithFormat:@"mapViewController decodeRestorableStateWithCoder called"];
-    DLog(@"%@", logText);
+    DLog(@"mapViewController decodeRestorableStateWithCoder called");
 
     [super decodeRestorableStateWithCoder:coder];
 
@@ -390,8 +389,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 {
     // Called on restored view controllers after other object decoding is
     // complete.
-    NSString *logText = [NSString stringWithFormat:@"finished restoring MapViewController"];
-    DLog(@"%@", logText);
+    DLog(@"finished restoring MapViewController");
 
     [self refreshBikeDataWithForce:NO];
 }
@@ -404,8 +402,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
  */
 - (void)minuteTimerDidFire:(NSTimer *)timer
 {
-    NSString *logText = [NSString stringWithFormat:@"Timer fired"];
-    DLog(@"%@", logText);
+    DLog(@"Timer fired");
 
     [self refreshBikeDataWithForce:NO];
 }
@@ -422,9 +419,8 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
         // We are not forcing a refresh, and the last data received exists and is
         // most likely the most recent data available, so we don't need new data
         // yet.
-        NSString *logText = [NSString stringWithFormat:@"Unforced data refresh blocked, last data was %f seconds ago",
-                                                       fabs([self.lastDataUpdateTime timeIntervalSinceNow])];
-        DLog(@"%@", logText);
+        DLog(@"Unforced data refresh blocked, last data was %f seconds ago",
+             fabs([self.lastDataUpdateTime timeIntervalSinceNow]));
         return;
     }
 
@@ -1072,8 +1068,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 
     // Start minute timer:
 
-    NSString *logText = [NSString stringWithFormat:@"Starting minute timer"];
-    DLog(@"%@", logText);
+    DLog(@"Starting minute timer");
 
     self.minuteTimer = [NSTimer scheduledTimerWithTimeInterval:60
                                                         target:self
@@ -1141,8 +1136,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    NSString *logText = [NSString stringWithFormat:@"NEW STATION DATA: bikingState: %ld", self.bikingState];
-    DLog(@"%@", logText);
+    DLog(@"NEW STATION DATA: bikingState: %ld", (long)self.bikingState);
     // Set the last time we got a fresh set of station data
     self.lastDataUpdateTime = [NSDate date];
 
@@ -1392,8 +1386,7 @@ static NSString *const LastDataUpdateTimeKey = @"LastDataUpdateTimeKey";
 - (IBAction)cancelTapped:(id)sender
 {
     // log it for debugging
-    NSString *logText = [NSString stringWithFormat:@"cancelTapped"];
-    DLog(@"%@", logText);
+    DLog(@"cancelTapped");
 
     // reset to inactive
     [self clearBikeRouteWithRefresh:YES];

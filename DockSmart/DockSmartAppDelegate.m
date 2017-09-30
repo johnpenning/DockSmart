@@ -106,11 +106,9 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     // Recall current city URL from NSUserDefaults:
     self.currentCityUrl = [defaults stringForKey:kCityPreference];
 
-    NSNumber *startLocation = [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey];
-    NSString *logText = [NSString stringWithFormat:@"willFinishLaunchingWithOptions: startLocation %@ "
-                                                   @"applicationState: %ld",
-                                                   startLocation, [application applicationState]];
-    DLog(@"%@", logText);
+    DLog(@"willFinishLaunchingWithOptions: startLocation %@ "
+         @"applicationState: %ld",
+         [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey], [application applicationState]);
     return YES;
 }
 
@@ -122,9 +120,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     // and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down
     // OpenGL ES frame rates. Games should use this method to pause the game.
-    NSString *logText = [NSString
-        stringWithFormat:@"applicationWillResignActive: applicationState: %ld", [application applicationState]];
-    DLog(@"%@", logText);
+    DLog(@"applicationWillResignActive: applicationState: %ld", [application applicationState]);
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -135,9 +131,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     // If your application supports background execution, this method is called
     // instead of applicationWillTerminate: when the user quits.
 
-    NSString *logText = [NSString
-        stringWithFormat:@"applicationDidEnterBackground: applicationState: %ld", [application applicationState]];
-    DLog(@"%@", logText);
+    DLog(@"applicationDidEnterBackground: applicationState: %ld", [application applicationState]);
 
     // Continue using standard location services if we are currently station
     // tracking, else stop
@@ -152,9 +146,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     // Called as part of the transition from the background to the inactive state;
     // here you can undo many of the changes made on entering the background.
 
-    NSString *logText = [NSString
-        stringWithFormat:@"applicationWillEnterForeground: applicationState: %ld", [application applicationState]];
-    DLog(@"%@", logText);
+    DLog(@"applicationWillEnterForeground: applicationState: %ld", [application applicationState]);
 
     // Start standard location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
@@ -166,9 +158,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     // application was inactive. If the application was previously in the
     // background, optionally refresh the user interface.
 
-    NSString *logText = [NSString
-        stringWithFormat:@"applicationDidBecomeActive: applicationState: %ld", [application applicationState]];
-    DLog(@"%@", logText);
+    DLog(@"applicationDidBecomeActive: applicationState: %ld", [application applicationState]);
 
     // Start standard location service
     [[LocationController sharedInstance] startUpdatingCurrentLocation];
@@ -186,9 +176,8 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 {
     // Called when the application is about to terminate. Save data if
     // appropriate. See also applicationDidEnterBackground:.
-    NSString *logText =
-        [NSString stringWithFormat:@"applicationWillTerminate: applicationState: %ld", [application applicationState]];
-    DLog(@"%@", logText);
+
+    DLog(@"applicationWillTerminate: applicationState: %ld", [application applicationState]);
 
     // Switch to significant change location service:
     DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
@@ -221,8 +210,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
     DockSmartMapViewController *controller = self.window.rootViewController.childViewControllers[0];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
-    NSString *logText = [NSString stringWithFormat:@"Auto city: %d", [defaults boolForKey:kAutoCityPreference]];
-    DLog(@"%@", logText);
+    DLog(@"Auto city: %d", [defaults boolForKey:kAutoCityPreference]);
 
     // Set a flag saying we are currently loading data:
     self.isHTTPRequestInProcess = YES;
@@ -233,8 +221,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
      */
     if ((controller.bikingState != BikingStateInactive) || ([defaults boolForKey:kAutoCityPreference] == NO) ||
         ([[LocationController sharedInstance] location] == nil)) {
-        NSString *logText = [NSString stringWithFormat:@"Skipping auto city detection"];
-        DLog(@"%@", logText);
+        DLog(@"Skipping auto city detection");
 
         [self loadJSONBikeDataForCityWithUrl:self.currentCityUrl];
         return;
@@ -343,8 +330,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
  */
 - (void)loadJSONBikeDataForCityWithUrl:(NSString *)url
 {
-    NSString *logText = [NSString stringWithFormat:@"loadJSONBikeDataForCityWithUrl: %@", url];
-    DLog(@"%@", logText);
+    DLog(@"loadJSONBikeDataForCityWithUrl: %@", url);
 
     [[DSHTTPSessionManager sharedInstance] GET:url
         parameters:nil
@@ -401,8 +387,7 @@ static NSString *const stationErrorMessage = @"Information might not be up-to-da
 {
     // if data is currently loading, don't try to load it again
     if (self.isHTTPRequestInProcess) {
-        NSString *logText = [NSString stringWithFormat:@"HTTP request in process, overlapping request blocked"];
-        DLog(@"%@", logText);
+        DLog(@"HTTP request in process, overlapping request blocked");
         return;
     }
     // Start loading

@@ -162,9 +162,7 @@ static NSString *const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey
 
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 {
-    NSString *logText =
-        [NSString stringWithFormat:@"destinationsMasterViewController decodeRestorableStateWithCoder called"];
-    DLog(@"%@", logText);
+    DLog(@"destinationsMasterViewController decodeRestorableStateWithCoder called");
 
     [super decodeRestorableStateWithCoder:coder];
 
@@ -190,8 +188,7 @@ static NSString *const UserCoordinateLongitudeKey = @"UserCoordinateLongitudeKey
 - (void)applicationFinishedRestoringState
 {
     // Called on restored view controllers after other object decoding is complete.
-    NSString *logText = [NSString stringWithFormat:@"finished restoring DestinationsMasterViewController"];
-    DLog(@"%@", logText);
+    DLog(@"finished restoring DestinationsMasterViewController");
 
     // Pointing to the map view controller's data keeps us from having to store twice as many lists...
     self.dataController = [self.tabBarController.childViewControllers[0] dataController];
@@ -398,7 +395,7 @@ static NSString *const kStationCell = @"StationCell";
     if ([locationAtIndex isKindOfClass:[Station class]]) {
         Station *stationAtIndex = (Station *)locationAtIndex;
         [[cell detailTextLabel] setText:[NSString stringWithFormat:@"Bikes: %ld Docks: %ld Distance: %2.2f mi",
-                                                                   stationAtIndex.nbBikes, stationAtIndex.nbEmptyDocks,
+                                                                   (long)stationAtIndex.nbBikes, (long)stationAtIndex.nbEmptyDocks,
                                                                    stationAtIndex.distanceFromUser / METERS_PER_MILE]];
     } else if ([locationAtIndex isKindOfClass:[Address class]]) {
         // show the same info as the map callout subtitle (ideally a neighborhood name, plus the distance from the

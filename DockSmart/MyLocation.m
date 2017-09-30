@@ -101,8 +101,7 @@ static NSString *const AnnotationIdentifierKey = @"AnnotationIdentifierKey";
 - (void)applicationFinishedRestoringState
 {
     // Called on restored view controllers after other object decoding is complete.
-    NSString *logText = [NSString stringWithFormat:@"finished restoring MyLocation"];
-    DLog(@"%@", logText);
+    DLog(@"finished restoring MyLocation");
 }
 
 #pragma mark - NSCopying
