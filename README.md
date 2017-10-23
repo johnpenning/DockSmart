@@ -1,6 +1,6 @@
 # DockSmart
-##Your live-updating, worldwide bike sharing companion.
-##Never get dockblocked again.
+Your live-updating, worldwide bike sharing companion.
+Never get dockblocked again.
 ====
 
 DockSmart is the worldwide bike share companion app that tracks dock availability as you bike. No app is better at simply getting you to your destination as quickly and efficiently as possible.
