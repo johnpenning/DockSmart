@@ -1,11 +1,11 @@
 # DockSmart
 Your live-updating, worldwide bike sharing companion.
-Never get dockblocked again.
+Never show up to a full station again.
 ====
 
 DockSmart is the worldwide bike share companion app that tracks dock availability as you bike. No app is better at simply getting you to your destination as quickly and efficiently as possible.
 
-Have you ever been dockblocked? You know the problem. You're out using your city's bike share system, and as you get to your destination, you notice that the station is completely full. There are no docks available for your bike, even though your phone told you there was a dock free when you first started biking. Someone stole your spot!
+The most frustrating part of the bike share experience: As you get to your destination, you notice that the station is completely full. There are no docks available for your bike, even though your phone told you there was a dock free when you first started biking. Someone stole your spot!
 
 DockSmart uses station tracking to keep track of real-time station data while you're biking. Just tap Start Station Tracking and put your phone in your pocket. As you bike, DockSmart will periodically check if the station you're currently biking towards has filled up. If so, it will alert you with a buzz and a chime (make sure the ringer is on), telling you to go to the next closest station and saving you the effort of biking all the way to a station that just hit 100% capacity. If a dock at a closer station that was previously full opens up, it will alert you of that too.
 
@@ -19,18 +19,22 @@ Bike share systems supported include:
 
 - Capital Bikeshare (Washington, DC)
 - Citi Bike (New York, NY)
-- Bay Area Bike Share (San Francisco Bay Area, CA)
+- Ford GoBike (San Francisco Bay Area, CA)
+- Biketown (Portland, OR)
 - Divvy (Chicago, IL)
 - Hubway (Boston, MA)
 - Nice Ride MN (Minneapolis-St. Paul, MN)
-- Bixi (Montreal, QC; Toronto, ON; Ottawa, ON)
-- Barclays Cycle Hire (London, England)
+- Bixi (Montréal, QC)
+- Bike Share Toronto (Toronto, ON)
+- Santander Cycles (London, England)
 - Vélib (Paris, France)
 - And lots more, in 18 countries around the world
 
 DockSmart uses the independent, open source CityBikes API for worldwide station data. Visit [www.citybik.es](http://www.citybik.es) for more information, including a full list of cities.
 
-Note: DockSmart requires iOS 7. The station tracking feature requires enabling both Location Services and Background App Refresh.
+Note: DockSmart requires iOS 10. The station tracking feature requires enabling both Location Services and Background App Refresh.
+
+Continued use of GPS running in the background can dramatically decrease battery life.
 
 ## License
 
